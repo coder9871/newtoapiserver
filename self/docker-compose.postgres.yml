@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-newtoapi
+    restart: unless-stopped
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5532:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${POSTGRES_DB:-newtoapi}
+      - PGDATA=/var/lib/postgresql/data
+      - TZ=${TZ:-Asia/Shanghai}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${POSTGRES_DB:-newtoapi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
