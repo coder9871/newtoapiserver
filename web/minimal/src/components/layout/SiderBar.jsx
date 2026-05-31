@@ -203,7 +203,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
   const chatMenuItems = useMemo(() => {
     const items = [
       {
-        text: t('操练场'),
+        text: t('对话'),
         itemKey: 'playground',
         to: '/playground',
       },
@@ -446,9 +446,6 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {/* 聊天区域 */}
           {hasSectionVisibleModules('chat') && (
             <div className='sidebar-section'>
-              {!collapsed && (
-                <div className='sidebar-group-label'>{t('聊天')}</div>
-              )}
               {chatMenuItems.map((item) => renderSubItem(item))}
             </div>
           )}
@@ -457,12 +454,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {hasSectionVisibleModules('console') && (
             <>
               <Divider className='sidebar-divider' />
-              <div>
-                {!collapsed && (
-                  <div className='sidebar-group-label'>{t('控制台')}</div>
-                )}
-                {workspaceItems.map((item) => renderNavItem(item))}
-              </div>
+              <div>{workspaceItems.map((item) => renderNavItem(item))}</div>
             </>
           )}
 
@@ -470,12 +462,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {hasSectionVisibleModules('personal') && (
             <>
               <Divider className='sidebar-divider' />
-              <div>
-                {!collapsed && (
-                  <div className='sidebar-group-label'>{t('个人中心')}</div>
-                )}
-                {financeItems.map((item) => renderNavItem(item))}
-              </div>
+              <div>{financeItems.map((item) => renderNavItem(item))}</div>
             </>
           )}
 

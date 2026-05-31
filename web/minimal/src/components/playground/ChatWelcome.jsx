@@ -18,33 +18,26 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button, TextArea, Typography } from '@douyinfe/semi-ui';
+import { Typography, TextArea, Button, Select } from '@douyinfe/semi-ui';
 import { Send } from 'lucide-react';
-
+import { useTranslation } from 'react-i18next';
 import { getSystemName } from '../../helpers';
 
-const PENDING_PROMPT_KEY = 'minimal_pending_prompt';
-
-const Home = () => {
+/**
+ * 对话欢迎页 —— 未开始对话时展示，风格与首页一致：
+ * 居中标题 + 模型选择 + 输入框（发送图标同行）。发送后由父组件切换为对话气泡布局。
+ */
+const ChatWelcome = ({ models = [], model, onModelChange, onSend }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const systemName = getSystemName();
-
   const [prompt, setPrompt] = useState('');
 
-  // 发送：把问题带到操练场（未登录会被 PrivateRoute 引导登录后回到操练场再自动发送）
   const handleSend = useCallback(() => {
     const text = (prompt || '').trim();
     if (!text) return;
-    try {
-      sessionStorage.setItem(PENDING_PROMPT_KEY, text);
-    } catch (error) {
-      // 忽略存储异常
-    }
-    navigate('/console/playground');
-  }, [prompt, navigate]);
+    onSend?.(text);
+    setPrompt('');
+  }, [prompt, onSend]);
 
   const handleKeyDown = useCallback(
     (e) => {
@@ -57,19 +50,30 @@ const Home = () => {
   );
 
   return (
-    <div
-      className='flex flex-col items-center justify-center px-4'
-      style={{ minHeight: 'calc(100vh - 64px)', paddingTop: 64 }}
-    >
+    <div className='flex h-full flex-col items-center justify-center px-4'>
       <div className='flex w-full max-w-2xl flex-col items-center'>
         <Typography.Title
           heading={1}
-          className='!mb-8 text-center !font-semibold tracking-tight'
+          className='!mb-6 text-center !font-semibold tracking-tight'
         >
           {systemName || t('开始对话')}
         </Typography.Title>
 
-        <div className='home-search-box flex w-full items-end gap-2 rounded-full border border-semi-color-border bg-semi-color-bg-1 py-2 pl-5 pr-2 shadow-sm transition-all duration-200 focus-within:shadow-md focus-within:border-semi-color-text-2'>
+        {/* 模型选择 */}
+        <div className='mb-4'>
+          <Select
+            placeholder={t('请选择模型')}
+            value={model}
+            onChange={onModelChange}
+            optionList={models}
+            filter
+            className='!rounded-full'
+            style={{ minWidth: 200 }}
+          />
+        </div>
+
+        {/* 输入框 + 发送（同一行） */}
+        <div className='home-search-box flex w-full items-end gap-2 rounded-full border border-semi-color-border bg-semi-color-bg-1 py-2 pl-5 pr-2 shadow-sm transition-all duration-200 focus-within:border-semi-color-text-2 focus-within:shadow-md'>
           <TextArea
             value={prompt}
             onChange={setPrompt}
@@ -84,7 +88,6 @@ const Home = () => {
               background: 'transparent',
             }}
           />
-
           <Button
             theme='solid'
             type='primary'
@@ -99,4 +102,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ChatWelcome;

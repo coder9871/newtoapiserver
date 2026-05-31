@@ -38,7 +38,7 @@ const ApiInfoPanel = ({
   return (
     <Card
       {...CARD_PROPS}
-      className='bg-gray-50 border-0 !rounded-2xl'
+      className='!rounded-2xl'
       title={
         <div className={FLEX_CENTER_GAP2}>
           <Server size={16} />
@@ -51,9 +51,9 @@ const ApiInfoPanel = ({
         {apiInfoData.length > 0 ? (
           apiInfoData.map((api) => (
             <React.Fragment key={api.id}>
-              <div className='flex p-2 hover:bg-white rounded-lg transition-colors cursor-pointer'>
+              <div className='flex p-2 hover:bg-semi-color-fill-0 rounded-lg transition-colors cursor-pointer'>
                 <div className='flex-shrink-0 mr-3'>
-                  <Avatar size='extra-small' color={api.color}>
+                  <Avatar size='extra-small' color='grey'>
                     {api.route.substring(0, 2)}
                   </Avatar>
                 </div>

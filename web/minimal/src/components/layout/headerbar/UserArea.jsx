@@ -20,7 +20,12 @@ For commercial licensing, please contact support@quantumnous.com
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Button, Dropdown, Typography } from '@douyinfe/semi-ui';
-import { ChevronDown, LayoutDashboard, ScrollText } from 'lucide-react';
+import {
+  ChevronDown,
+  LayoutDashboard,
+  ScrollText,
+  MessageSquare,
+} from 'lucide-react';
 import {
   IconExit,
   IconUserSetting,
@@ -59,6 +64,20 @@ const UserArea = ({
           getPopupContainer={() => dropdownRef.current}
           render={
             <Dropdown.Menu className='!bg-semi-color-bg-overlay !border-semi-color-border !shadow-lg !rounded-lg dark:!bg-gray-700 dark:!border-gray-600'>
+              <Dropdown.Item
+                onClick={() => {
+                  navigate('/console/playground');
+                }}
+                className='!px-3 !py-1.5 !text-sm !text-semi-color-text-0 hover:!bg-semi-color-fill-1 dark:!text-gray-200 dark:hover:!bg-blue-500 dark:hover:!text-white'
+              >
+                <div className='flex items-center gap-2'>
+                  <MessageSquare
+                    size={16}
+                    className='text-gray-500 dark:text-gray-400'
+                  />
+                  <span>{t('对话')}</span>
+                </div>
+              </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
                   navigate('/console');
@@ -170,7 +189,8 @@ const UserArea = ({
       </div>
     );
   } else {
-    const showRegisterButton = !isSelfUseMode;
+    // 头部只保留「登录」按钮，注册入口在登录页内
+    const showRegisterButton = false;
 
     const commonSizingAndLayoutClass =
       'flex items-center justify-center !py-[10px] !px-1.5';

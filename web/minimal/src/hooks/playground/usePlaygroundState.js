@@ -85,18 +85,8 @@ export const usePlaygroundState = () => {
   const [groups, setGroups] = useState([]);
   const [status, setStatus] = useState({});
 
-  // 消息相关状态 - 使用加载的消息或默认消息初始化
-  const [message, setMessage] = useState(
-    () => initialMessages || getDefaultMessages(t),
-  );
-
-  // 当语言改变时，如果是默认消息则更新
-  useEffect(() => {
-    // 只在没有保存的消息时才更新默认消息
-    if (!initialMessages) {
-      setMessage(getDefaultMessages(t));
-    }
-  }, [t, initialMessages]); // 当语言改变时
+  // 消息相关状态 - 使用加载的消息初始化；无则为空（展示欢迎页，不放默认假对话）
+  const [message, setMessage] = useState(() => initialMessages || []);
 
   // 调试状态
   const [debugData, setDebugData] = useState({

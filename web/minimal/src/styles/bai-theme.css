@@ -1,0 +1,437 @@
+/*
+Copyright (C) 2025 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+
+/* ============================================================
+ * b.ai 风格主题 — 简单 / 大气 / 暖象牙白
+ * 设计基线参考 https://b.ai 与 https://chat.b.ai/chat
+ *   - 页面底色：暖象牙白 (#fffdf7)，卡片/弹层用纯白形成轻盈层次
+ *   - 主色：近黑 (#18181b)，按钮黑底白字、胶囊圆角
+ *   - 语义色（info/success/warning/danger）保留，整体近单色
+ *   - 字体：DM Sans（几何无衬线）+ 中日韩系统字体回退
+ *   - 圆角更大、阴影更柔，去除生硬边框
+ * 通过覆盖 Semi Design 的 CSS 变量实现全站换肤。
+ * ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ---------- 字体 ---------- */
+body,
+.semi-always-light,
+.semi-always-dark {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+ * 亮色主题 tokens（默认）
+ * ============================================================ */
+body:not([theme-mode='dark']) {
+  /* 背景层级：页面=暖象牙白，卡片/弹层=纯白 */
+  --semi-color-bg-0: #fffdf7; /* 页面 / 侧边栏 / 头部底色 */
+  --semi-color-bg-1: #ffffff; /* 卡片 / 弹窗 / 输入 / 下拉 */
+  --semi-color-bg-2: #faf8f1;
+  --semi-color-bg-3: #f4f1e8;
+  --semi-color-bg-4: #eeebe1;
+
+  /* 填充（hover / 选中等中性态）使用暖灰 */
+  --semi-color-fill-0: rgba(8, 8, 8, 0.04);
+  --semi-color-fill-1: rgba(8, 8, 8, 0.07);
+  --semi-color-fill-2: rgba(8, 8, 8, 0.11);
+
+  /* 边框：极淡的暖灰，弱化分割感 */
+  --semi-color-border: #ece8df;
+  --semi-color-nav-bg: #fffdf7;
+
+  /* 文本：近黑到暖灰 */
+  --semi-color-text-0: #18181b;
+  --semi-color-text-1: #3f3d39;
+  --semi-color-text-2: #76746c;
+  --semi-color-text-3: #a8a69c;
+
+  /* 主色 = 近黑（按钮黑底白字、链接、选中强调） */
+  --semi-color-primary: #18181b;
+  --semi-color-primary-hover: #000000;
+  --semi-color-primary-active: #000000;
+  --semi-color-primary-disabled: rgba(24, 24, 27, 0.28);
+  --semi-color-primary-light-default: rgba(24, 24, 27, 0.05);
+  --semi-color-primary-light-hover: rgba(24, 24, 27, 0.09);
+  --semi-color-primary-light-active: rgba(24, 24, 27, 0.14);
+
+  --semi-color-link: #18181b;
+  --semi-color-link-hover: #000000;
+  --semi-color-link-active: #000000;
+  --semi-color-focus-border: #18181b;
+
+  --semi-color-shadow: rgba(24, 24, 27, 0.06);
+}
+
+/* ============================================================
+ * 暗色主题 tokens — 与亮色呼应的「深炭灰 + 近白主色」
+ * ============================================================ */
+body[theme-mode='dark'] {
+  --semi-color-bg-0: #0f0f0e; /* 页面 / 侧边栏 / 头部 */
+  --semi-color-bg-1: #1a1a18; /* 卡片 / 弹窗 / 输入 */
+  --semi-color-bg-2: #232321;
+  --semi-color-bg-3: #2c2c29;
+  --semi-color-bg-4: #353532;
+
+  --semi-color-fill-0: rgba(245, 244, 239, 0.06);
+  --semi-color-fill-1: rgba(245, 244, 239, 0.1);
+  --semi-color-fill-2: rgba(245, 244, 239, 0.15);
+
+  --semi-color-border: #2e2d2a;
+  --semi-color-nav-bg: #0f0f0e;
+
+  --semi-color-text-0: #f5f4ef;
+  --semi-color-text-1: #c8c6bf;
+  --semi-color-text-2: #8f8d85;
+  --semi-color-text-3: #66645d;
+
+  /* 主色 = 近白（按钮白底深字） */
+  --semi-color-primary: #f5f4ef;
+  --semi-color-primary-hover: #ffffff;
+  --semi-color-primary-active: #e4e2da;
+  --semi-color-primary-disabled: rgba(245, 244, 239, 0.3);
+  --semi-color-primary-light-default: rgba(245, 244, 239, 0.1);
+  --semi-color-primary-light-hover: rgba(245, 244, 239, 0.16);
+  --semi-color-primary-light-active: rgba(245, 244, 239, 0.22);
+
+  --semi-color-link: #f5f4ef;
+  --semi-color-link-hover: #ffffff;
+  --semi-color-link-active: #ffffff;
+  --semi-color-focus-border: #f5f4ef;
+
+  --semi-color-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* 暗色下：实心主色按钮（近白底）需要深色文字，避免白底白字 */
+body[theme-mode='dark'] .semi-button-primary.semi-button-content-solid,
+body[theme-mode='dark'] .semi-button-primary.semi-button-content-solid .semi-button-content,
+body[theme-mode='dark'] .semi-button-primary.semi-button-content-solid .semi-icon {
+  color: #0f0f0e !important;
+}
+
+/* ============================================================
+ * 圆角 — 更大、更柔，按钮做成胶囊
+ * ============================================================ */
+
+/* 按钮 / 分页项 / 发送按钮 → 胶囊 */
+.semi-button,
+.semi-page-item,
+.semi-chat-inputBox-sendButton,
+.semi-tabs-tab-button {
+  border-radius: 999px !important;
+}
+
+/* 输入类控件 → 中等圆角 */
+.semi-input-wrapper,
+.semi-input-textarea-wrapper,
+.semi-select,
+.semi-tagInput,
+.semi-datepicker-range-input,
+.semi-radio,
+.semi-tag-closable,
+.semi-navigation-item,
+.semi-navigation-sub-title {
+  border-radius: 12px !important;
+}
+
+/* 卡片 / 弹窗 / 侧边抽屉 / 下拉浮层 → 大圆角 */
+.semi-card,
+.semi-modal-content,
+.semi-sidesheet-inner,
+.semi-dropdown-content,
+.semi-popover-content,
+.semi-table-wrapper {
+  border-radius: 16px !important;
+}
+
+/* 头像 / 标签保持较小圆角 */
+.semi-tag:not(.semi-tag-closable) {
+  border-radius: 8px !important;
+}
+
+/* ============================================================
+ * 组件精修 — 弱化边框、柔化阴影、贴近 b.ai 的「简单大气」
+ * ============================================================ */
+
+/* 卡片：去重边框，改用极淡边框 + 柔阴影 */
+body:not([theme-mode='dark']) .semi-card {
+  border: 1px solid var(--semi-color-border);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.03);
+}
+
+/* 实心主色按钮：柔和阴影，更接近 b.ai 黑色胶囊 CTA */
+.semi-button-primary.semi-button-content-solid {
+  box-shadow: none;
+}
+
+/* 顶部头部栏：去重描边，仅保留一条极淡分割线 */
+.semi-layout-header {
+  background-color: var(--semi-color-bg-0) !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+/* 侧边栏与页面同底色，无生硬竖线 */
+.sidebar-nav-item {
+  border-radius: 12px;
+  margin: 3px 10px;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--semi-color-fill-0);
+  color: var(--semi-color-text-0);
+}
+
+.sidebar-nav-item-selected {
+  background-color: var(--semi-color-fill-1);
+  color: var(--semi-color-text-0);
+  font-weight: 600;
+}
+
+/* 表格：表头透明轻盈、小号灰字；行更高更透气；发丝分割线 */
+.semi-table-thead > .semi-table-row > .semi-table-row-head {
+  background-color: transparent !important;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--semi-color-text-2) !important;
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell {
+  border-bottom: 1px solid var(--semi-color-border);
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.semi-table-row:hover > .semi-table-row-cell {
+  background-color: var(--semi-color-fill-0) !important;
+}
+
+/* ============================================================
+ * 输入类控件 —— b.ai 式：白底 + 发丝边框，去掉灰色填充
+ * ============================================================ */
+.semi-input-wrapper,
+.semi-input-number,
+.semi-select,
+.semi-tagInput,
+.semi-datepicker-range-input,
+.semi-cascader,
+.semi-input-textarea-wrapper {
+  background-color: var(--semi-color-bg-1) !important;
+  border: 1px solid var(--semi-color-border) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.semi-input-wrapper:hover,
+.semi-select:hover,
+.semi-tagInput:hover,
+.semi-input-number:hover,
+.semi-datepicker-range-input:hover {
+  border-color: var(--semi-color-text-3) !important;
+}
+
+/* 聚焦：近黑细描边 + 极淡光环，替代默认蓝色高亮 */
+.semi-input-wrapper:focus-within,
+.semi-input-textarea-wrapper:focus-within,
+.semi-input-number:focus-within,
+.semi-tagInput-focus,
+.semi-select-focus,
+.semi-select-open,
+.semi-datepicker-range-input-focus {
+  border-color: var(--semi-color-primary) !important;
+  box-shadow: 0 0 0 3px var(--semi-color-primary-light-default) !important;
+}
+
+/* 首页大搜索框不套用上面的白底边框（保持无缝） */
+.home-search-box .semi-input-textarea-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+ * 登录/注册等 auth 页：压淡背景光晕，保持 b.ai 的克制留白
+ * ============================================================ */
+html:not(.dark) .blur-ball-indigo {
+  background: #c8b6ff; /* 柔薰衣草 */
+  opacity: 0.1;
+}
+
+html:not(.dark) .blur-ball-teal {
+  background: #ffd9c0; /* 暖桃，呼应象牙白底 */
+  opacity: 0.12;
+}
+
+html.dark .blur-ball-indigo {
+  opacity: 0.18;
+}
+
+html.dark .blur-ball-teal {
+  opacity: 0.14;
+}
+
+/* auth 卡片：纯白、柔阴影、不要花哨渐变 */
+.semi-card.with-pastel-balls {
+  --pb-opacity: 0.18;
+}
+
+/* 分页：更轻盈 */
+.semi-page-item {
+  border: none;
+}
+
+.semi-page-item-active {
+  background-color: var(--semi-color-primary) !important;
+  color: var(--semi-color-bg-1) !important;
+}
+
+/* 顶部导航文字加粗，呼应 b.ai 的清晰导航 */
+.semi-navigation-horizontal .semi-navigation-item {
+  font-weight: 500;
+}
+
+/* Toast / 通知卡片更圆润 */
+.Toastify__toast {
+  border-radius: 14px !important;
+}
+
+/* ============================================================
+ * 首页 Hero 搜索框 — 还原 b.ai 无缝白底大圆角
+ * ============================================================ */
+.home-search-box .semi-input-textarea-wrapper,
+.home-search-box .semi-input-textarea {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.home-search-box .semi-input-textarea {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+ * 数据看板 —— b.ai 级精修：去盒子、单色、强层级、大留白
+ * ============================================================ */
+
+/* 4 组统计合成一块通透白板，用细分隔线而非一堆盒子 */
+.dashboard-stats-panel {
+  background: var(--semi-color-bg-1);
+  border: 1px solid var(--semi-color-border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.dashboard-stats-group {
+  padding: 22px 26px;
+  position: relative;
+}
+
+/* 组之间的细分隔线（桌面竖线 / 移动横线），只用一根发丝线 */
+@media (min-width: 1024px) {
+  .dashboard-stats-group:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18px;
+    bottom: 18px;
+    width: 1px;
+    background: var(--semi-color-border);
+  }
+}
+
+@media (max-width: 1023px) {
+  .dashboard-stats-group:not(:first-child) {
+    border-top: 1px solid var(--semi-color-border);
+  }
+}
+
+/* 组标题：小、灰、字间距拉开，作为弱化的分区标签 */
+.dashboard-stats-grouptitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semi-color-text-2);
+}
+
+.dashboard-stats-grouptitle svg {
+  width: 15px;
+  height: 15px;
+  opacity: 0.75;
+}
+
+/* 看板内的图表/信息卡：极简白板，弱边框、柔阴影、宽内边距 */
+.dashboard-root .semi-card {
+  background: var(--semi-color-bg-1);
+  border: 1px solid var(--semi-color-border) !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+}
+
+.dashboard-root .semi-card .semi-card-header {
+  padding: 18px 22px !important;
+}
+
+.dashboard-root .semi-card .semi-card-body {
+  padding: 8px 22px 18px !important;
+}
+
+/* 看板下划线 Tabs：去多余描边，激活态近黑 */
+.dashboard-chart-card .semi-tabs-bar-line {
+  border-bottom: none;
+}
+
+.dashboard-chart-card .semi-tabs-tab {
+  font-size: 13px;
+  color: var(--semi-color-text-2);
+}
+
+.dashboard-chart-card .semi-tabs-tab-active {
+  color: var(--semi-color-text-0);
+  font-weight: 600;
+}
+
+/* Tabs 单行排布，超出可横向滚动而不换行 */
+.dashboard-chart-tabs .semi-tabs-bar,
+.dashboard-chart-tabs .semi-tabs-content,
+.dashboard-chart-tabs [role='tablist'] {
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dashboard-chart-tabs .semi-tabs-bar::-webkit-scrollbar,
+.dashboard-chart-tabs .semi-tabs-content::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboard-chart-tabs .semi-tabs-tab {
+  white-space: nowrap;
+  flex-shrink: 0;
+}

@@ -17,45 +17,27 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { memo, useCallback } from 'react';
-import { Input, Button, Switch, Select, Divider } from '@douyinfe/semi-ui';
-import { IconSearch, IconCopy, IconFilter } from '@douyinfe/semi-icons';
+import React, { memo, useCallback, useMemo } from 'react';
+import { Input, Button, Divider, Select } from '@douyinfe/semi-ui';
+import { IconSearch } from '@douyinfe/semi-icons';
+import { getLobeHubIcon } from '../../../../../helpers';
 
 const SearchActions = memo(
   ({
-    selectedRowKeys = [],
-    copyText,
     handleChange,
     handleCompositionStart,
     handleCompositionEnd,
     isMobile = false,
     searchValue = '',
-    setShowFilterModal,
-    showWithRecharge,
-    setShowWithRecharge,
-    currency,
-    setCurrency,
-    siteDisplayType,
-    showRatio,
-    setShowRatio,
+    filterVendor = 'all',
+    setFilterVendor,
+    models = [],
     viewMode,
     setViewMode,
     tokenUnit,
     setTokenUnit,
     t,
   }) => {
-    const supportsCurrencyDisplay = siteDisplayType !== 'TOKENS';
-
-    const handleCopyClick = useCallback(() => {
-      if (copyText && selectedRowKeys.length > 0) {
-        copyText(selectedRowKeys);
-      }
-    }, [copyText, selectedRowKeys]);
-
-    const handleFilterClick = useCallback(() => {
-      setShowFilterModal?.(true);
-    }, [setShowFilterModal]);
-
     const handleViewModeToggle = useCallback(() => {
       setViewMode?.(viewMode === 'table' ? 'card' : 'table');
     }, [viewMode, setViewMode]);
@@ -64,9 +46,46 @@ const SearchActions = memo(
       setTokenUnit?.(tokenUnit === 'K' ? 'M' : 'K');
     }, [tokenUnit, setTokenUnit]);
 
+    // 由模型列表归纳出供应商下拉选项（含图标）
+    const vendorOptions = useMemo(() => {
+      const icons = new Map();
+      const vendors = new Set();
+      let hasUnknown = false;
+      (models || []).forEach((m) => {
+        if (m.vendor_name) {
+          vendors.add(m.vendor_name);
+          if (m.vendor_icon && !icons.has(m.vendor_name)) {
+            icons.set(m.vendor_name, m.vendor_icon);
+          }
+        } else {
+          hasUnknown = true;
+        }
+      });
+
+      const withIcon = (node, label) => (
+        <span className='flex items-center gap-2'>
+          {node}
+          <span className='truncate'>{label}</span>
+        </span>
+      );
+
+      const opts = [{ value: 'all', label: t('全部供应商') }];
+      Array.from(vendors)
+        .sort()
+        .forEach((name) => {
+          const icon = icons.get(name);
+          opts.push({
+            value: name,
+            label: icon ? withIcon(getLobeHubIcon(icon, 16), name) : name,
+          });
+        });
+      if (hasUnknown) opts.push({ value: 'unknown', label: t('未知供应商') });
+      return opts;
+    }, [models, t]);
+
     return (
       <div className='flex items-center gap-2 w-full'>
-        <div className='flex-1'>
+        <div className='flex-1 min-w-0'>
           <Input
             prefix={<IconSearch />}
             placeholder={t('模糊搜索模型名称')}
@@ -78,50 +97,19 @@ const SearchActions = memo(
           />
         </div>
 
-        <Button
-          theme='outline'
-          type='primary'
-          icon={<IconCopy />}
-          onClick={handleCopyClick}
-          disabled={selectedRowKeys.length === 0}
-          className='!bg-blue-500 hover:!bg-blue-600 !text-white disabled:!bg-gray-300 disabled:!text-gray-500'
-        >
-          {t('复制')}
-        </Button>
+        {/* 供应商下拉筛选 —— 与搜索并列 */}
+        <Select
+          value={filterVendor}
+          onChange={setFilterVendor}
+          optionList={vendorOptions}
+          insetLabel={t('供应商')}
+          className='shrink-0'
+          style={{ width: isMobile ? 130 : 190 }}
+        />
 
         {!isMobile && (
           <>
             <Divider layout='vertical' margin='8px' />
-
-            {/* 充值价格显示开关 */}
-            {supportsCurrencyDisplay && (
-              <div className='flex items-center gap-2'>
-                <span className='text-sm text-gray-600'>{t('充值价格显示')}</span>
-                <Switch
-                  checked={showWithRecharge}
-                  onChange={setShowWithRecharge}
-                />
-              </div>
-            )}
-
-            {/* 货币单位选择 */}
-            {supportsCurrencyDisplay && showWithRecharge && (
-              <Select
-                value={currency}
-                onChange={setCurrency}
-                optionList={[
-                  { value: 'USD', label: 'USD' },
-                  { value: 'CNY', label: 'CNY' },
-                  { value: 'CUSTOM', label: t('自定义货币') },
-                ]}
-              />
-            )}
-
-            {/* 显示倍率开关 */}
-            <div className='flex items-center gap-2'>
-              <span className='text-sm text-gray-600'>{t('倍率')}</span>
-              <Switch checked={showRatio} onChange={setShowRatio} />
-            </div>
 
             {/* 视图模式切换按钮 */}
             <Button
@@ -141,17 +129,6 @@ const SearchActions = memo(
               {tokenUnit}
             </Button>
           </>
-        )}
-
-        {isMobile && (
-          <Button
-            theme='outline'
-            type='tertiary'
-            icon={<IconFilter />}
-            onClick={handleFilterClick}
-          >
-            {t('筛选')}
-          </Button>
         )}
       </div>
     );

@@ -35,17 +35,12 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
 
     const allLinks = [
       {
-        text: t('首页'),
-        itemKey: 'home',
-        to: '/',
-      },
-      {
         text: t('控制台'),
         itemKey: 'console',
         to: '/console',
       },
       {
-        text: t('模型广场'),
+        text: t('模型与价格'),
         itemKey: 'pricing',
         to: '/pricing',
       },

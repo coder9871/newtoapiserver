@@ -18,48 +18,52 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { Card, Avatar, Skeleton, Tag } from '@douyinfe/semi-ui';
+import { Button, Skeleton } from '@douyinfe/semi-ui';
 import { VChart } from '@visactor/react-vchart';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+// 单色趋势线 —— 摒弃彩虹色，保持 b.ai 的克制
+const TREND_COLOR = '#9a978d';
 
 const StatsCards = ({
   groupedStatsData,
   loading,
   getTrendSpec,
-  CARD_PROPS,
   CHART_CONFIG,
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
   return (
-    <div className='mb-4'>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {groupedStatsData.map((group, idx) => (
-          <Card
-            key={idx}
-            {...CARD_PROPS}
-            className={`${group.color} border-0 !rounded-2xl w-full`}
-            title={group.title}
-          >
-            <div className='space-y-4'>
-              {group.items.map((item, itemIdx) => (
-                <div
-                  key={itemIdx}
-                  className='flex items-center justify-between cursor-pointer'
-                  onClick={item.onClick}
-                >
-                  <div className='flex items-center'>
-                    <Avatar
-                      className='mr-3'
-                      size='small'
-                      color={item.avatarColor}
+    <div className='mb-8'>
+      <div className='dashboard-stats-panel'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
+          {groupedStatsData.map((group, idx) => (
+            <div key={idx} className='dashboard-stats-group'>
+              <div className='dashboard-stats-grouptitle'>{group.title}</div>
+
+              <div className='space-y-6'>
+                {group.items.map((item, itemIdx) => {
+                  const isBalance = item.title === t('当前余额');
+                  const hasMeaningfulTrend =
+                    Array.isArray(item.trendData) &&
+                    item.trendData.length > 1 &&
+                    item.trendData.some((v) => Number(v) > 0);
+                  const hasTrend = !isBalance && !loading && hasMeaningfulTrend;
+
+                  return (
+                    <div
+                      key={itemIdx}
+                      className={`flex items-end justify-between gap-2 ${
+                        item.onClick ? 'cursor-pointer' : ''
+                      }`}
+                      onClick={item.onClick}
                     >
-                      {item.icon}
-                    </Avatar>
-                    <div>
-                      <div className='text-xs text-gray-500'>{item.title}</div>
-                      <div className='text-lg font-semibold'>
+                      <div className='min-w-0'>
+                        <div className='text-xs text-semi-color-text-2 mb-1 truncate'>
+                          {item.title}
+                        </div>
                         <Skeleton
                           loading={loading}
                           active
@@ -67,47 +71,46 @@ const StatsCards = ({
                             <Skeleton.Paragraph
                               active
                               rows={1}
-                              style={{
-                                width: '65px',
-                                height: '24px',
-                                marginTop: '4px',
-                              }}
+                              style={{ width: '72px', height: '28px' }}
                             />
                           }
                         >
-                          {item.value}
+                          <div className='text-[26px] leading-none font-semibold tracking-tight text-semi-color-text-0 tabular-nums'>
+                            {item.value}
+                          </div>
                         </Skeleton>
                       </div>
+
+                      {isBalance ? (
+                        <Button
+                          size='small'
+                          theme='solid'
+                          type='primary'
+                          className='!rounded-full !h-7 !px-3.5 shrink-0'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/console/topup');
+                          }}
+                        >
+                          {t('充值')}
+                        </Button>
+                      ) : (
+                        hasTrend && (
+                          <div className='w-20 h-8 shrink-0 opacity-80'>
+                            <VChart
+                              spec={getTrendSpec(item.trendData, TREND_COLOR)}
+                              option={CHART_CONFIG}
+                            />
+                          </div>
+                        )
+                      )}
                     </div>
-                  </div>
-                  {item.title === t('当前余额') ? (
-                    <Tag
-                      color='white'
-                      shape='circle'
-                      size='large'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/console/topup');
-                      }}
-                    >
-                      {t('充值')}
-                    </Tag>
-                  ) : (
-                    (loading ||
-                      (item.trendData && item.trendData.length > 0)) && (
-                      <div className='w-24 h-10'>
-                        <VChart
-                          spec={getTrendSpec(item.trendData, item.trendColor)}
-                          option={CHART_CONFIG}
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
-          </Card>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
