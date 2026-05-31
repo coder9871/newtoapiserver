@@ -1,6 +1,8 @@
 docker compose -f self/docker-compose.postgres.yml up -d
 docker compose -f self/docker-compose.redis.yml up -d
 
+curl -fsSL https://bun.sh/install | bash
+
 # 默认前端
 cd web/default && bun install && bun run build && cd ../..
 # 经典前端
