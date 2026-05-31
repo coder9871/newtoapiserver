@@ -40,3 +40,4 @@ skills-lock.json
 postgres_data
 redis_data
 server
+web/minimal/dist
