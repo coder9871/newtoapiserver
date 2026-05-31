@@ -29,7 +29,7 @@ const NotificationButton = ({ unreadCount, onNoticeOpen, t }) => {
     theme: 'borderless',
     type: 'tertiary',
     className:
-      '!p-1.5 !text-current focus:!bg-semi-color-fill-1 dark:focus:!bg-gray-700 !rounded-full !bg-semi-color-fill-0 dark:!bg-semi-color-fill-1 hover:!bg-semi-color-fill-1 dark:hover:!bg-semi-color-fill-2',
+      '!w-9 !h-9 !p-0 inline-flex items-center justify-center !rounded-full !bg-transparent !text-semi-color-text-2 hover:!bg-semi-color-fill-0 hover:!text-semi-color-text-0 focus:!bg-semi-color-fill-0 transition-colors duration-200',
   };
 
   if (unreadCount > 0) {

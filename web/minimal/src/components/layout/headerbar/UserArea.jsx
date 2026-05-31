@@ -166,7 +166,7 @@ const UserArea = ({
           <Button
             theme='borderless'
             type='tertiary'
-            className='flex items-center gap-1.5 !p-1 !rounded-full hover:!bg-semi-color-fill-1 dark:hover:!bg-gray-700 !bg-semi-color-fill-0 dark:!bg-semi-color-fill-1 dark:hover:!bg-semi-color-fill-2'
+            className='flex items-center gap-1.5 !h-9 !pl-1 !pr-2 !rounded-full !bg-transparent hover:!bg-semi-color-fill-0 transition-colors duration-200'
           >
             <Avatar
               size='extra-small'
@@ -193,16 +193,16 @@ const UserArea = ({
     const showRegisterButton = false;
 
     const commonSizingAndLayoutClass =
-      'flex items-center justify-center !py-[10px] !px-1.5';
+      'flex items-center justify-center !h-9 !px-3';
 
     const loginButtonSpecificStyling =
-      '!bg-semi-color-fill-0 dark:!bg-semi-color-fill-1 hover:!bg-semi-color-fill-1 dark:hover:!bg-gray-700 transition-colors';
+      '!bg-transparent hover:!bg-semi-color-fill-0 transition-colors duration-200';
     let loginButtonClasses = `${commonSizingAndLayoutClass} ${loginButtonSpecificStyling}`;
 
     let registerButtonClasses = `${commonSizingAndLayoutClass}`;
 
     const loginButtonTextSpanClass =
-      '!text-xs !text-semi-color-text-1 dark:!text-gray-300 !p-1.5';
+      '!text-sm !font-medium !text-semi-color-text-1 dark:!text-gray-300';
     const registerButtonTextSpanClass = '!text-xs !text-white !p-1.5';
 
     if (showRegisterButton) {

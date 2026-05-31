@@ -34,7 +34,7 @@ const ThemeToggle = ({ onThemeToggle, t }) => {
       onClick={() => onThemeToggle(isDark ? 'light' : 'dark')}
       theme='borderless'
       type='tertiary'
-      className='!p-1.5 !text-current focus:!bg-semi-color-fill-1 !rounded-full !bg-semi-color-fill-0 hover:!bg-semi-color-fill-1'
+      className='!w-9 !h-9 !p-0 inline-flex items-center justify-center !rounded-full !bg-transparent !text-semi-color-text-2 hover:!bg-semi-color-fill-0 hover:!text-semi-color-text-0 focus:!bg-semi-color-fill-0 transition-colors duration-200'
     />
   );
 };
