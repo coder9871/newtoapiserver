@@ -20,10 +20,11 @@ For commercial licensing, please contact support@quantumnous.com
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, TextArea, Typography } from '@douyinfe/semi-ui';
+import { Button, TextArea } from '@douyinfe/semi-ui';
 import { Send } from 'lucide-react';
 
 import { getSystemName } from '../../helpers';
+import './home.css';
 
 const PENDING_PROMPT_KEY = 'minimal_pending_prompt';
 
@@ -57,45 +58,42 @@ const Home = () => {
   );
 
   return (
-    <div
-      className='flex flex-col items-center justify-center px-4'
-      style={{ minHeight: 'calc(100vh - 64px)', paddingTop: 64 }}
-    >
-      <div className='flex w-full max-w-2xl flex-col items-center'>
-        <Typography.Title
-          heading={1}
-          className='!mb-8 text-center !font-semibold tracking-tight'
-        >
-          {systemName || t('开始对话')}
-        </Typography.Title>
+    <main className='minimal-home'>
+      <section className='minimal-home__stage' aria-label={systemName}>
+        <div className='minimal-home__content'>
+          <h1 className='minimal-home__title'>{systemName}</h1>
 
-        <div className='home-search-box flex w-full items-end gap-2 rounded-full border border-semi-color-border bg-semi-color-bg-1 py-2 pl-5 pr-2 shadow-sm transition-all duration-200 focus-within:shadow-md focus-within:border-semi-color-text-2'>
-          <TextArea
-            value={prompt}
-            onChange={setPrompt}
-            onKeyDown={handleKeyDown}
-            placeholder={t('请输入您的问题...')}
-            rows={1}
-            autosize
-            style={{
-              border: 'none',
-              boxShadow: 'none',
-              resize: 'none',
-              background: 'transparent',
-            }}
-          />
+          <div className='home-search-box minimal-home__prompt'>
+            <TextArea
+              className='minimal-home__textarea'
+              value={prompt}
+              onChange={setPrompt}
+              onKeyDown={handleKeyDown}
+              placeholder={t('请输入您的问题...')}
+              aria-label={t('请输入您的问题...')}
+              rows={1}
+              autosize={{ minRows: 1, maxRows: 4 }}
+              style={{
+                border: 'none',
+                boxShadow: 'none',
+                resize: 'none',
+                background: 'transparent',
+              }}
+            />
 
-          <Button
-            theme='solid'
-            type='primary'
-            icon={<Send size={16} />}
-            onClick={handleSend}
-            disabled={!prompt.trim()}
-            className='!h-9 !w-9 !rounded-full shrink-0'
-          />
+            <Button
+              theme='solid'
+              type='primary'
+              icon={<Send size={18} />}
+              onClick={handleSend}
+              disabled={!prompt.trim()}
+              className='minimal-home__send'
+              aria-label={t('操练场')}
+            />
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

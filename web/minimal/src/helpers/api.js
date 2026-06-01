@@ -36,7 +36,6 @@ export let API = axios.create({
   },
 });
 
-
 function redirectToOAuthUrl(url, options = {}) {
   const { openInNewTab = false } = options;
   const targetUrl = typeof url === 'string' ? url : url.toString();
@@ -48,7 +47,6 @@ function redirectToOAuthUrl(url, options = {}) {
 
   window.location.assign(targetUrl);
 }
-
 
 function patchAPIInstance(instance) {
   const originalGet = instance.get.bind(instance);
@@ -198,13 +196,25 @@ export const processModelsData = (data, currentModel) => {
     value: model,
   }));
 
-  const hasCurrentModel = modelOptions.some(
-    (option) => option.value === currentModel,
-  );
-  const selectedModel =
-    hasCurrentModel && modelOptions.length > 0
-      ? currentModel
-      : modelOptions[0]?.value;
+  const hasCurrentModel =
+    currentModel &&
+    modelOptions.some((option) => option.value === currentModel);
+
+  let selectedModel;
+  if (hasCurrentModel) {
+    // 用户已选择（或从已保存配置恢复）的有效模型，保持不变
+    selectedModel = currentModel;
+  } else {
+    // 初始化默认模型：优先 gpt-5.4，其次任意 deepseek 模型，最后回退到第一个
+    const preferredModel = modelOptions.find(
+      (option) => option.value === 'gpt-5.4',
+    );
+    const deepseekModel = modelOptions.find((option) =>
+      option.value.toLowerCase().includes('deepseek'),
+    );
+    selectedModel =
+      preferredModel?.value || deepseekModel?.value || modelOptions[0]?.value;
+  }
 
   return { modelOptions, selectedModel };
 };

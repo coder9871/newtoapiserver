@@ -86,7 +86,13 @@ const LoginForm = () => {
     } catch (e) {
       // ignore
     }
-    return location.state?.from?.pathname || '/console';
+    const from = location.state?.from?.pathname;
+    // 裸控制台首页(Dashboard)统一改用操练场作为默认落点；
+    // 其它具体来源页(如 /console/token)仍按原页面回跳。
+    if (from && from !== '/console') {
+      return from;
+    }
+    return '/console/playground';
   })();
   const { t } = useTranslation();
   const githubButtonTextKeyByState = {
@@ -464,7 +470,7 @@ const LoginForm = () => {
         setUserData(finish.data);
         updateAPI();
         showSuccess('登录成功！');
-        navigate('/console');
+        navigate('/console/playground');
       } else {
         showError(finish.message || 'Passkey 登录失败，请重试');
       }
@@ -492,7 +498,7 @@ const LoginForm = () => {
     setUserData(data);
     updateAPI();
     showSuccess('登录成功！');
-    navigate('/console');
+    navigate('/console/playground');
   };
 
   // 返回登录页面
