@@ -51,6 +51,17 @@ body {
   height: calc(100dvh - 64px);
 }
 
+/*
+ * 头部与内容融为一体（全部页面）：
+ * 头部与页面主体本就同色，唯一的「分割」来自布局头部底部那条 1px 边框。
+ * 去掉它（连同可能的阴影），头部即与下方内容连成同一块面。
+ * 首页另有更彻底的「透明融入渐变」规则，见 pages/Home/home.css。
+ */
+.semi-layout-header {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
