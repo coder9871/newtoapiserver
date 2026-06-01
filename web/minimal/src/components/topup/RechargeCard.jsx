@@ -124,107 +124,58 @@ const RechargeCard = ({
   const topupContent = (
     <Space vertical style={{ width: '100%' }}>
       {/* 统计数据 */}
-      <Card
-        className='!rounded-xl w-full'
-        cover={
-          <div
-            className='relative h-30'
-            style={{
-              '--palette-primary-darkerChannel': '37 99 235',
-              backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            <div className='relative z-10 h-full flex flex-col justify-between p-4'>
-              <div className='flex justify-between items-center'>
-                <Text strong style={{ color: 'white', fontSize: '16px' }}>
-                  {t('账户统计')}
+      <Card className='!rounded-xl w-full'>
+        {/* 账户统计 */}
+        <div className='grid grid-cols-3 gap-3 mb-6'>
+          {[
+            {
+              icon: Wallet,
+              value: renderQuota(userState?.user?.quota),
+              label: t('当前余额'),
+            },
+            {
+              icon: TrendingUp,
+              value: renderQuota(userState?.user?.used_quota),
+              label: t('历史消耗'),
+            },
+            {
+              icon: BarChart2,
+              value: userState?.user?.request_count || 0,
+              label: t('请求次数'),
+            },
+          ].map((stat, idx) => {
+            const StatIcon = stat.icon;
+            return (
+              <div
+                key={idx}
+                className='flex flex-col items-center justify-center text-center py-5 px-2 rounded-xl'
+                style={{ background: 'var(--semi-color-fill-0)' }}
+              >
+                <div
+                  className='flex items-center justify-center w-9 h-9 rounded-full mb-2'
+                  style={{
+                    background: 'var(--semi-color-primary-light-default)',
+                  }}
+                >
+                  <StatIcon
+                    size={18}
+                    style={{ color: 'var(--semi-color-primary)' }}
+                  />
+                </div>
+                <div
+                  className='text-lg sm:text-2xl font-bold'
+                  style={{ color: 'var(--semi-color-text-0)' }}
+                >
+                  {stat.value}
+                </div>
+                <Text type='tertiary' className='mt-1' style={{ fontSize: 12 }}>
+                  {stat.label}
                 </Text>
               </div>
+            );
+          })}
+        </div>
 
-              {/* 统计数据 */}
-              <div className='grid grid-cols-3 gap-6 mt-4'>
-                {/* 当前余额 */}
-                <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
-                    {renderQuota(userState?.user?.quota)}
-                  </div>
-                  <div className='flex items-center justify-center text-sm'>
-                    <Wallet
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
-                      {t('当前余额')}
-                    </Text>
-                  </div>
-                </div>
-
-                {/* 历史消耗 */}
-                <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
-                    {renderQuota(userState?.user?.used_quota)}
-                  </div>
-                  <div className='flex items-center justify-center text-sm'>
-                    <TrendingUp
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
-                      {t('历史消耗')}
-                    </Text>
-                  </div>
-                </div>
-
-                {/* 请求次数 */}
-                <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
-                    {userState?.user?.request_count || 0}
-                  </div>
-                  <div className='flex items-center justify-center text-sm'>
-                    <BarChart2
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
-                      {t('请求次数')}
-                    </Text>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      >
         {/* 在线充值表单 */}
         {statusLoading ? (
           <div className='py-8 flex justify-center'>

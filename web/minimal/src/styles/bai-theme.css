@@ -28,17 +28,21 @@ For commercial licensing, please contact support@quantumnous.com
  * 通过覆盖 Semi Design 的 CSS 变量实现全站换肤。
  * ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ---------- 字体 ---------- */
+/* ---------- 字体 ----------
+ * 正文采用 Inter（屏显锐利的中性无衬线，还原 b.ai 清爽观感），
+ * 中文回退到 PingFang / 微软雅黑等系统字体。
+ */
 body,
 .semi-always-light,
 .semi-always-dark {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* ============================================================

@@ -11,6 +11,18 @@
     linear-gradient(180deg, var(--semi-color-bg-0) 0%, var(--semi-color-bg-1) 100%);
 }
 
+/*
+ * 首页：头部固定(position:fixed)且本身不占文档流，首页渐变背景从视口顶端 y=0
+ * 起即已铺在头部之后。这里把头部背景设为透明，去掉那条不透明白条形成的下边缘，
+ * 让头部与首页背景融为一整片（逻辑上仍是各自独立的组件，仅首页路由生效）。
+ */
+body.minimal-home-route header {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 0 !important;
+  backdrop-filter: none !important;
+}
+
 .minimal-home__stage {
   width: min(720px, 100%);
 }
@@ -23,16 +35,85 @@
   animation: minimal-home-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.minimal-home__title {
+.minimal-home__slogan {
   max-width: 100%;
-  margin: 0 0 34px;
-  color: var(--semi-color-text-0);
-  font-size: clamp(44px, 7vw, 76px);
-  line-height: 0.98;
-  font-weight: 720;
-  letter-spacing: 0;
+  margin: 0 0 38px;
+  font-size: clamp(22px, 3.4vw, 34px);
+  font-weight: 660;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
   text-align: center;
+  color: var(--semi-color-text-0);
   overflow-wrap: anywhere;
+}
+
+/* 逐词淡入（进场一次）+ 波浪浮动（持续循环） */
+.minimal-home__slogan-seg {
+  display: inline-block;
+  opacity: 0;
+  animation: minimal-slogan-in 560ms ease both;
+  animation-delay: calc(300ms + var(--seg) * 140ms);
+}
+
+/* 两个关键词：渐变流光 */
+.minimal-home__slogan-key {
+  position: relative;
+  font-weight: 760;
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* 进场淡入 + 渐变流光（仅动 background-position，不影响文字清晰度） */
+  animation:
+    minimal-slogan-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    minimal-slogan-shine 4.5s ease-in-out infinite;
+  animation-delay:
+    calc(300ms + var(--seg) * 140ms),
+    calc(1000ms + var(--seg) * 140ms);
+}
+
+.minimal-home__slogan-key--a {
+  background-image: linear-gradient(
+    100deg,
+    #6366f1 0%,
+    #8b5cf6 28%,
+    #ec4899 52%,
+    #8b5cf6 76%,
+    #6366f1 100%
+  );
+}
+
+.minimal-home__slogan-key--b {
+  background-image: linear-gradient(
+    100deg,
+    #0ea5e9 0%,
+    #06b6d4 28%,
+    #10b981 52%,
+    #06b6d4 76%,
+    #0ea5e9 100%
+  );
+}
+
+@keyframes minimal-slogan-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes minimal-slogan-shine {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .minimal-home__prompt {
@@ -106,9 +187,10 @@
     padding: 48px 14px 36px;
   }
 
-  .minimal-home__title {
-    margin-bottom: 26px;
-    font-size: clamp(38px, 14vw, 56px);
+  .minimal-home__slogan {
+    margin-bottom: 28px;
+    font-size: clamp(20px, 6vw, 26px);
+    letter-spacing: 0.3px;
   }
 
   .minimal-home__prompt {
@@ -135,5 +217,19 @@
 
   .minimal-home__prompt {
     transition: none;
+  }
+
+  .minimal-home__slogan-seg,
+  .minimal-home__slogan-key {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+  }
+
+  /* 关键词在禁用动画时仍保留渐变着色 */
+  .minimal-home__slogan-key {
+    -webkit-text-fill-color: transparent;
+    background-position: 0% 50%;
   }
 }

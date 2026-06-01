@@ -52,70 +52,42 @@ const UserInfoHeader = ({ t, userState }) => {
   };
 
   return (
-    <Card
-      className='!rounded-2xl overflow-hidden'
-      cover={
-        <div
-          className='relative h-32'
-          style={{
-            '--palette-primary-darkerChannel': '0 75 80',
-            backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          {/* 用户信息内容 */}
-          <div className='relative z-10 h-full flex flex-col justify-end p-6'>
-            <div className='flex items-center'>
-              <div className='flex items-stretch gap-3 sm:gap-4 flex-1 min-w-0'>
-                <Avatar size='large' color={stringToColor(getUsername())}>
-                  {getAvatarText()}
-                </Avatar>
-                <div className='flex-1 min-w-0 flex flex-col justify-between'>
-                  <div
-                    className='text-3xl font-bold truncate'
-                    style={{ color: 'white' }}
-                  >
-                    {getUsername()}
-                  </div>
-                  <div className='flex flex-wrap items-center gap-2'>
-                    {isRoot() ? (
-                      <Tag
-                        size='large'
-                        shape='circle'
-                        style={{ color: 'white' }}
-                      >
-                        {t('超级管理员')}
-                      </Tag>
-                    ) : isAdmin() ? (
-                      <Tag
-                        size='large'
-                        shape='circle'
-                        style={{ color: 'white' }}
-                      >
-                        {t('管理员')}
-                      </Tag>
-                    ) : (
-                      <Tag
-                        size='large'
-                        shape='circle'
-                        style={{ color: 'white' }}
-                      >
-                        {t('普通用户')}
-                      </Tag>
-                    )}
-                    <Tag size='large' shape='circle' style={{ color: 'white' }}>
-                      ID: {userState?.user?.id}
-                    </Tag>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <Card className='!rounded-2xl'>
+      {/* 用户信息头部 */}
+      <div className='flex items-center gap-3 sm:gap-4'>
+        <Avatar size='large' color={stringToColor(getUsername())}>
+          {getAvatarText()}
+        </Avatar>
+        <div className='flex-1 min-w-0'>
+          <div
+            className='text-2xl font-bold truncate'
+            style={{ color: 'var(--semi-color-text-0)' }}
+          >
+            {getUsername()}
+          </div>
+          <div className='flex flex-wrap items-center gap-2 mt-1'>
+            {isRoot() ? (
+              <Tag size='large' shape='circle' color='red'>
+                {t('超级管理员')}
+              </Tag>
+            ) : isAdmin() ? (
+              <Tag size='large' shape='circle' color='blue'>
+                {t('管理员')}
+              </Tag>
+            ) : (
+              <Tag size='large' shape='circle' color='green'>
+                {t('普通用户')}
+              </Tag>
+            )}
+            <Tag size='large' shape='circle' color='grey'>
+              ID: {userState?.user?.id}
+            </Tag>
           </div>
         </div>
-      }
-    >
+      </div>
+
+      <Divider margin='16px' />
+
       {/* 当前余额和桌面版统计信息 */}
       <div className='flex items-start justify-between gap-6'>
         {/* 当前余额显示 */}

@@ -17,13 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button, TextArea } from '@douyinfe/semi-ui';
 import { Send } from 'lucide-react';
 
-import { getSystemName } from '../../helpers';
 import './home.css';
 
 const PENDING_PROMPT_KEY = 'minimal_pending_prompt';
@@ -31,9 +30,18 @@ const PENDING_PROMPT_KEY = 'minimal_pending_prompt';
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const systemName = getSystemName();
 
   const [prompt, setPrompt] = useState('');
+
+  // 首页：让头部与内容区视觉融为一体（去掉头部与背景之间的横向接缝）
+  // 逻辑上头部与首页仍是分开的组件，这里仅通过路由标记类让头部背景透明、
+  // 首页背景上移铺到头部之后，形成贯穿顶部的一整片渐变。
+  useEffect(() => {
+    document.body.classList.add('minimal-home-route');
+    return () => {
+      document.body.classList.remove('minimal-home-route');
+    };
+  }, []);
 
   // 发送：把问题带到操练场（未登录会被 PrivateRoute 引导登录后回到操练场再自动发送）
   const handleSend = useCallback(() => {
@@ -59,9 +67,34 @@ const Home = () => {
 
   return (
     <main className='minimal-home'>
-      <section className='minimal-home__stage' aria-label={systemName}>
+      <section
+        className='minimal-home__stage'
+        aria-label={t('聚合全球大模型，导航海量智能体')}
+      >
         <div className='minimal-home__content'>
-          <h1 className='minimal-home__title'>{systemName}</h1>
+          <h1
+            className='minimal-home__slogan'
+            aria-label={t('聚合全球大模型，导航海量智能体')}
+          >
+            <span className='minimal-home__slogan-seg' style={{ '--seg': 0 }}>
+              {t('聚合全球')}
+            </span>
+            <span
+              className='minimal-home__slogan-seg minimal-home__slogan-key minimal-home__slogan-key--a'
+              style={{ '--seg': 1 }}
+            >
+              {t('大模型')}
+            </span>
+            <span className='minimal-home__slogan-seg' style={{ '--seg': 2 }}>
+              {t('，导航海量')}
+            </span>
+            <span
+              className='minimal-home__slogan-seg minimal-home__slogan-key minimal-home__slogan-key--b'
+              style={{ '--seg': 3 }}
+            >
+              {t('智能体')}
+            </span>
+          </h1>
 
           <div className='home-search-box minimal-home__prompt'>
             <TextArea

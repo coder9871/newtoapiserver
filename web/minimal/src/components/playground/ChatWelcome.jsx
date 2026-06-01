@@ -18,10 +18,9 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React, { useCallback, useState } from 'react';
-import { Typography, TextArea, Button, Select } from '@douyinfe/semi-ui';
+import { TextArea, Button, Select } from '@douyinfe/semi-ui';
 import { Send } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getSystemName } from '../../helpers';
 
 /**
  * 对话欢迎页 —— 未开始对话时展示，风格与首页一致：
@@ -29,7 +28,6 @@ import { getSystemName } from '../../helpers';
  */
 const ChatWelcome = ({ models = [], model, onModelChange, onSend }) => {
   const { t } = useTranslation();
-  const systemName = getSystemName();
   const [prompt, setPrompt] = useState('');
 
   const handleSend = useCallback(() => {
@@ -52,13 +50,6 @@ const ChatWelcome = ({ models = [], model, onModelChange, onSend }) => {
   return (
     <div className='flex h-full flex-col items-center justify-center px-4'>
       <div className='flex w-full max-w-2xl flex-col items-center'>
-        <Typography.Title
-          heading={1}
-          className='!mb-6 text-center !font-semibold tracking-tight'
-        >
-          {systemName || t('开始对话')}
-        </Typography.Title>
-
         {/* 模型选择 */}
         <div className='mb-4'>
           <Select
