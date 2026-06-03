@@ -37,21 +37,23 @@ import {
 import {
   stringToColor,
   calculateModelPrice,
-  formatPriceInfo,
   formatDynamicPriceSummary,
+  getModelPriceItems,
   getLobeHubIcon,
 } from '../../../../../helpers';
 import PricingCardSkeleton from './PricingCardSkeleton';
 import { useMinimumLoadingTime } from '../../../../../hooks/common/useMinimumLoadingTime';
 import { renderLimitedItems } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
+import PricingDiscountTag, {
+  getPricingDiscountMeta,
+} from '../../common/PricingDiscount';
 
 const CARD_STYLES = {
-  container:
-    'w-12 h-12 rounded-2xl flex items-center justify-center relative shadow-md',
+  container: 'pricing-model-avatar',
   icon: 'w-8 h-8 flex items-center justify-center',
-  selected: 'border-blue-500 bg-blue-50',
-  default: 'border-gray-200 hover:border-gray-300',
+  selected: 'pricing-model-card-selected',
+  default: '',
 };
 
 const PricingCardView = ({
@@ -152,6 +154,60 @@ const PricingCardView = ({
     return record.description || '';
   };
 
+  const renderCardPricing = (priceData) => {
+    if (priceData.isDynamicPricing) {
+      return (
+        <div className='pricing-card-price pricing-card-price-dynamic'>
+          {formatDynamicPriceSummary(
+            priceData.billingExpr,
+            t,
+            priceData.usedGroupRatio,
+          )}
+        </div>
+      );
+    }
+
+    const priceItems = getModelPriceItems(priceData, t, siteDisplayType);
+    const primaryCount = priceData.isPerToken ? 2 : 1;
+    const primaryItems = priceItems.slice(0, primaryCount);
+    const secondaryItems = priceItems.slice(primaryCount, primaryCount + 3);
+    const extraCount =
+      priceItems.length - primaryItems.length - secondaryItems.length;
+
+    return (
+      <div className='pricing-card-price'>
+        <div className='pricing-price-primary-grid'>
+          {primaryItems.map((item) => (
+            <div key={item.key} className='pricing-price-primary'>
+              <div className='pricing-price-label'>{item.label}</div>
+              <div className='pricing-price-value'>
+                {item.value}
+                {item.suffix && (
+                  <span className='pricing-price-suffix'>{item.suffix}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {(secondaryItems.length > 0 || extraCount > 0) && (
+          <div className='pricing-price-secondary-row'>
+            {secondaryItems.map((item) => (
+              <span key={item.key} className='pricing-price-chip'>
+                {item.label} {item.value}
+              </span>
+            ))}
+            {extraCount > 0 && (
+              <span className='pricing-price-chip pricing-price-more'>
+                +{extraCount}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // 渲染标签
   const renderTags = (record) => {
     // 计费类型标签（左边）
@@ -235,8 +291,8 @@ const PricingCardView = ({
   }
 
   return (
-    <div className='px-2 pt-2'>
-      <div className='grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4'>
+    <div className='pricing-card-view'>
+      <div className='pricing-card-grid'>
         {paginatedModels.map((model, index) => {
           const modelKey = getModelKey(model);
           const isSelected = selectedRowKeys.includes(modelKey);
@@ -250,34 +306,31 @@ const PricingCardView = ({
             currency,
             quotaDisplayType: siteDisplayType,
           });
+          const discountMeta = getPricingDiscountMeta(
+            priceData?.usedGroupRatio,
+            t,
+          );
+          const description = getModelDescription(model);
 
           return (
             <Card
               key={modelKey || index}
-              className={`!rounded-2xl transition-all duration-200 hover:shadow-lg border cursor-pointer ${isSelected ? CARD_STYLES.selected : CARD_STYLES.default}`}
-              bodyStyle={{ height: '100%' }}
+              className={`pricing-model-card ${isSelected ? CARD_STYLES.selected : CARD_STYLES.default}`}
               onClick={() => openModelDetail && openModelDetail(model)}
             >
-              <div className='flex flex-col h-full'>
+              <div className='flex flex-col'>
                 {/* 头部：图标 + 模型名称 + 操作按钮 */}
-                <div className='flex items-start justify-between mb-3'>
+                <div className='pricing-card-head'>
                   <div className='flex items-start space-x-3 flex-1 min-w-0'>
                     {getModelIcon(model)}
                     <div className='flex-1 min-w-0'>
-                      <h3 className='text-lg font-bold text-gray-900 truncate'>
+                      <h3 className='pricing-card-title'>
                         {model.model_name}
                       </h3>
-                      <div className='flex flex-col gap-1 text-xs mt-1'>
-                        {priceData.isDynamicPricing ? (
-                          formatDynamicPriceSummary(priceData.billingExpr, t, priceData.usedGroupRatio)
-                        ) : (
-                          formatPriceInfo(priceData, t, siteDisplayType)
-                        )}
-                      </div>
                     </div>
                   </div>
 
-                  <div className='flex items-center space-x-2 ml-3'>
+                  <div className='pricing-card-actions'>
                     {/* 复制按钮 */}
                     <Button
                       size='small'
@@ -303,18 +356,35 @@ const PricingCardView = ({
                   </div>
                 </div>
 
-                {/* 模型描述 - 占据剩余空间 */}
-                <div className='flex-1 mb-4'>
-                  <p
-                    className='text-xs line-clamp-2 leading-relaxed'
-                    style={{ color: 'var(--semi-color-text-2)' }}
-                  >
-                    {getModelDescription(model)}
-                  </p>
+                <div
+                  className={`pricing-card-price-shell ${discountMeta ? 'pricing-card-price-discounted' : ''}`}
+                >
+                  {discountMeta && (
+                    <div className='pricing-card-discount-inline'>
+                      <div className='pricing-card-discount-main'>
+                        <PricingDiscountTag
+                          ratio={priceData?.usedGroupRatio}
+                          t={t}
+                          size='small'
+                        />
+                        <span className='pricing-card-discount-percent'>
+                          -{discountMeta.percent}%
+                        </span>
+                      </div>
+                      <span className='pricing-card-discount-ratio'>
+                        x{discountMeta.ratio}
+                      </span>
+                    </div>
+                  )}
+                  {renderCardPricing(priceData)}
                 </div>
 
+                {description && (
+                  <p className='pricing-card-desc'>{description}</p>
+                )}
+
                 {/* 底部区域 */}
-                <div className='mt-auto'>
+                <div>
                   {/* 标签区域 */}
                   {renderTags(model)}
 
@@ -339,7 +409,7 @@ const PricingCardView = ({
                           />
                         </Tooltip>
                       </div>
-                      <div className='grid grid-cols-3 gap-2 text-xs text-gray-600'>
+                      <div className='pricing-ratio-grid'>
                         <div>
                           {t('模型')}:{' '}
                           {model.quota_type === 0 ? model.model_ratio : t('无')}

@@ -18,8 +18,9 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React, { memo, useCallback, useMemo } from 'react';
-import { Input, Button, Divider, Select } from '@douyinfe/semi-ui';
+import { Input, Button, Select } from '@douyinfe/semi-ui';
 import { IconSearch } from '@douyinfe/semi-icons';
+import { BadgePercent, Boxes, Grid2X2, Table2 } from 'lucide-react';
 import { getLobeHubIcon } from '../../../../../helpers';
 
 const SearchActions = memo(
@@ -36,11 +37,16 @@ const SearchActions = memo(
     setViewMode,
     tokenUnit,
     setTokenUnit,
+    stats,
     t,
   }) => {
-    const handleViewModeToggle = useCallback(() => {
-      setViewMode?.(viewMode === 'table' ? 'card' : 'table');
-    }, [viewMode, setViewMode]);
+    const handleCardView = useCallback(() => {
+      setViewMode?.('card');
+    }, [setViewMode]);
+
+    const handleTableView = useCallback(() => {
+      setViewMode?.('table');
+    }, [setViewMode]);
 
     const handleTokenUnitToggle = useCallback(() => {
       setTokenUnit?.(tokenUnit === 'K' ? 'M' : 'K');
@@ -84,11 +90,11 @@ const SearchActions = memo(
     }, [models, t]);
 
     return (
-      <div className='flex items-center gap-2 w-full'>
-        <div className='flex-1 min-w-0'>
+      <div className='pricing-toolbar'>
+        <div className='pricing-toolbar-search'>
           <Input
             prefix={<IconSearch />}
-            placeholder={t('模糊搜索模型名称')}
+            placeholder={t('按模型、供应商、端点或标签搜索')}
             value={searchValue}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
@@ -97,39 +103,64 @@ const SearchActions = memo(
           />
         </div>
 
-        {/* 供应商下拉筛选 —— 与搜索并列 */}
-        <Select
-          value={filterVendor}
-          onChange={setFilterVendor}
-          optionList={vendorOptions}
-          insetLabel={t('供应商')}
-          className='shrink-0'
-          style={{ width: isMobile ? 130 : 190 }}
-        />
+        <div className='pricing-toolbar-controls'>
+          <div className='pricing-inline-metrics'>
+            <div className='pricing-inline-metric'>
+              <Boxes size={13} strokeWidth={2} className='pricing-inline-metric-icon' />
+              <span className='pricing-inline-metric-value'>
+                {stats?.modelCount?.toLocaleString?.() ?? '0'}
+              </span>
+              <span className='pricing-inline-metric-label'>{t('总模型数')}</span>
+            </div>
+            <div className='pricing-inline-metric pricing-inline-metric-accent'>
+              <BadgePercent
+                size={13}
+                strokeWidth={2}
+                className='pricing-inline-metric-icon'
+              />
+              <span className='pricing-inline-metric-value'>
+                {stats?.discountedModels?.toLocaleString?.() ?? '0'}
+              </span>
+              <span className='pricing-inline-metric-label'>{t('折扣模型')}</span>
+            </div>
+          </div>
 
-        {!isMobile && (
-          <>
-            <Divider layout='vertical' margin='8px' />
+          <Select
+            value={filterVendor}
+            onChange={setFilterVendor}
+            optionList={vendorOptions}
+            insetLabel={t('供应商')}
+            className='pricing-vendor-select'
+            style={{ width: isMobile ? 132 : 168 }}
+          />
 
-            {/* 视图模式切换按钮 */}
+          <div className='pricing-toggle-group'>
             <Button
+              className='pricing-toggle-button'
+              theme={viewMode === 'card' ? 'solid' : 'outline'}
+              type={viewMode === 'card' ? 'primary' : 'tertiary'}
+              icon={<Grid2X2 size={14} />}
+              onClick={handleCardView}
+            />
+            <Button
+              className='pricing-toggle-button'
               theme={viewMode === 'table' ? 'solid' : 'outline'}
               type={viewMode === 'table' ? 'primary' : 'tertiary'}
-              onClick={handleViewModeToggle}
+              icon={<Table2 size={14} />}
+              onClick={handleTableView}
             >
-              {t('表格视图')}
+              {!isMobile ? t('表格视图') : null}
             </Button>
-
-            {/* Token单位切换按钮 */}
             <Button
+              className='pricing-toggle-button pricing-unit-button'
               theme={tokenUnit === 'K' ? 'solid' : 'outline'}
               type={tokenUnit === 'K' ? 'primary' : 'tertiary'}
               onClick={handleTokenUnitToggle}
             >
               {tokenUnit}
             </Button>
-          </>
-        )}
+          </div>
+        </div>
       </div>
     );
   },

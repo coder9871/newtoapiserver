@@ -21,6 +21,9 @@ import React from 'react';
 import { Avatar, Typography, Table, Tag } from '@douyinfe/semi-ui';
 import { IconCoinMoneyStroked } from '@douyinfe/semi-icons';
 import { calculateModelPrice, getModelPriceItems } from '../../../../../helpers';
+import PricingDiscountTag, {
+  getPricingDiscountMeta,
+} from '../../common/PricingDiscount';
 
 const { Text } = Typography;
 
@@ -64,12 +67,13 @@ const ModelPricingTable = ({
 
       // 获取分组倍率
       const groupRatioValue =
-        groupRatio && groupRatio[group] ? groupRatio[group] : 1;
+        groupRatio && groupRatio[group] !== undefined ? groupRatio[group] : 1;
 
       return {
         key: group,
         group: group,
         ratio: groupRatioValue,
+        discountMeta: getPricingDiscountMeta(groupRatioValue, t),
         billingType:
           modelData?.billing_mode === 'tiered_expr'
             ? t('动态计费')
@@ -81,6 +85,7 @@ const ModelPricingTable = ({
         priceItems: getModelPriceItems(priceData, t, siteDisplayType),
       };
     });
+    const hasDiscount = tableData.some((row) => row.discountMeta);
 
     // 定义表格列
     const columns = [
@@ -108,6 +113,14 @@ const ModelPricingTable = ({
             {text}x
           </Tag>
         ),
+      });
+    }
+
+    if (hasDiscount) {
+      columns.push({
+        title: t('优惠'),
+        dataIndex: 'ratio',
+        render: (text) => <PricingDiscountTag ratio={text} t={t} />,
       });
     }
 

@@ -17,8 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import SearchActions from './SearchActions';
+import { getModelDiscountRatio } from '../../common/PricingDiscount';
 
 const PricingTopSection = memo(
   ({
@@ -36,10 +37,32 @@ const PricingTopSection = memo(
     setViewMode,
     tokenUnit,
     setTokenUnit,
+    groupRatio = {},
     t,
   }) => {
+    const stats = useMemo(() => {
+      let discountedModels = 0;
+
+      (models || []).forEach((model) => {
+        if (
+          getModelDiscountRatio({
+            record: model,
+            selectedGroup: 'all',
+            groupRatio,
+          }) !== null
+        ) {
+          discountedModels += 1;
+        }
+      });
+
+      return {
+        modelCount: (models || []).length,
+        discountedModels,
+      };
+    }, [models, groupRatio]);
+
     return (
-      <div className='w-full'>
+      <section className='pricing-command-panel'>
         <SearchActions
           selectedRowKeys={selectedRowKeys}
           copyText={copyText}
@@ -55,9 +78,10 @@ const PricingTopSection = memo(
           setViewMode={setViewMode}
           tokenUnit={tokenUnit}
           setTokenUnit={setTokenUnit}
+          stats={stats}
           t={t}
         />
-      </div>
+      </section>
     );
   },
 );

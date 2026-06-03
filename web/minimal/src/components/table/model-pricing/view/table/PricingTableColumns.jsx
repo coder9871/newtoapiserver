@@ -32,6 +32,7 @@ import {
   renderDescription,
 } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
+import PricingDiscountTag from '../../common/PricingDiscount';
 
 function renderQuotaType(type, t) {
   switch (type) {
@@ -137,6 +138,7 @@ export const getPricingTableColumns = ({
   const endpointColumn = {
     title: t('可用端点类型'),
     dataIndex: 'supported_endpoint_types',
+    width: 240,
     render: (text, record, index) => {
       return renderSupportedEndpoints(text);
     },
@@ -145,6 +147,7 @@ export const getPricingTableColumns = ({
   const modelNameColumn = {
     title: t('模型名称'),
     dataIndex: 'model_name',
+    width: 220,
     render: (text, record, index) => {
       return renderModelTag(text, {
         onClick: () => {
@@ -159,6 +162,7 @@ export const getPricingTableColumns = ({
   const quotaColumn = {
     title: t('计费类型'),
     dataIndex: 'quota_type',
+    width: 120,
     render: (text, record, index) => {
       return renderQuotaType(parseInt(text), t);
     },
@@ -168,18 +172,21 @@ export const getPricingTableColumns = ({
   const descriptionColumn = {
     title: t('描述'),
     dataIndex: 'description',
+    width: 260,
     render: (text) => renderDescription(text, 200),
   };
 
   const tagsColumn = {
     title: t('标签'),
     dataIndex: 'tags',
+    width: 180,
     render: renderTags,
   };
 
   const vendorColumn = {
     title: t('供应商'),
     dataIndex: 'vendor_name',
+    width: 150,
     render: (text, record) => renderVendor(text, record.vendor_icon, t),
   };
 
@@ -207,20 +214,21 @@ export const getPricingTableColumns = ({
       </div>
     ),
     dataIndex: 'model_ratio',
+    width: 190,
     render: (text, record, index) => {
       const completionRatio = parseFloat(record.completion_ratio.toFixed(3));
       const priceData = getPriceData(record);
 
       return (
-        <div className='space-y-1'>
-          <div className='text-gray-700'>
+        <div className='pricing-table-muted-stack'>
+          <div>
             {t('模型倍率')}：{record.quota_type === 0 ? text : t('无')}
           </div>
-          <div className='text-gray-700'>
+          <div>
             {t('补全倍率')}：
             {record.quota_type === 0 ? completionRatio : t('无')}
           </div>
-          <div className='text-gray-700'>
+          <div>
             {t('分组倍率')}：{priceData?.usedGroupRatio ?? '-'}
           </div>
         </div>
@@ -231,17 +239,26 @@ export const getPricingTableColumns = ({
   const priceColumn = {
     title: siteDisplayType === 'TOKENS' ? t('计费摘要') : t('模型价格'),
     dataIndex: 'model_price',
+    width: 260,
     ...(isMobile ? {} : { fixed: 'right' }),
     render: (text, record, index) => {
       const priceData = getPriceData(record);
       const priceItems = getModelPriceItems(priceData, t, siteDisplayType);
 
       return (
-        <div className='space-y-1'>
+        <div className='pricing-table-price-cell'>
+          <PricingDiscountTag ratio={priceData?.usedGroupRatio} t={t} />
           {priceItems.map((item) => (
-            <div key={item.key} className='text-gray-700'>
-              {item.label} {item.value}
-              {item.suffix}
+            <div key={item.key} className='pricing-table-price-row'>
+              <span className='pricing-table-price-label'>{item.label}</span>
+              <span className='pricing-table-price-value'>
+                {item.value}
+                {item.suffix && (
+                  <span className='pricing-table-price-suffix'>
+                    {item.suffix}
+                  </span>
+                )}
+              </span>
             </div>
           ))}
         </div>

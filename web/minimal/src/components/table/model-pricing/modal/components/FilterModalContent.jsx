@@ -35,8 +35,6 @@ const FilterModalContent = ({ sidebarProps, t }) => {
     siteDisplayType,
     handleChange,
     setActiveKey,
-    showRatio,
-    setShowRatio,
     viewMode,
     setViewMode,
     filterGroup,
@@ -79,8 +77,6 @@ const FilterModalContent = ({ sidebarProps, t }) => {
         currency={currency}
         setCurrency={setCurrency}
         siteDisplayType={siteDisplayType}
-        showRatio={showRatio}
-        setShowRatio={setShowRatio}
         viewMode={viewMode}
         setViewMode={setViewMode}
         tokenUnit={tokenUnit}
