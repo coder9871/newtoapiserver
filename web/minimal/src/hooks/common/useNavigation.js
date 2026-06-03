@@ -47,14 +47,7 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
       {
         text: t('文档'),
         itemKey: 'docs',
-        ...(docsLink
-          ? {
-              isExternal: true,
-              externalLink: docsLink,
-            }
-          : {
-              to: '/docs',
-            }),
+        to: '/docs',
       },
       {
         text: t('关于'),

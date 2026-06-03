@@ -540,9 +540,9 @@ const $ = () =>
                 title: a(s, 'OpenAI 图像', 'OpenAI Images'),
                 type: 'api',
                 method: 'POST',
-              }            
+              },
             ],
-          }
+          },
         ],
       },
       {
@@ -2375,7 +2375,7 @@ main();`,
                           '不存储你的提示词、上传文件或生成内容。',
                           'We do not store your prompts, uploaded files, or generated responses.',
                         ),
-                      })
+                      }),
                     ],
                   }),
                   e.jsxs('div', {
@@ -3053,8 +3053,8 @@ main();`,
             method: 'POST',
             endpoint: '/v1/images/generations',
             description: t(
-              '使用 OpenAI DALL·E 模型根据文本提示生成图像。支持 DALL·E 3 的质量/风格/多尺寸选项，可根据详细描述生成高质量创意图像。',
-              "Creates an image given a text prompt using OpenAI's DALL-E models. Supports DALL-E 3 with advanced features like quality settings, style options, and multiple size formats. Generate high-quality, creative images from detailed text descriptions.",
+              '根据文本提示生成图像。支持新一代 gpt-image 系列（gpt-image-2、gpt-image-1.5、gpt-image-1、gpt-image-1-mini）以及 DALL·E 3 / DALL·E 2。gpt-image-2 为 2026 年发布的旗舰模型，内置推理（thinking）能力，文本与细节渲染更精准，并可一次生成多张图像；gpt-image 系列还支持透明背景、输出格式与压缩等高级选项。',
+              'Creates an image given a text prompt. Supports the new gpt-image family (gpt-image-2, gpt-image-1.5, gpt-image-1, gpt-image-1-mini) as well as DALL-E 3 / DALL-E 2. gpt-image-2 is the 2026 flagship model with built-in reasoning (thinking), more accurate text and detail rendering, and the ability to produce multiple images at once; the gpt-image family also supports transparent backgrounds, output format and compression options.',
             ),
             headerParameters: [
               {
@@ -3100,8 +3100,8 @@ main();`,
                 type: 'string',
                 required: !1,
                 description: t(
-                  '图像生成模型，可选 "gpt-image-1"、"dall-e-2"、"dall-e-3"。均支持参考图输入，默认 "dall-e-2"。',
-                  'The model to use for image generation. Options include "gpt-image-1", "dall-e-2" and "dall-e-3". All models support reference image input. Defaults to "dall-e-2".',
+                  '图像生成模型。可选 gpt-image 系列（"gpt-image-2"、"gpt-image-1.5"、"gpt-image-1"、"gpt-image-1-mini"）或 "dall-e-3"、"dall-e-2"。各模型均支持参考图输入。推荐使用最新的 "gpt-image-2"。',
+                  'The model to use for image generation. Options include the gpt-image family ("gpt-image-2", "gpt-image-1.5", "gpt-image-1", "gpt-image-1-mini") as well as "dall-e-3" and "dall-e-2". All models support reference image input. The latest "gpt-image-2" is recommended.',
                 ),
               },
               {
@@ -3109,8 +3109,8 @@ main();`,
                 type: 'integer',
                 required: !1,
                 description: t(
-                  '生成图片数量，1~10。DALL·E 3 仅支持 n=1。默认 1。',
-                  'The number of images to generate. Must be between 1 and 10. For DALL-E 3, only n=1 is supported. Defaults to 1.',
+                  '生成图片数量，1~10。gpt-image 系列与 DALL·E 2 支持 1~10；DALL·E 3 仅支持 n=1。默认 1。',
+                  'The number of images to generate. Must be between 1 and 10. The gpt-image family and DALL-E 2 support 1-10; DALL-E 3 only supports n=1. Defaults to 1.',
                 ),
               },
               {
@@ -3118,8 +3118,8 @@ main();`,
                 type: 'string',
                 required: !1,
                 description: t(
-                  '生成尺寸。gpt-image-1: "1024x1024"/"1024x1536"/"1536x1024"；DALL·E 3: "1024x1024"/"1792x1024"/"1024x1792"；DALL·E 2: "256x256"/"512x512"/"1024x1024"。默认 "1024x1024"。',
-                  'The size of the generated images. For gpt-image-1, options are "1024x1024", "1024x1536", or "1536x1024". For DALL-E 3, options are "1024x1024", "1792x1024", or "1024x1792". For DALL-E 2, options are "256x256", "512x512", or "1024x1024". Defaults to "1024x1024".',
+                  '生成尺寸。gpt-image 系列（含 gpt-image-2）: "1024x1024"/"1024x1536"/"1536x1024"/"auto"；DALL·E 3: "1024x1024"/"1792x1024"/"1024x1792"；DALL·E 2: "256x256"/"512x512"/"1024x1024"。默认 "1024x1024"（gpt-image 默认 "auto"，由模型自动选择）。',
+                  'The size of the generated images. For the gpt-image family (including gpt-image-2): "1024x1024", "1024x1536", "1536x1024", or "auto". For DALL-E 3: "1024x1024", "1792x1024", or "1024x1792". For DALL-E 2: "256x256", "512x512", or "1024x1024". Defaults to "1024x1024" ("auto" for gpt-image, letting the model choose).',
                 ),
               },
               {
@@ -3127,8 +3127,8 @@ main();`,
                 type: 'string',
                 required: !1,
                 description: t(
-                  '图像质量，仅 DALL·E 3 支持。"standard" 或 "hd"。HD 细节更丰富且一致性更高，默认 "standard"。',
-                  'The quality of the image to generate. Only supported for DALL-E 3. Options are "standard" or "hd". HD creates images with finer details and greater consistency. Defaults to "standard".',
+                  '图像质量。gpt-image 系列（含 gpt-image-2）支持 "low"/"medium"/"high"/"auto"，默认 "auto"；DALL·E 3 支持 "standard"/"hd"（HD 细节更丰富），默认 "standard"。质量越高耗时与计费越高。',
+                  'The quality of the generated image. The gpt-image family (including gpt-image-2) supports "low", "medium", "high", or "auto" (default "auto"); DALL-E 3 supports "standard" or "hd" (HD has finer detail, default "standard"). Higher quality increases latency and cost.',
                 ),
               },
               {
@@ -3141,12 +3141,48 @@ main();`,
                 ),
               },
               {
+                name: 'background',
+                type: 'string',
+                required: !1,
+                description: t(
+                  '背景透明度，仅 gpt-image 系列（含 gpt-image-2）支持。"transparent"（透明）/"opaque"（不透明）/"auto"，默认 "auto"。设为 "transparent" 时 output_format 需为 "png" 或 "webp"。',
+                  'Background transparency, only supported by the gpt-image family (including gpt-image-2). "transparent", "opaque", or "auto" (default "auto"). When set to "transparent", output_format must be "png" or "webp".',
+                ),
+              },
+              {
+                name: 'output_format',
+                type: 'string',
+                required: !1,
+                description: t(
+                  '输出图片格式，仅 gpt-image 系列支持。"png"/"jpeg"/"webp"，默认 "png"。',
+                  'The output image format, only supported by the gpt-image family. "png", "jpeg", or "webp". Defaults to "png".',
+                ),
+              },
+              {
+                name: 'output_compression',
+                type: 'integer',
+                required: !1,
+                description: t(
+                  '输出压缩级别（0~100），仅 gpt-image 系列在 output_format 为 "jpeg"/"webp" 时生效，默认 100。',
+                  'Output compression level (0-100), only effective for the gpt-image family when output_format is "jpeg" or "webp". Defaults to 100.',
+                ),
+              },
+              {
+                name: 'moderation',
+                type: 'string',
+                required: !1,
+                description: t(
+                  '内容审核强度，仅 gpt-image 系列支持。"auto"（标准）或 "low"（更宽松），默认 "auto"。',
+                  'Content moderation level, only supported by the gpt-image family. "auto" (standard) or "low" (less strict). Defaults to "auto".',
+                ),
+              },
+              {
                 name: 'image',
                 type: 'string',
                 required: !1,
                 description: t(
                   '参考图，用于引导生成。支持 URL 或 base64（"data:image/jpeg;base64,..."），模型会结合提示词进行生成。',
-                  'Reference image for guided generation. Supported by all models (gpt-image-1, dall-e-2, dall-e-3). Can be a URL (e.g., "https://example.com/image.jpg") or base64-encoded image data (format: "data:image/jpeg;base64,..."). The model will use this image as a reference to guide the generation based on your prompt.',
+                  'Reference image for guided generation. Supported by all models (gpt-image-2, gpt-image-1.5, gpt-image-1, dall-e-2, dall-e-3). Can be a URL (e.g., "https://example.com/image.jpg") or base64-encoded image data (format: "data:image/jpeg;base64,..."). The model will use this image as a reference to guide the generation based on your prompt.',
                 ),
               },
               {
@@ -3154,8 +3190,8 @@ main();`,
                 type: 'string',
                 required: !1,
                 description: t(
-                  '返回格式："url"（图片链接）或 "b64_json"（base64 JSON）。默认 "url"。',
-                  'The format in which the generated images are returned. Options are "url" (image URL) or "b64_json" (base64-encoded JSON). Defaults to "url".',
+                  '返回格式，仅 DALL·E 系列支持："url"（图片链接）或 "b64_json"（base64 JSON），默认 "url"。gpt-image 系列（含 gpt-image-2）不支持此参数，始终以 base64 返回（data 中的 b64_json 字段）。',
+                  'The format in which the generated images are returned. Only supported by the DALL-E family: "url" (image URL) or "b64_json" (base64-encoded JSON), default "url". The gpt-image family (including gpt-image-2) does not support this parameter and always returns base64 (the b64_json field in data).',
                 ),
               },
               {
@@ -3169,22 +3205,21 @@ main();`,
               },
             ],
             requestExample: {
-              model: 'dall-e-3',
+              model: 'gpt-image-2',
               prompt:
-                'Transform this image into a watercolor painting style with soft, dreamy colors and artistic brush strokes',
-              image: 'https://example.com/reference-image.jpg',
+                'A modern product poster for a coffee brand, with the bold headline text "MORNING BREW" rendered crisply at the top, warm lighting, photorealistic',
               n: 1,
-              size: '1024x1024',
-              quality: 'hd',
-              style: 'vivid',
+              size: '1024x1536',
+              quality: 'high',
+              background: 'auto',
+              output_format: 'png',
             },
             responseExample: {
               created: 1677858242,
               data: [
                 {
-                  url: 'https://example.com/generated-image-url.png',
-                  revised_prompt:
-                    'A cute baby sea otter floating on its back in crystal clear turquoise water, holding a small seashell, with soft sunlight creating sparkles on the water surface, rendered in a hyper-realistic style with vivid colors and fine details',
+                  b64_json:
+                    'iVBORw0KGgoAAAANSUhEUgAA...（base64 编码的图片数据 / base64-encoded image data）',
                 },
               ],
             },
@@ -12600,7 +12635,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                         children: [
                           e.jsx('div', {
                             className: 'text-gray-500 mb-2',
-                            children: '# Paste your Open6666 key when prompted:',
+                            children:
+                              '# Paste your Open6666 key when prompted:',
                           }),
                           e.jsx('div', {
                             children: 'Enter API Key: sk-xxxxxxxxxxxxxxxxxxxx',
