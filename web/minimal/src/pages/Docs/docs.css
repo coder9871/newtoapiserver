@@ -1,0 +1,102 @@
+.docs-page {
+  background: #ffffff;
+  color: #0f172a;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.docs-page code,
+.docs-code-block {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono',
+    Menlo, monospace;
+}
+
+.docs-page :not(pre) > code {
+  color: #0f172a;
+}
+
+.docs-code-block {
+  margin: 0;
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.docs-code-block code {
+  display: block;
+  min-width: max-content;
+  background: transparent;
+  color: inherit;
+}
+
+.docs-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.docs-content th,
+.docs-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.docs-content th {
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+.docs-scrollable,
+.docs-content,
+.docs-page main {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.docs-scrollable::-webkit-scrollbar,
+.docs-content::-webkit-scrollbar,
+.docs-page main::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.docs-scrollable::-webkit-scrollbar-thumb,
+.docs-content::-webkit-scrollbar-thumb,
+.docs-page main::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+body[theme-mode='dark'] .docs-page,
+html.dark .docs-page {
+  color: #0f172a;
+}
+
+body[theme-mode='dark'] .docs-page .bg-white,
+html.dark .docs-page .bg-white {
+  background-color: #ffffff !important;
+}
+
+body[theme-mode='dark'] .docs-page .text-gray-900,
+body[theme-mode='dark'] .docs-page .text-gray-800,
+body[theme-mode='dark'] .docs-page .text-gray-700,
+body[theme-mode='dark'] .docs-page .text-gray-600,
+body[theme-mode='dark'] .docs-page .text-gray-500,
+html.dark .docs-page .text-gray-900,
+html.dark .docs-page .text-gray-800,
+html.dark .docs-page .text-gray-700,
+html.dark .docs-page .text-gray-600,
+html.dark .docs-page .text-gray-500 {
+  color: #0f172a !important;
+}
