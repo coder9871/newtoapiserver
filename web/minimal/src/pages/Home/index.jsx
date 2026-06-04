@@ -72,6 +72,11 @@ const Home = () => {
         aria-label={t('请输入您的问题...')}
       >
         <div className='minimal-home__content'>
+          <div className='minimal-home__headline' aria-hidden='true'>
+            <span className='minimal-home__headline-text'>
+              {t('聚合全球大模型，导航海量智能体')}
+            </span>
+          </div>
           <div className='home-search-box minimal-home__prompt'>
             <TextArea
               className='minimal-home__textarea'
