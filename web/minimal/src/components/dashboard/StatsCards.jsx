@@ -55,7 +55,7 @@ const StatsCards = ({
                   return (
                     <div
                       key={itemIdx}
-                      className={`flex items-end justify-between gap-2 ${
+                      className={`dashboard-stats-item flex items-end justify-between gap-2 ${
                         item.onClick ? 'cursor-pointer' : ''
                       }`}
                       onClick={item.onClick}

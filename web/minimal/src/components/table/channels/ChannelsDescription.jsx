@@ -18,25 +18,18 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { CalendarClock } from 'lucide-react';
-import CompactModeToggle from '../../common/ui/CompactModeToggle';
+import { Workflow } from 'lucide-react';
 import AdminPageHeader from '../../common/ui/AdminPageHeader';
 
-const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
+const ChannelsDescription = ({ t }) => {
   return (
     <AdminPageHeader
       eyebrow={t('控制台')}
-      icon={<CalendarClock size={16} />}
-      title={t('订阅管理')}
-      trailing={
-        <CompactModeToggle
-          compactMode={compactMode}
-          setCompactMode={setCompactMode}
-          t={t}
-        />
-      }
+      icon={<Workflow size={16} />}
+      title={t('渠道管理')}
+      subtitle={t('集中维护上游渠道、状态策略与批量运维操作。')}
     />
   );
 };
 
-export default SubscriptionsDescription;
+export default ChannelsDescription;

@@ -42,8 +42,12 @@ const PricingTopSection = memo(
   }) => {
     const stats = useMemo(() => {
       let discountedModels = 0;
+      const vendorSet = new Set();
 
       (models || []).forEach((model) => {
+        if (model.vendor_name) {
+          vendorSet.add(model.vendor_name);
+        }
         if (
           getModelDiscountRatio({
             record: model,
@@ -57,6 +61,7 @@ const PricingTopSection = memo(
 
       return {
         modelCount: (models || []).length,
+        vendorCount: vendorSet.size,
         discountedModels,
       };
     }, [models, groupRatio]);

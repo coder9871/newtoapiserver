@@ -36,7 +36,7 @@ const PricingPage = () => {
   };
 
   return (
-    <div className='bg-semi-color-bg-0'>
+    <div className='pricing-page-surface bg-semi-color-bg-0'>
       <Layout className='pricing-layout'>
         <Content className='pricing-scroll-hide pricing-content'>
           <PricingContent

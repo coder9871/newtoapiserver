@@ -233,6 +233,125 @@ body:not([theme-mode='dark']) .semi-card {
   background-color: var(--semi-color-fill-0) !important;
 }
 
+/*
+ * 固定操作列需要拥有自己的实底色，否则 tertiary 按钮 + sticky cell
+ * 会把横向滚动区下面的内容透出来，尤其在 token 列表里会显得很乱。
+ * Semi 真正使用的是 .semi-table-cell-fixed-right / -first，而不是 row-cell-fixed-right。
+ */
+.semi-table-thead > .semi-table-row > .semi-table-row-head.table-ops-column,
+.semi-table-thead > .semi-table-row > .semi-table-row-head.semi-table-cell-fixed-right,
+.semi-table-thead > .semi-table-row > .semi-table-row-head.semi-table-cell-fixed-right-first,
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell.table-ops-column,
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell.semi-table-cell-fixed-right,
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell.semi-table-cell-fixed-right-first {
+  background-color: var(--semi-color-bg-1) !important;
+  background-image: linear-gradient(
+    0deg,
+    var(--semi-color-bg-1),
+    var(--semi-color-bg-1)
+  ) !important;
+}
+
+.semi-table-thead
+  > .semi-table-row
+  > .semi-table-row-head.table-ops-column::before,
+.semi-table-thead
+  > .semi-table-row
+  > .semi-table-row-head.semi-table-cell-fixed-right::before,
+.semi-table-thead
+  > .semi-table-row
+  > .semi-table-row-head.semi-table-cell-fixed-right-first::before,
+.semi-table-tbody
+  > .semi-table-row
+  > .semi-table-row-cell.table-ops-column::before,
+.semi-table-tbody
+  > .semi-table-row
+  > .semi-table-row-cell.semi-table-cell-fixed-right::before,
+.semi-table-tbody
+  > .semi-table-row
+  > .semi-table-row-cell.semi-table-cell-fixed-right-first::before {
+  background-color: var(--semi-color-bg-1) !important;
+}
+
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.table-ops-column,
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.semi-table-cell-fixed-right,
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.semi-table-cell-fixed-right-first {
+  background-color: var(--semi-color-fill-0) !important;
+  background-image: linear-gradient(
+    0deg,
+    var(--semi-color-fill-0),
+    var(--semi-color-fill-0)
+  ) !important;
+}
+
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.table-ops-column::before,
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.semi-table-cell-fixed-right::before,
+.semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell.semi-table-cell-fixed-right-first::before {
+  background-color: var(--semi-color-fill-0) !important;
+}
+
+.token-ops-actions {
+  gap: 8px !important;
+}
+
+.token-ops-surface {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--semi-color-bg-1) !important;
+}
+
+.semi-table-tbody > .semi-table-row:hover .token-ops-surface {
+  background: var(--semi-color-bg-1) !important;
+}
+
+.token-ops-button.semi-button,
+.token-ops-split-button.semi-button-group .token-ops-button.semi-button {
+  background: var(--semi-color-bg-1) !important;
+  border-color: var(--semi-color-border) !important;
+  box-shadow: none !important;
+}
+
+.semi-table-tbody
+  > .semi-table-row:hover
+  .token-ops-button.semi-button,
+.semi-table-tbody
+  > .semi-table-row:hover
+  .token-ops-split-button.semi-button-group .token-ops-button.semi-button {
+  background: var(--semi-color-bg-1) !important;
+  border-color: var(--semi-color-border) !important;
+}
+
+.token-ops-button.semi-button:hover,
+.token-ops-button.semi-button:active,
+.token-ops-button.semi-button:focus {
+  background: var(--semi-color-fill-0) !important;
+  border-color: var(--semi-color-text-3) !important;
+}
+
+.token-ops-button-danger.semi-button,
+.token-ops-button-danger.semi-button:hover,
+.token-ops-button-danger.semi-button:active,
+.token-ops-button-danger.semi-button:focus {
+  background: var(--semi-color-danger-light-default) !important;
+  border-color: var(--semi-color-danger-light-active) !important;
+  color: var(--semi-color-danger) !important;
+}
+
 /* ============================================================
  * 输入类控件 —— b.ai 式：白底 + 发丝边框，去掉灰色填充
  * ============================================================ */
@@ -275,24 +394,27 @@ body:not([theme-mode='dark']) .semi-card {
 }
 
 /* ============================================================
- * 登录/注册等 auth 页：压淡背景光晕，保持 b.ai 的克制留白
+ * 登录/注册等 auth 页：背景光晕全部中性单色（堵住 indigo/teal 泄漏），
+ * 仅作为极淡的墨色呼吸感，保持 b.ai 的克制留白与单色方向。
  * ============================================================ */
 html:not(.dark) .blur-ball-indigo {
-  background: #c8b6ff; /* 柔薰衣草 */
-  opacity: 0.1;
+  background: #18181b; /* 近黑墨色 */
+  opacity: 0.05;
 }
 
 html:not(.dark) .blur-ball-teal {
-  background: #ffd9c0; /* 暖桃，呼应象牙白底 */
-  opacity: 0.12;
+  background: #3f3d39; /* 暖墨灰 */
+  opacity: 0.05;
 }
 
 html.dark .blur-ball-indigo {
-  opacity: 0.18;
+  background: #f5f4ef; /* 近白 */
+  opacity: 0.06;
 }
 
 html.dark .blur-ball-teal {
-  opacity: 0.14;
+  background: #c8c6bf;
+  opacity: 0.05;
 }
 
 /* auth 卡片：纯白、柔阴影、不要花哨渐变 */
@@ -340,6 +462,52 @@ html.dark .blur-ball-teal {
  * ============================================================ */
 
 /* 4 组统计合成一块通透白板，用细分隔线而非一堆盒子 */
+.dashboard-shell {
+  margin-top: 18px;
+}
+
+.dashboard-page {
+  padding-bottom: 20px;
+}
+
+.dashboard-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 4px 0;
+}
+
+.dashboard-hero-copy {
+  min-width: 0;
+}
+
+.dashboard-hero-kicker {
+  margin-bottom: 10px;
+  color: var(--semi-color-text-2);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.dashboard-hero-title {
+  margin: 0 !important;
+  letter-spacing: -0.03em;
+}
+
+.dashboard-hero-subtitle {
+  margin: 10px 0 0;
+  color: var(--semi-color-text-2);
+  font-size: 14px;
+}
+
+.dashboard-hero-actions .semi-button {
+  background: var(--semi-color-bg-1) !important;
+  border: 1px solid var(--semi-color-border) !important;
+  box-shadow: 0 8px 20px rgba(24, 24, 27, 0.05);
+}
+
 .dashboard-stats-panel {
   background: var(--semi-color-bg-1);
   border: 1px solid var(--semi-color-border);
@@ -390,6 +558,16 @@ html.dark .blur-ball-teal {
   opacity: 0.75;
 }
 
+.dashboard-stats-item {
+  padding: 14px 0;
+  border-top: 1px solid var(--semi-color-border);
+}
+
+.dashboard-stats-item:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
 /* 看板内的图表/信息卡：极简白板，弱边框、柔阴影、宽内边距 */
 .dashboard-root .semi-card {
   background: var(--semi-color-bg-1);
@@ -414,20 +592,29 @@ html.dark .blur-ball-teal {
 .dashboard-chart-card .semi-tabs-tab {
   font-size: 13px;
   color: var(--semi-color-text-2);
+  padding: 0 !important;
 }
 
 .dashboard-chart-card .semi-tabs-tab-active {
   color: var(--semi-color-text-0);
   font-weight: 600;
+  background: transparent !important;
 }
 
 /* Tabs 单行排布，超出可横向滚动而不换行 */
 .dashboard-chart-tabs .semi-tabs-bar,
 .dashboard-chart-tabs .semi-tabs-content,
 .dashboard-chart-tabs [role='tablist'] {
+  display: flex;
+  align-items: center;
   flex-wrap: nowrap !important;
   overflow-x: auto;
   scrollbar-width: none;
+}
+
+.dashboard-chart-tabs .semi-tabs-bar {
+  min-height: 40px;
+  padding: 0 !important;
 }
 
 .dashboard-chart-tabs .semi-tabs-bar::-webkit-scrollbar,
@@ -436,6 +623,948 @@ html.dark .blur-ball-teal {
 }
 
 .dashboard-chart-tabs .semi-tabs-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 !important;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.dashboard-chart-tabs .semi-tabs-tab-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px !important;
+  line-height: 1.2;
+  background: transparent !important;
+}
+
+.dashboard-chart-tabs .semi-tabs-tab-active .semi-tabs-tab-button {
+  background: var(--semi-color-fill-0) !important;
+  color: var(--semi-color-text-0) !important;
+  font-weight: 600;
+}
+
+/* ============================================================
+ * Token 归属边界（务必遵守）
+ *   - 本文件（bai-theme.css）拥有所有 Semi 的 --semi-color-* token
+ *     以及下面的编辑级排版尺度 / 共享版式类。
+ *   - index.css 只拥有壳层专用 --app-* token，不得反向覆盖 --semi-color-*。
+ *   - 语义色（success/warning/danger/info）与数据可视化分类色板保留；
+ *     除此之外不引入彩色强调，靠层级 / 留白 / 字重建立秩序。
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * 编辑级排版尺度（Editorial type scale）—— 全站统一的字号节奏
+ * 让 Dashboard / Pricing / 表格页 / 首页 metadata 读起来像同一套产品。
+ * 用法：给标题/数值/标签元素加对应 class，颜色仍走 --semi-color-text-*。
+ * ------------------------------------------------------------ */
+.editorial-display {
+  font-size: clamp(28px, 4vw, 34px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--semi-color-text-0);
+}
+
+.editorial-h2 {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--semi-color-text-0);
+}
+
+.editorial-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--semi-color-text-0);
+}
+
+.editorial-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--semi-color-text-1);
+}
+
+/* 小型分区标签：大写、字间距拉开、灰、克制 */
+.editorial-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--semi-color-text-2);
+}
+
+/* 元信息 / 次要说明文字 */
+.editorial-meta {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--semi-color-text-2);
+}
+
+/* 关键数值：等宽数字、强字重，用于统计/价格 */
+.editorial-value {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--semi-color-text-0);
+}
+
+/* ------------------------------------------------------------
+ * 共享面板 chrome —— Dashboard 各信息面板统一的头部 / 列表项节奏
+ * ------------------------------------------------------------ */
+.dashboard-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+.dashboard-panel-list-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+.dashboard-panel-list-item:last-child {
+  border-bottom: none;
+}
+
+/* ------------------------------------------------------------
+ * 后台列表页统一页头（Phase C 复用）
+ * ------------------------------------------------------------ */
+.admin-page-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 2px 10px;
+}
+
+.admin-page-head-title {
+  font-size: 17px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  color: var(--semi-color-text-0);
+  line-height: 1.2;
+}
+
+.admin-page-head-subtitle {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--semi-color-text-2);
+  line-height: 1.45;
+}
+
+.admin-page-notice-shell {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.admin-page-notice.semi-banner {
+  padding: 16px 18px !important;
+  border-radius: 24px !important;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent) !important;
+  backdrop-filter: blur(10px);
+}
+
+.admin-page-notice .semi-banner-description {
+  padding-right: 34px;
+  color: var(--semi-color-text-1) !important;
+  line-height: 1.6;
+}
+
+.admin-page-notice-dismiss.semi-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--semi-color-text-2) !important;
+}
+
+/* ------------------------------------------------------------
+ * 后台 CardPro 头部系统 —— 工具条 / 筛选条 / 统计条统一层级
+ * ------------------------------------------------------------ */
+.table-scroll-card .semi-card-header {
+  padding: 16px 18px 12px !important;
+}
+
+.table-scroll-card .semi-card-footer {
+  padding: 12px 18px 16px !important;
+}
+
+.card-pro-header {
+  gap: 10px;
+}
+
+.card-pro-section--description,
+.card-pro-section--tabs {
+  min-width: 0;
+}
+
+.card-pro-section--stats,
+.card-pro-section--actions,
+.card-pro-section--search {
+  border: 1px solid var(--semi-color-border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 84%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+
+body[theme-mode='dark'] .card-pro-section--stats,
+body[theme-mode='dark'] .card-pro-section--actions,
+body[theme-mode='dark'] .card-pro-section--search {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.card-pro-section--stats {
+  padding: 10px 14px;
+}
+
+.card-pro-section--actions,
+.card-pro-section--search {
+  padding: 12px 14px;
+}
+
+.card-pro-section--stats .semi-form,
+.card-pro-section--actions .semi-form,
+.card-pro-section--search .semi-form {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.card-pro-section--stats .semi-form-field,
+.card-pro-section--actions .semi-form-field,
+.card-pro-section--search .semi-form-field {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.card-pro-section--stats .semi-input-wrapper,
+.card-pro-section--stats .semi-select,
+.card-pro-section--stats .semi-tagInput,
+.card-pro-section--stats .semi-input-number,
+.card-pro-section--stats .semi-datepicker-range-input,
+.card-pro-section--search .semi-input-wrapper,
+.card-pro-section--search .semi-select,
+.card-pro-section--search .semi-tagInput,
+.card-pro-section--search .semi-input-number,
+.card-pro-section--search .semi-datepicker-range-input,
+.card-pro-section--actions .semi-input-wrapper,
+.card-pro-section--actions .semi-select,
+.card-pro-section--actions .semi-tagInput,
+.card-pro-section--actions .semi-input-number,
+.card-pro-section--actions .semi-datepicker-range-input {
+  min-height: 38px;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  background: var(--semi-color-bg-1) !important;
+}
+
+.card-pro-section--stats .semi-button,
+.card-pro-section--actions .semi-button,
+.card-pro-section--search .semi-button {
+  min-height: 36px;
+  box-shadow: none !important;
+}
+
+.card-pro-section--stats .semi-tag {
+  border: 1px solid var(--semi-color-border) !important;
+  border-radius: 999px !important;
+  background: var(--semi-color-bg-1) !important;
+  color: var(--semi-color-text-1) !important;
+  box-shadow: none !important;
+}
+
+.card-pro-section--stats .semi-tag .semi-tag-content {
+  font-weight: 600;
+}
+
+.card-pro-mobile-toggle-button.semi-button {
+  border-color: var(--semi-color-border) !important;
+  background: transparent !important;
+}
+
+@media (max-width: 767px) {
+  .table-scroll-card .semi-card-header {
+    padding: 14px 14px 10px !important;
+  }
+
+  .table-scroll-card .semi-card-footer {
+    padding: 12px 14px 16px !important;
+  }
+
+  .card-pro-section--stats,
+  .card-pro-section--actions,
+  .card-pro-section--search {
+    padding: 12px;
+    border-radius: 16px;
+  }
+}
+
+/* ============================================================
+ * 弹层系统（Modal / SideSheet / Drawer / Popover）统一产品语言
+ *   - 遮罩：中性墨色 + 轻模糊，制造分层感而非默认黑幕
+ *   - 容器：更高的柔性抬升阴影，聚焦态发丝描边
+ *   - 头部 / 底部：发丝分割线，区分内容与操作区
+ * 注：不覆盖 body 内边距（部分弹层依赖 padding:0 做满幅编辑器/图表）。
+ * ============================================================ */
+.semi-modal-mask,
+.semi-sidesheet-mask {
+  background-color: rgba(24, 24, 27, 0.36) !important;
+  backdrop-filter: blur(3px);
+}
+
+body[theme-mode='dark'] .semi-modal-mask,
+body[theme-mode='dark'] .semi-sidesheet-mask {
+  background-color: rgba(0, 0, 0, 0.52) !important;
+}
+
+/* 弹窗容器：更高级的抬升阴影（覆盖壳层通用的浅阴影） */
+.semi-modal-content {
+  box-shadow: 0 28px 90px rgba(24, 24, 27, 0.12) !important;
+}
+
+body[theme-mode='dark'] .semi-modal-content {
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* 头部 / 底部发丝线，让操作区与内容区分层 */
+.semi-modal-header,
+.semi-sidesheet-header {
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+.semi-modal-footer,
+.semi-sidesheet-footer {
+  border-top: 1px solid var(--semi-color-border);
+}
+
+/* 弹窗底部按钮：胶囊圆角（与全站按钮语言一致） */
+.semi-modal-footer .semi-button {
+  border-radius: 999px !important;
+}
+
+/* ============================================================
+ * 第三轮收口：侧栏 / Auth / 后台表单
+ * 目标：去掉默认后台感、修正对齐、把登录后表单页纳入同一套产品语言。
+ * ============================================================ */
+
+/* ---------- Console sidebar alignment ---------- */
+.sidebar-container {
+  border-radius: 26px !important;
+}
+
+.sidebar-nav {
+  padding: 18px 14px 12px 24px !important;
+}
+
+.sidebar-nav .semi-navigation-list-wrapper,
+.sidebar-nav .semi-navigation-header-list-outer {
+  width: 100%;
+}
+
+.sidebar-section {
+  padding-top: 10px !important;
+}
+
+.sidebar-section-primary {
+  padding-top: 0 !important;
+}
+
+.sidebar-divider {
+  margin: 12px 8px !important;
+}
+
+.sidebar-section-eyebrow {
+  padding: 0 8px 9px !important;
+  line-height: 1;
+}
+
+.sidebar-nav .semi-navigation-item,
+.sidebar-nav .semi-navigation-sub-title {
+  display: flex !important;
+  align-items: center !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  margin: 0 0 6px 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 17px !important;
+  line-height: 1 !important;
+}
+
+.sidebar-nav .semi-navigation-item:hover,
+.sidebar-nav .semi-navigation-sub-title:hover {
+  transform: translateX(2px);
+}
+
+.sidebar-nav .semi-navigation-item-selected,
+.sidebar-nav .semi-navigation-sub-title-selected {
+  border-color: var(--semi-color-border) !important;
+  background: var(--semi-color-fill-1) !important;
+  box-shadow: 0 10px 24px rgba(24, 24, 27, 0.06);
+}
+
+body[theme-mode='dark'] .sidebar-nav .semi-navigation-item-selected,
+body[theme-mode='dark'] .sidebar-nav .semi-navigation-sub-title-selected {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+}
+
+.sidebar-nav .semi-navigation-item-icon,
+.sidebar-nav .semi-navigation-sub-title-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  margin-right: 10px !important;
+}
+
+.sidebar-icon-container {
+  width: 34px !important;
+  height: 34px !important;
+  margin-right: 0 !important;
+  border-radius: 12px !important;
+}
+
+.sidebar-nav .semi-navigation-item-text,
+.sidebar-nav .semi-navigation-sub-title-text {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  line-height: 1.2 !important;
+}
+
+.sidebar-nav .semi-navigation-item-text span,
+.sidebar-nav .semi-navigation-sub-title-text span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.sidebar-collapsed .sidebar-nav {
+  padding: 18px 12px 12px !important;
+}
+
+body.sidebar-collapsed .sidebar-rail,
+body.sidebar-collapsed .sidebar-section-eyebrow,
+body.sidebar-collapsed .sidebar-divider {
+  display: none !important;
+}
+
+body.sidebar-collapsed .sidebar-section {
+  padding-top: 0 !important;
+}
+
+body.sidebar-collapsed .sidebar-nav .semi-navigation-item,
+body.sidebar-collapsed .sidebar-nav .semi-navigation-sub-title {
+  justify-content: center !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  margin: 0 auto 8px !important;
+  padding: 0 !important;
+}
+
+body.sidebar-collapsed .sidebar-nav .semi-navigation-item-icon,
+body.sidebar-collapsed .sidebar-nav .semi-navigation-sub-title-icon {
+  margin-right: 0 !important;
+}
+
+body.sidebar-collapsed .sidebar-nav .semi-navigation-item-text,
+body.sidebar-collapsed .sidebar-nav .semi-navigation-sub-title-text {
+  display: none !important;
+}
+
+.sidebar-collapse-button {
+  padding: 12px 14px 16px !important;
+}
+
+body.sidebar-collapsed .sidebar-collapse-button {
+  padding-right: 12px !important;
+  padding-left: 12px !important;
+}
+
+/* ---------- Auth pages ---------- */
+.auth-page {
+  min-height: calc(100vh - var(--app-header-height));
+  min-height: calc(100dvh - var(--app-header-height));
+  padding-top: clamp(24px, 7vh, 84px) !important;
+  padding-bottom: clamp(32px, 8vh, 92px) !important;
+  background:
+    radial-gradient(circle at 20% 18%, var(--semi-color-fill-0), transparent 28%),
+    radial-gradient(circle at 84% 72%, var(--semi-color-fill-0), transparent 24%),
+    var(--app-bg) !important;
+}
+
+.auth-page-inner {
+  width: min(100%, 460px) !important;
+  max-width: 460px !important;
+  margin-top: 0 !important;
+}
+
+.auth-form-card-shell {
+  max-width: 460px !important;
+}
+
+.auth-brand {
+  margin-bottom: 18px !important;
+}
+
+.auth-brand-logo {
+  width: 42px;
+  height: 42px;
+  padding: 3px;
+  border: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-1);
+  box-shadow: 0 12px 28px rgba(24, 24, 27, 0.08);
+}
+
+.auth-brand-title {
+  margin: 0 !important;
+  color: var(--semi-color-text-0) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+.auth-card.semi-card {
+  overflow: hidden;
+  border: 1px solid var(--app-shell-border) !important;
+  border-radius: 30px !important;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 92%, transparent) !important;
+  box-shadow: 0 28px 80px rgba(24, 24, 27, 0.1) !important;
+  backdrop-filter: blur(18px);
+}
+
+body[theme-mode='dark'] .auth-card.semi-card {
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38) !important;
+}
+
+.auth-card .semi-card-body {
+  padding: 0 !important;
+}
+
+.auth-card-heading {
+  justify-content: flex-start !important;
+  padding: 30px 30px 0 !important;
+}
+
+.auth-card-title {
+  margin: 0 !important;
+  color: var(--semi-color-text-0) !important;
+  font-size: clamp(30px, 4vw, 40px) !important;
+  font-weight: 760 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.auth-card-body {
+  padding: 26px 30px 30px !important;
+}
+
+.auth-page .semi-form {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.auth-page .semi-form-field {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.auth-page .semi-form-field-label {
+  color: var(--semi-color-text-1) !important;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.auth-page .semi-input-wrapper {
+  min-height: 46px;
+  border-radius: 16px !important;
+  background: var(--semi-color-bg-1) !important;
+}
+
+.auth-option-button.semi-button {
+  height: 46px !important;
+  border-color: var(--semi-color-border) !important;
+  background: var(--semi-color-bg-1) !important;
+  color: var(--semi-color-text-0) !important;
+  box-shadow: none !important;
+}
+
+.auth-option-button.semi-button:hover {
+  border-color: var(--semi-color-text-3) !important;
+  background: var(--semi-color-fill-0) !important;
+}
+
+.auth-primary-button.semi-button,
+.auth-page .semi-button-primary.semi-button-content-solid {
+  height: 46px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 14px 28px rgba(24, 24, 27, 0.18) !important;
+}
+
+.auth-ghost-button.semi-button {
+  height: 42px !important;
+  color: var(--semi-color-text-2) !important;
+}
+
+.auth-muted,
+.auth-page .semi-typography,
+.auth-page .semi-checkbox-addon {
+  color: var(--semi-color-text-2) !important;
+}
+
+.auth-link,
+.auth-page a {
+  color: var(--semi-color-text-0) !important;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--semi-color-border);
+  text-underline-offset: 3px;
+}
+
+.auth-page .semi-divider {
+  color: var(--semi-color-text-3) !important;
+}
+
+.auth-page .blur-ball {
+  opacity: 0.04 !important;
+}
+
+@media (max-width: 560px) {
+  .auth-page {
+    padding-right: 14px !important;
+    padding-left: 14px !important;
+  }
+
+  .auth-card-heading {
+    padding: 24px 22px 0 !important;
+  }
+
+  .auth-card-body {
+    padding: 22px !important;
+  }
+}
+
+/* ---------- Logged-in settings forms ---------- */
+.settings-page-shell {
+  margin-top: 0 !important;
+  padding: 0 0 24px !important;
+}
+
+.settings-page-header {
+  margin-bottom: 18px;
+}
+
+.settings-page-content {
+  min-width: 0;
+}
+
+.settings-page-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 20px 20px;
+  border: 1px solid var(--app-shell-border);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 84%, transparent);
+  box-shadow: 0 24px 70px rgba(24, 24, 27, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+body[theme-mode='dark'] .settings-page-overview {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.settings-page-overview-title {
+  margin-top: 6px;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--semi-color-text-0);
+}
+
+.settings-page-overview-meta {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--semi-color-text-2);
+}
+
+.settings-page-quicknav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.settings-page-quicknav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 12px 14px;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--semi-color-bg-0) 72%, transparent);
+  color: var(--semi-color-text-1);
+  text-align: left;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.settings-page-quicknav-item:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--semi-color-text-2) 32%, var(--semi-color-border));
+  background: color-mix(in srgb, var(--semi-color-bg-1) 92%, transparent);
+}
+
+.settings-page-quicknav-item.is-active {
+  border-color: var(--semi-color-text-3);
+  background: var(--semi-color-fill-0);
+  box-shadow: 0 12px 28px rgba(24, 24, 27, 0.08);
+  color: var(--semi-color-text-0);
+}
+
+body[theme-mode='dark'] .settings-page-quicknav-item.is-active {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.settings-page-quicknav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-1);
+  flex-shrink: 0;
+}
+
+.settings-page-quicknav-label {
+  font-size: 13px;
+  font-weight: 640;
+  line-height: 1.35;
+}
+
+.settings-page-tag.semi-tag {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--semi-color-border);
+  background: color-mix(in srgb, var(--semi-color-bg-0) 85%, transparent);
+  color: var(--semi-color-text-1);
+  font-weight: 650;
+}
+
+.settings-page-tabs.semi-tabs {
+  overflow: hidden;
+  border: 1px solid var(--app-shell-border);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent) !important;
+  box-shadow: 0 24px 70px rgba(24, 24, 27, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+body[theme-mode='dark'] .settings-page-tabs.semi-tabs {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.settings-page-tabs .semi-tabs-bar {
+  padding: 14px 16px 0 !important;
+  border-bottom: 1px solid var(--semi-color-border);
+  background: transparent !important;
+}
+
+.settings-page-tabs .semi-tabs-tab {
+  margin-right: 6px !important;
+}
+
+.settings-page-tabs .semi-tabs-tab-button {
+  height: 38px;
+  padding: 0 14px !important;
+}
+
+.settings-page-tabs .semi-tabs-content,
+.settings-page-tabs .semi-tabs-pane,
+.settings-page-tabs .semi-tabs-pane > div {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.settings-page-tabs .semi-tabs-content {
+  padding: 20px !important;
+}
+
+.settings-page-panel {
+  overflow: hidden;
+  border: 1px solid var(--app-shell-border);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent) !important;
+  box-shadow: 0 24px 70px rgba(24, 24, 27, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+body[theme-mode='dark'] .settings-page-panel {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.settings-page-panel-head {
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--semi-color-border);
+}
+
+.settings-page-panel-title {
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--semi-color-text-0);
+}
+
+.settings-page-panel-meta {
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--semi-color-text-2);
+}
+
+.settings-page-panel-body {
+  padding: 20px;
+}
+
+.settings-page-shell .semi-card {
+  margin-top: 16px !important;
+  border: 1px solid var(--app-shell-border) !important;
+  border-radius: 24px !important;
+  background: var(--semi-color-bg-1) !important;
+  box-shadow: none !important;
+}
+
+.settings-page-shell .semi-card:first-child {
+  margin-top: 0 !important;
+}
+
+.settings-page-shell .semi-card-body {
+  padding: 24px !important;
+}
+
+.settings-page-shell .semi-form {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.settings-page-shell .semi-form-section {
+  margin: 0 0 22px !important;
+  padding: 22px !important;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--semi-color-bg-0) 52%, transparent);
+}
+
+.settings-page-shell .semi-form-section:last-child {
+  margin-bottom: 0 !important;
+}
+
+.settings-page-shell .semi-form-section-title {
+  margin-bottom: 18px !important;
+  color: var(--semi-color-text-0) !important;
+  font-size: 16px !important;
+  font-weight: 740 !important;
+  letter-spacing: -0.015em;
+}
+
+.settings-page-shell .semi-form-field {
+  margin-bottom: 18px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.settings-page-shell .semi-form-field-label {
+  color: var(--semi-color-text-1) !important;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.settings-page-shell .semi-form-field-extra,
+.settings-page-shell .semi-form-field-help-text {
+  color: var(--semi-color-text-2) !important;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.settings-page-shell .semi-input-wrapper,
+.settings-page-shell .semi-input-number,
+.settings-page-shell .semi-select,
+.settings-page-shell .semi-tagInput,
+.settings-page-shell .semi-input-textarea-wrapper {
+  min-height: 42px;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+.settings-page-shell .semi-input-textarea-wrapper {
+  min-height: 96px;
+}
+
+.settings-page-shell .semi-button {
+  min-height: 38px;
+  font-weight: 650;
+}
+
+@media (max-width: 767px) {
+  .settings-page-overview {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .settings-page-quicknav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .settings-page-quicknav-item {
+    min-height: 54px;
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .settings-page-panel-head,
+  .settings-page-panel-body {
+    padding: 14px;
+  }
+
+  .settings-page-tabs .semi-tabs-content {
+    padding: 12px !important;
+  }
+
+  .settings-page-shell .semi-card-body,
+  .settings-page-shell .semi-form-section {
+    padding: 16px !important;
+  }
 }

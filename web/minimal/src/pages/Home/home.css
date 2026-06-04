@@ -1,20 +1,18 @@
 .minimal-home {
-  min-height: calc(100vh - 64px);
-  min-height: calc(100dvh - 64px);
+  min-height: calc(100vh - var(--app-header-height));
+  min-height: calc(100dvh - var(--app-header-height));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 64px 20px 48px;
+  padding: 28px 20px 64px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 26%, rgba(120, 131, 155, 0.08), transparent 30%),
-    linear-gradient(180deg, var(--semi-color-bg-0) 0%, var(--semi-color-bg-1) 100%);
+    radial-gradient(circle at 50% 42%, var(--semi-color-fill-0), transparent 34%),
+    transparent;
 }
 
 /*
- * 首页：头部固定(position:fixed)且本身不占文档流，首页渐变背景从视口顶端 y=0
- * 起即已铺在头部之后。这里把头部背景设为透明，去掉那条不透明白条形成的下边缘，
- * 让头部与首页背景融为一整片（逻辑上仍是各自独立的组件，仅首页路由生效）。
+ * 首页只保留输入框。头部继续透明，让页面视觉中心只落在 prompt 上。
  */
 body.minimal-home-route header {
   background: transparent !important;
@@ -24,125 +22,57 @@ body.minimal-home-route header {
 }
 
 .minimal-home__stage {
-  width: min(720px, 100%);
+  width: min(820px, 100%);
 }
 
 .minimal-home__content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   min-width: 0;
-  animation: minimal-home-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.minimal-home__slogan {
-  max-width: 100%;
-  margin: 0 0 38px;
-  font-size: clamp(22px, 3.4vw, 34px);
-  font-weight: 660;
-  line-height: 1.25;
-  letter-spacing: 0.5px;
-  text-align: center;
-  color: var(--semi-color-text-0);
-  overflow-wrap: anywhere;
-}
-
-/* 逐词淡入（进场一次）+ 波浪浮动（持续循环） */
-.minimal-home__slogan-seg {
-  display: inline-block;
-  opacity: 0;
-  animation: minimal-slogan-in 560ms ease both;
-  animation-delay: calc(300ms + var(--seg) * 140ms);
-}
-
-/* 两个关键词：渐变流光 */
-.minimal-home__slogan-key {
-  position: relative;
-  font-weight: 760;
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  /* 进场淡入 + 渐变流光（仅动 background-position，不影响文字清晰度） */
-  animation:
-    minimal-slogan-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    minimal-slogan-shine 4.5s ease-in-out infinite;
-  animation-delay:
-    calc(300ms + var(--seg) * 140ms),
-    calc(1000ms + var(--seg) * 140ms);
-}
-
-.minimal-home__slogan-key--a {
-  background-image: linear-gradient(
-    100deg,
-    #6366f1 0%,
-    #8b5cf6 28%,
-    #ec4899 52%,
-    #8b5cf6 76%,
-    #6366f1 100%
-  );
-}
-
-.minimal-home__slogan-key--b {
-  background-image: linear-gradient(
-    100deg,
-    #0ea5e9 0%,
-    #06b6d4 28%,
-    #10b981 52%,
-    #06b6d4 76%,
-    #0ea5e9 100%
-  );
-}
-
-@keyframes minimal-slogan-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes minimal-slogan-shine {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
+  animation: minimal-home-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .minimal-home__prompt {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 10px;
-  width: 100%;
-  min-height: 62px;
-  padding: 11px 11px 11px 22px;
-  border: 1px solid color-mix(in srgb, var(--semi-color-border) 78%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--semi-color-bg-1) 94%, transparent);
+  width: min(760px, 100%);
+  min-height: 66px;
+  padding: 12px 12px 12px 24px;
+  border: 1px solid color-mix(in srgb, var(--semi-color-border) 72%, transparent);
+  border-radius: 34px;
+  background: color-mix(in srgb, var(--semi-color-bg-1) 96%, transparent);
   box-shadow:
-    0 18px 48px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(16px);
+    0 28px 72px rgba(24, 24, 27, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(18px);
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
     transform 180ms ease;
 }
 
-.minimal-home__prompt:focus-within {
-  border-color: color-mix(in srgb, var(--semi-color-text-2) 72%, transparent);
+body[theme-mode='dark'] .minimal-home__prompt {
+  background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent);
   box-shadow:
-    0 22px 58px rgba(15, 23, 42, 0.11),
-    0 0 0 4px color-mix(in srgb, var(--semi-color-primary) 10%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    0 28px 72px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.minimal-home__prompt:focus-within {
+  border-color: color-mix(in srgb, var(--semi-color-text-1) 80%, transparent);
+  box-shadow:
+    0 30px 78px rgba(24, 24, 27, 0.12),
+    0 0 0 4px color-mix(in srgb, var(--semi-color-primary) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
   transform: translateY(-1px);
+}
+
+body[theme-mode='dark'] .minimal-home__prompt:focus-within {
+  box-shadow:
+    0 30px 78px rgba(0, 0, 0, 0.36),
+    0 0 0 4px color-mix(in srgb, var(--semi-color-primary) 16%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .minimal-home__textarea {
@@ -150,12 +80,19 @@ body.minimal-home-route header {
   min-width: 0;
 }
 
+.minimal-home__textarea .semi-input-textarea-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 42px;
+  padding: 0 !important;
+}
+
 .minimal-home__textarea .semi-input-textarea {
-  min-height: 38px;
-  padding: 6px 0;
+  min-height: 0;
+  padding: 6px 0 !important;
   color: var(--semi-color-text-0);
   font-size: 17px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .minimal-home__textarea .semi-input-textarea::placeholder {
@@ -163,39 +100,35 @@ body.minimal-home-route header {
 }
 
 .minimal-home__send {
-  width: 42px !important;
-  height: 42px !important;
-  flex: 0 0 42px;
+  width: 50px !important;
+  height: 50px !important;
+  flex: 0 0 50px;
   border-radius: 999px !important;
-  box-shadow: 0 10px 22px color-mix(in srgb, var(--semi-color-primary) 24%, transparent);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--semi-color-primary) 24%, transparent);
 }
 
 @keyframes minimal-home-rise {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px) scale(0.99);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 @media (max-width: 560px) {
   .minimal-home {
-    padding: 48px 14px 36px;
-  }
-
-  .minimal-home__slogan {
-    margin-bottom: 28px;
-    font-size: clamp(20px, 6vw, 26px);
-    letter-spacing: 0.3px;
+    align-items: flex-start;
+    padding: 30vh 14px 36px;
   }
 
   .minimal-home__prompt {
     min-height: 58px;
     padding: 9px 9px 9px 18px;
+    border-radius: 26px;
   }
 
   .minimal-home__textarea .semi-input-textarea {
@@ -204,32 +137,16 @@ body.minimal-home-route header {
   }
 
   .minimal-home__send {
-    width: 40px !important;
-    height: 40px !important;
-    flex-basis: 40px;
+    width: 42px !important;
+    height: 42px !important;
+    flex-basis: 42px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .minimal-home__content {
-    animation: none;
-  }
-
+  .minimal-home__content,
   .minimal-home__prompt {
-    transition: none;
-  }
-
-  .minimal-home__slogan-seg,
-  .minimal-home__slogan-key {
-    opacity: 1;
-    transform: none;
-    filter: none;
     animation: none;
-  }
-
-  /* 关键词在禁用动画时仍保留渐变着色 */
-  .minimal-home__slogan-key {
-    -webkit-text-fill-color: transparent;
-    background-position: 0% 50%;
+    transition: none;
   }
 }

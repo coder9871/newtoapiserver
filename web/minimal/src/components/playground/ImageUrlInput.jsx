@@ -54,7 +54,9 @@ const ImageUrlInput = ({
           <Image
             size={16}
             className={
-              imageEnabled && !disabled ? 'text-blue-500' : 'text-gray-400'
+              imageEnabled && !disabled
+                ? '!text-[var(--semi-color-primary)]'
+                : 'text-gray-400'
             }
           />
           <Typography.Text strong className='text-sm'>

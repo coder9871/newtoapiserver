@@ -156,6 +156,7 @@ const PageLayout = () => {
       }}
     >
       <Header
+        className='app-shell-header'
         style={{
           padding: 0,
           height: 'auto',
@@ -172,6 +173,7 @@ const PageLayout = () => {
         />
       </Header>
       <Layout
+        className='app-shell-body'
         style={{
           overflow: isMobile ? 'visible' : 'auto',
           display: 'flex',
@@ -184,7 +186,7 @@ const PageLayout = () => {
             style={{
               position: 'fixed',
               left: 0,
-              top: '64px',
+              top: 'var(--app-header-height)',
               zIndex: 99,
               border: 'none',
               paddingRight: '0',
@@ -199,6 +201,7 @@ const PageLayout = () => {
           </Sider>
         )}
         <Layout
+          className='app-shell-main'
           style={{
             marginLeft: isMobile
               ? '0'
@@ -211,20 +214,29 @@ const PageLayout = () => {
           }}
         >
           <Content
+            className={`app-shell-content ${shouldInnerPadding ? 'app-shell-content-padded' : ''}`}
             style={{
               flex: '1 0 auto',
               overflowY: isMobile ? 'visible' : 'hidden',
               WebkitOverflowScrolling: 'touch',
-              padding: shouldInnerPadding ? (isMobile ? '5px' : '24px') : '0',
+              padding: shouldInnerPadding ? (isMobile ? '12px' : '24px') : '0',
               position: 'relative',
             }}
           >
+            <div className='app-shell-background'>
+              <div className='app-shell-orb app-shell-orb-a' />
+              <div className='app-shell-orb app-shell-orb-b' />
+              <div className='app-shell-grid' />
+            </div>
             <ErrorBoundary>
-              <App />
+              <div className='app-shell-page'>
+                <App />
+              </div>
             </ErrorBoundary>
           </Content>
           {!shouldHideFooter && (
             <Layout.Footer
+              className='app-shell-footer'
               style={{
                 flex: '0 0 auto',
                 width: '100%',

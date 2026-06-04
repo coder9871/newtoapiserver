@@ -17,8 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { useEffect, useState } from 'react';
-import { Layout, TabPane, Tabs } from '@douyinfe/semi-ui';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Tag, Space } from '@douyinfe/semi-ui';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -34,7 +34,9 @@ import {
   CreditCard,
   Server,
   Activity,
+  Shield,
 } from 'lucide-react';
+import AdminPageHeader from '../../components/common/ui/AdminPageHeader';
 
 import SystemSetting from '../../components/settings/SystemSetting';
 import { isRoot } from '../../helpers';
@@ -54,162 +56,190 @@ const Setting = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const [tabActiveKey, setTabActiveKey] = useState('1');
-  let panes = [];
+  const [tabActiveKey, setTabActiveKey] = useState('operation');
 
-  if (isRoot()) {
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Settings size={18} />
-          {t('运营设置')}
-        </span>
-      ),
-      content: <OperationSetting />,
-      itemKey: 'operation',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <LayoutDashboard size={18} />
-          {t('仪表盘设置')}
-        </span>
-      ),
-      content: <DashboardSetting />,
-      itemKey: 'dashboard',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <MessageSquare size={18} />
-          {t('聊天设置')}
-        </span>
-      ),
-      content: <ChatsSetting />,
-      itemKey: 'chats',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Palette size={18} />
-          {t('绘图设置')}
-        </span>
-      ),
-      content: <DrawingSetting />,
-      itemKey: 'drawing',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <CreditCard size={18} />
-          {t('支付设置')}
-        </span>
-      ),
-      content: <PaymentSetting />,
-      itemKey: 'payment',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Calculator size={18} />
-          {t('分组与模型定价设置')}
-        </span>
-      ),
-      content: <RatioSetting />,
-      itemKey: 'ratio',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Gauge size={18} />
-          {t('速率限制设置')}
-        </span>
-      ),
-      content: <RateLimitSetting />,
-      itemKey: 'ratelimit',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Shapes size={18} />
-          {t('模型相关设置')}
-        </span>
-      ),
-      content: <ModelSetting />,
-      itemKey: 'models',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Server size={18} />
-          {t('模型部署设置')}
-        </span>
-      ),
-      content: <ModelDeploymentSetting />,
-      itemKey: 'model-deployment',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Activity size={18} />
-          {t('性能设置')}
-        </span>
-      ),
-      content: <PerformanceSetting />,
-      itemKey: 'performance',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <Cog size={18} />
-          {t('系统设置')}
-        </span>
-      ),
-      content: <SystemSetting />,
-      itemKey: 'system',
-    });
-    panes.push({
-      tab: (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <MoreHorizontal size={18} />
-          {t('其他设置')}
-        </span>
-      ),
-      content: <OtherSetting />,
-      itemKey: 'other',
-    });
-  }
+  const panes = useMemo(() => {
+    if (!isRoot()) return [];
+
+    return [
+      {
+        label: t('运营设置'),
+        icon: <Settings size={18} />,
+        content: <OperationSetting />,
+        itemKey: 'operation',
+      },
+      {
+        label: t('仪表盘设置'),
+        icon: <LayoutDashboard size={18} />,
+        content: <DashboardSetting />,
+        itemKey: 'dashboard',
+      },
+      {
+        label: t('聊天设置'),
+        icon: <MessageSquare size={18} />,
+        content: <ChatsSetting />,
+        itemKey: 'chats',
+      },
+      {
+        label: t('绘图设置'),
+        icon: <Palette size={18} />,
+        content: <DrawingSetting />,
+        itemKey: 'drawing',
+      },
+      {
+        label: t('支付设置'),
+        icon: <CreditCard size={18} />,
+        content: <PaymentSetting />,
+        itemKey: 'payment',
+      },
+      {
+        label: t('分组与模型定价设置'),
+        icon: <Calculator size={18} />,
+        content: <RatioSetting />,
+        itemKey: 'ratio',
+      },
+      {
+        label: t('速率限制设置'),
+        icon: <Gauge size={18} />,
+        content: <RateLimitSetting />,
+        itemKey: 'ratelimit',
+      },
+      {
+        label: t('模型相关设置'),
+        icon: <Shapes size={18} />,
+        content: <ModelSetting />,
+        itemKey: 'models',
+      },
+      {
+        label: t('模型部署设置'),
+        icon: <Server size={18} />,
+        content: <ModelDeploymentSetting />,
+        itemKey: 'model-deployment',
+      },
+      {
+        label: t('性能设置'),
+        icon: <Activity size={18} />,
+        content: <PerformanceSetting />,
+        itemKey: 'performance',
+      },
+      {
+        label: t('系统设置'),
+        icon: <Cog size={18} />,
+        content: <SystemSetting />,
+        itemKey: 'system',
+      },
+      {
+        label: t('其他设置'),
+        icon: <MoreHorizontal size={18} />,
+        content: <OtherSetting />,
+        itemKey: 'other',
+      },
+    ];
+  }, [t]);
+
   const onChangeTab = (key) => {
     setTabActiveKey(key);
     navigate(`?tab=${key}`);
   };
+
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
+    const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get('tab');
     if (tab) {
       setTabActiveKey(tab);
-    } else {
-      onChangeTab('operation');
+      return;
     }
-  }, [location.search]);
+    if (panes[0]) {
+      onChangeTab(panes[0].itemKey);
+    }
+  }, [location.search, panes]);
+
+  const activePane =
+    panes.find((pane) => pane.itemKey === tabActiveKey) || panes[0] || null;
+  const activePaneIndex = activePane
+    ? panes.findIndex((pane) => pane.itemKey === activePane.itemKey) + 1
+    : 0;
+
   return (
-    <div className='mt-[60px] px-2'>
-      <Layout>
-        <Layout.Content>
-          <Tabs
-            type='card'
-            collapsible
-            activeKey={tabActiveKey}
-            onChange={(key) => onChangeTab(key)}
-          >
-            {panes.map((pane) => (
-              <TabPane itemKey={pane.itemKey} tab={pane.tab} key={pane.itemKey}>
-                {tabActiveKey === pane.itemKey && pane.content}
-              </TabPane>
-            ))}
-          </Tabs>
-        </Layout.Content>
-      </Layout>
+    <div className='settings-page-shell'>
+      <AdminPageHeader
+        className='settings-page-header'
+        eyebrow={t('控制台')}
+        icon={<Shield size={16} />}
+        title={t('配置中心')}
+        subtitle={
+          activePane
+            ? t('当前正在编辑：{{section}}', {
+                section: activePane.label,
+              })
+            : t('集中管理系统行为、产品策略与模型配置。')
+        }
+        trailing={
+          <Space wrap>
+            <Tag color='grey' className='settings-page-tag'>
+              {t('共 {{count}} 个配置分区', { count: panes.length })}
+            </Tag>
+            {activePane ? (
+              <Tag color='grey' className='settings-page-tag'>
+                {activePane.label}
+              </Tag>
+            ) : null}
+          </Space>
+        }
+      />
+
+      <div className='settings-page-overview'>
+        <div className='settings-page-overview-copy'>
+          <div className='editorial-label'>{t('配置导航')}</div>
+          <div className='settings-page-overview-title'>
+            {activePane ? activePane.label : t('配置中心')}
+          </div>
+          <div className='settings-page-overview-meta'>
+            {activePane
+              ? t('第 {{index}} / {{count}} 个分区', {
+                  index: activePaneIndex,
+                  count: panes.length,
+                })
+              : t('集中管理系统行为、产品策略与模型配置。')}
+          </div>
+        </div>
+        <div className='settings-page-quicknav' role='tablist'>
+          {panes.map((pane) => {
+            const isActive = pane.itemKey === tabActiveKey;
+            return (
+              <button
+                key={pane.itemKey}
+                type='button'
+                role='tab'
+                aria-selected={isActive}
+                className={`settings-page-quicknav-item ${isActive ? 'is-active' : ''}`}
+                onClick={() => onChangeTab(pane.itemKey)}
+              >
+                <span className='settings-page-quicknav-icon'>{pane.icon}</span>
+                <span className='settings-page-quicknav-label'>{pane.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className='settings-page-content'>
+        <div className='settings-page-panel'>
+          <div className='settings-page-panel-head'>
+            <div className='settings-page-panel-title'>
+              {activePane ? activePane.label : t('配置中心')}
+            </div>
+            <div className='settings-page-panel-meta'>
+              {activePane
+                ? t('正在编辑此分区的全部配置项。')
+                : t('请选择一个配置分区继续。')}
+            </div>
+          </div>
+          <div className='settings-page-panel-body'>
+            {activePane ? activePane.content : null}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

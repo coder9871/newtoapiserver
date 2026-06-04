@@ -529,7 +529,7 @@ const SubscriptionPlansCard = ({
                   <Card
                     key={plan?.id}
                     className={`!rounded-xl transition-all hover:shadow-lg w-full h-full ${
-                      isPopular ? 'ring-2 ring-purple-500' : ''
+                      isPopular ? 'ring-2 ring-[var(--semi-color-primary)]' : ''
                     }`}
                     bodyStyle={{ padding: 0 }}
                   >
@@ -537,7 +537,7 @@ const SubscriptionPlansCard = ({
                       {/* 推荐标签 */}
                       {isPopular && (
                         <div className='mb-2'>
-                          <Tag color='purple' shape='circle' size='small'>
+                          <Tag color='white' shape='circle' size='small'>
                             <Sparkles size={10} className='mr-1' />
                             {t('推荐')}
                           </Tag>
@@ -567,10 +567,10 @@ const SubscriptionPlansCard = ({
                       {/* 价格区域 */}
                       <div className='py-2'>
                         <div className='flex items-baseline justify-start'>
-                          <span className='text-xl font-bold text-purple-600'>
+                          <span className='text-xl font-bold text-semi-color-text-0'>
                             {symbol}
                           </span>
-                          <span className='text-3xl font-bold text-purple-600'>
+                          <span className='text-3xl font-bold text-semi-color-text-0'>
                             {displayPrice}
                           </span>
                         </div>

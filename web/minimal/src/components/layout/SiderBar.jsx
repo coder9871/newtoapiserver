@@ -445,34 +445,32 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         >
           {/* 聊天区域 */}
           {hasSectionVisibleModules('chat') && (
-            <div className='sidebar-section'>
+            <div className='sidebar-section sidebar-section-primary'>
               {chatMenuItems.map((item) => renderSubItem(item))}
             </div>
           )}
 
           {/* 控制台区域 */}
           {hasSectionVisibleModules('console') && (
-            <>
-              <Divider className='sidebar-divider' />
-              <div>{workspaceItems.map((item) => renderNavItem(item))}</div>
-            </>
+            <div className='sidebar-section'>
+              {workspaceItems.map((item) => renderNavItem(item))}
+            </div>
           )}
 
           {/* 个人中心区域 */}
           {hasSectionVisibleModules('personal') && (
-            <>
-              <Divider className='sidebar-divider' />
-              <div>{financeItems.map((item) => renderNavItem(item))}</div>
-            </>
+            <div className='sidebar-section'>
+              {financeItems.map((item) => renderNavItem(item))}
+            </div>
           )}
 
           {/* 管理员区域 - 只在管理员时显示且配置允许时显示 */}
           {isAdmin() && hasSectionVisibleModules('admin') && (
             <>
               <Divider className='sidebar-divider' />
-              <div>
+              <div className='sidebar-section'>
                 {!collapsed && (
-                  <div className='sidebar-group-label'>{t('管理员')}</div>
+                  <div className='sidebar-section-eyebrow'>{t('管理员')}</div>
                 )}
                 {adminItems.map((item) => renderNavItem(item))}
               </div>

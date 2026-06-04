@@ -18,11 +18,11 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { Layout } from '@douyinfe/semi-ui';
 import CardPro from '../../common/ui/CardPro';
 import MjLogsTable from './MjLogsTable';
 import MjLogsActions from './MjLogsActions';
 import MjLogsFilters from './MjLogsFilters';
+import MjLogsDescription from './MjLogsDescription';
 import ColumnSelectorModal from './modals/ColumnSelectorModal';
 import ContentModal from './modals/ContentModal';
 import { useMjLogsData } from '../../../hooks/mj-logs/useMjLogsData';
@@ -39,25 +39,24 @@ const MjLogsPage = () => {
       <ColumnSelectorModal {...mjLogsData} />
       <ContentModal {...mjLogsData} />
 
-      <Layout>
-        <CardPro
-          type='type2'
-          statsArea={<MjLogsActions {...mjLogsData} />}
-          searchArea={<MjLogsFilters {...mjLogsData} />}
-          paginationArea={createCardProPagination({
-            currentPage: mjLogsData.activePage,
-            pageSize: mjLogsData.pageSize,
-            total: mjLogsData.logCount,
-            onPageChange: mjLogsData.handlePageChange,
-            onPageSizeChange: mjLogsData.handlePageSizeChange,
-            isMobile: isMobile,
-            t: mjLogsData.t,
-          })}
-          t={mjLogsData.t}
-        >
-          <MjLogsTable {...mjLogsData} />
-        </CardPro>
-      </Layout>
+      <CardPro
+        type='type2'
+        descriptionArea={<MjLogsDescription {...mjLogsData} />}
+        statsArea={<MjLogsActions {...mjLogsData} />}
+        searchArea={<MjLogsFilters {...mjLogsData} />}
+        paginationArea={createCardProPagination({
+          currentPage: mjLogsData.activePage,
+          pageSize: mjLogsData.pageSize,
+          total: mjLogsData.logCount,
+          onPageChange: mjLogsData.handlePageChange,
+          onPageSizeChange: mjLogsData.handlePageSizeChange,
+          isMobile: isMobile,
+          t: mjLogsData.t,
+        })}
+        t={mjLogsData.t}
+      >
+        <MjLogsTable {...mjLogsData} />
+      </CardPro>
     </>
   );
 };

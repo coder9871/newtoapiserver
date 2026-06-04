@@ -168,15 +168,32 @@ const PricingCardView = ({
     }
 
     const priceItems = getModelPriceItems(priceData, t, siteDisplayType);
-    const primaryCount = priceData.isPerToken ? 2 : 1;
-    const primaryItems = priceItems.slice(0, primaryCount);
-    const secondaryItems = priceItems.slice(primaryCount, primaryCount + 3);
-    const extraCount =
-      priceItems.length - primaryItems.length - secondaryItems.length;
+    const primaryKeys = new Set([
+      'input',
+      'completion',
+      'input-ratio',
+      'completion-ratio',
+    ]);
+    const preferredPrimaryItems = priceItems.filter((item) =>
+      primaryKeys.has(item.key),
+    );
+    const primaryItems =
+      preferredPrimaryItems.length > 0
+        ? preferredPrimaryItems
+        : priceItems.slice(0, 1);
+    const secondaryItems = priceItems.filter(
+      (item) =>
+        !primaryItems.some((primaryItem) => primaryItem.key === item.key),
+    );
+    const secondarySummary = secondaryItems
+      .map((item) => `${item.label} ${item.value}${item.suffix || ''}`)
+      .join(' · ');
 
     return (
       <div className='pricing-card-price'>
-        <div className='pricing-price-primary-grid'>
+        <div
+          className={`pricing-price-primary-grid ${primaryItems.length === 1 ? 'pricing-price-primary-grid-single' : ''}`}
+        >
           {primaryItems.map((item) => (
             <div key={item.key} className='pricing-price-primary'>
               <div className='pricing-price-label'>{item.label}</div>
@@ -190,18 +207,26 @@ const PricingCardView = ({
           ))}
         </div>
 
-        {(secondaryItems.length > 0 || extraCount > 0) && (
-          <div className='pricing-price-secondary-row'>
-            {secondaryItems.map((item) => (
-              <span key={item.key} className='pricing-price-chip'>
-                {item.label} {item.value}
-              </span>
+        {secondaryItems.length > 0 && (
+          <div
+            className='pricing-price-secondary-list'
+            title={secondarySummary}
+          >
+            {secondaryItems.map((item, index) => (
+              <React.Fragment key={item.key}>
+                {index > 0 && (
+                  <span className='pricing-price-secondary-separator'>·</span>
+                )}
+                <span className='pricing-price-secondary-item'>
+                  <span className='pricing-price-secondary-label'>
+                    {item.label}
+                  </span>
+                  <span className='pricing-price-secondary-value'>
+                    {item.value}
+                  </span>
+                </span>
+              </React.Fragment>
             ))}
-            {extraCount > 0 && (
-              <span className='pricing-price-chip pricing-price-more'>
-                +{extraCount}
-              </span>
-            )}
           </div>
         )}
       </div>
@@ -318,7 +343,7 @@ const PricingCardView = ({
               className={`pricing-model-card ${isSelected ? CARD_STYLES.selected : CARD_STYLES.default}`}
               onClick={() => openModelDetail && openModelDetail(model)}
             >
-              <div className='flex flex-col'>
+              <div className='pricing-card-inner'>
                 {/* 头部：图标 + 模型名称 + 操作按钮 */}
                 <div className='pricing-card-head'>
                   <div className='flex items-start space-x-3 flex-1 min-w-0'>
@@ -379,12 +404,14 @@ const PricingCardView = ({
                   {renderCardPricing(priceData)}
                 </div>
 
-                {description && (
-                  <p className='pricing-card-desc'>{description}</p>
-                )}
+                <p
+                  className={`pricing-card-desc ${description ? '' : 'pricing-card-desc-empty'}`}
+                >
+                  {description || '-'}
+                </p>
 
                 {/* 底部区域 */}
-                <div>
+                <div className='pricing-card-footer'>
                   {/* 标签区域 */}
                   {renderTags(model)}
 

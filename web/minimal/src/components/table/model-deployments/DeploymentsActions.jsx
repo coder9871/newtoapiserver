@@ -19,7 +19,6 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import { Button, Popconfirm } from '@douyinfe/semi-ui';
-import CompactModeToggle from '../../common/ui/CompactModeToggle';
 
 const DeploymentsActions = ({
   selectedKeys,
@@ -28,9 +27,6 @@ const DeploymentsActions = ({
   setShowEdit,
   batchDeleteDeployments,
   batchOperationsEnabled = true,
-  compactMode,
-  setCompactMode,
-  showCreateModal,
   setShowCreateModal,
   t,
 }) => {
@@ -95,13 +91,6 @@ const DeploymentsActions = ({
           </Button>
         </>
       )}
-
-      {/* Compact Mode */}
-      <CompactModeToggle
-        compactMode={compactMode}
-        setCompactMode={setCompactMode}
-        t={t}
-      />
     </div>
   );
 };

@@ -24,6 +24,7 @@ import CardPro from '../../common/ui/CardPro';
 import ModelsTable from './ModelsTable';
 import ModelsActions from './ModelsActions';
 import ModelsFilters from './ModelsFilters';
+import ModelsDescription from './ModelsDescription';
 import ModelsTabs from './ModelsTabs';
 import EditModelModal from './modals/EditModelModal';
 import EditVendorModal from './modals/EditVendorModal';
@@ -131,8 +132,9 @@ const ModelsPage = () => {
       />
 
       {showMarketplaceDisplayNotice ? (
-        <div style={{ position: 'relative', marginBottom: 12 }}>
+        <div className='admin-page-notice-shell'>
           <Banner
+            className='admin-page-notice'
             type='warning'
             closeIcon={null}
             icon={
@@ -147,18 +149,25 @@ const ModelsPage = () => {
             style={{ marginBottom: 0 }}
           />
           <Button
+            className='admin-page-notice-dismiss'
             theme='borderless'
             size='small'
             type='tertiary'
             icon={<IconClose aria-hidden={true} />}
             onClick={confirmCloseMarketplaceDisplayNotice}
-            style={{ position: 'absolute', top: 8, right: 8 }}
             aria-label={t('关闭')}
           />
         </div>
       ) : null}
       <CardPro
         type='type3'
+        descriptionArea={
+          <ModelsDescription
+            compactMode={compactMode}
+            setCompactMode={setCompactMode}
+            t={t}
+          />
+        }
         tabsArea={<ModelsTabs {...modelsData} />}
         actionsArea={
           <div className='flex flex-col md:flex-row justify-between items-center gap-2 w-full'>
@@ -173,8 +182,6 @@ const ModelsPage = () => {
               previewing={modelsData.previewing}
               previewUpstreamDiff={modelsData.previewUpstreamDiff}
               applyUpstreamOverwrite={modelsData.applyUpstreamOverwrite}
-              compactMode={compactMode}
-              setCompactMode={setCompactMode}
               t={t}
             />
 

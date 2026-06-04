@@ -196,7 +196,7 @@ const UpdateConfigModal = ({ visible, onCancel, deployment, onSuccess, t }) => {
     <Modal
       title={
         <div className='flex items-center gap-2'>
-          <FaCog className='text-blue-500' />
+          <FaCog className='text-semi-color-text-2' />
           <span>{t('更新容器配置')}</span>
         </div>
       }
@@ -250,7 +250,7 @@ const UpdateConfigModal = ({ visible, onCancel, deployment, onSuccess, t }) => {
             <Collapse.Panel
               header={
                 <div className='flex items-center gap-2'>
-                  <FaDocker className='text-blue-600' />
+                  <FaDocker className='text-semi-color-text-2' />
                   <span>{t('镜像配置')}</span>
                 </div>
               }
@@ -288,7 +288,7 @@ const UpdateConfigModal = ({ visible, onCancel, deployment, onSuccess, t }) => {
             <Collapse.Panel
               header={
                 <div className='flex items-center gap-2'>
-                  <FaNetworkWired className='text-green-600' />
+                  <FaNetworkWired className='text-semi-color-text-2' />
                   <span>{t('网络配置')}</span>
                 </div>
               }
@@ -316,7 +316,7 @@ const UpdateConfigModal = ({ visible, onCancel, deployment, onSuccess, t }) => {
             <Collapse.Panel
               header={
                 <div className='flex items-center gap-2'>
-                  <FaTerminal className='text-purple-600' />
+                  <FaTerminal className='text-semi-color-text-2' />
                   <span>{t('启动配置')}</span>
                 </div>
               }
@@ -342,7 +342,7 @@ const UpdateConfigModal = ({ visible, onCancel, deployment, onSuccess, t }) => {
             <Collapse.Panel
               header={
                 <div className='flex items-center gap-2'>
-                  <FaKey className='text-orange-600' />
+                  <FaKey className='text-semi-color-text-2' />
                   <span>{t('环境变量')}</span>
                   <Tag size='small'>{envVars.length}</Tag>
                 </div>

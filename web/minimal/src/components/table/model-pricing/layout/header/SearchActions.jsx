@@ -20,7 +20,7 @@ For commercial licensing, please contact support@quantumnous.com
 import React, { memo, useCallback, useMemo } from 'react';
 import { Input, Button, Select } from '@douyinfe/semi-ui';
 import { IconSearch } from '@douyinfe/semi-icons';
-import { BadgePercent, Boxes, Grid2X2, Table2 } from 'lucide-react';
+import { Grid2X2, Table2 } from 'lucide-react';
 import { getLobeHubIcon } from '../../../../../helpers';
 
 const SearchActions = memo(
@@ -90,78 +90,83 @@ const SearchActions = memo(
     }, [models, t]);
 
     return (
-      <div className='pricing-toolbar'>
-        <div className='pricing-toolbar-search'>
-          <Input
-            prefix={<IconSearch />}
-            placeholder={t('按模型、供应商、端点或标签搜索')}
-            value={searchValue}
-            onCompositionStart={handleCompositionStart}
-            onCompositionEnd={handleCompositionEnd}
-            onChange={handleChange}
-            showClear
-          />
-        </div>
-
-        <div className='pricing-toolbar-controls'>
-          <div className='pricing-inline-metrics'>
-            <div className='pricing-inline-metric'>
-              <Boxes size={13} strokeWidth={2} className='pricing-inline-metric-icon' />
-              <span className='pricing-inline-metric-value'>
-                {stats?.modelCount?.toLocaleString?.() ?? '0'}
-              </span>
-              <span className='pricing-inline-metric-label'>{t('总模型数')}</span>
-            </div>
-            <div className='pricing-inline-metric pricing-inline-metric-accent'>
-              <BadgePercent
-                size={13}
-                strokeWidth={2}
-                className='pricing-inline-metric-icon'
-              />
-              <span className='pricing-inline-metric-value'>
+      <>
+        {/* 第一层：目录标题 + 实时统计（替代原先重复的页面 hero） */}
+        <div className='pricing-command-head'>
+          <h1 className='pricing-command-title'>{t('模型与价格')}</h1>
+          <div className='pricing-command-stats'>
+            <span className='pricing-command-stat'>
+              <strong>{stats?.modelCount?.toLocaleString?.() ?? '0'}</strong>
+              {t('个模型')}
+            </span>
+            <span className='pricing-command-dot' />
+            <span className='pricing-command-stat'>
+              <strong>{stats?.vendorCount?.toLocaleString?.() ?? '0'}</strong>
+              {t('家供应商')}
+            </span>
+            <span className='pricing-command-dot' />
+            <span className='pricing-command-stat'>
+              <strong>
                 {stats?.discountedModels?.toLocaleString?.() ?? '0'}
-              </span>
-              <span className='pricing-inline-metric-label'>{t('折扣模型')}</span>
-            </div>
-          </div>
-
-          <Select
-            value={filterVendor}
-            onChange={setFilterVendor}
-            optionList={vendorOptions}
-            insetLabel={t('供应商')}
-            className='pricing-vendor-select'
-            style={{ width: isMobile ? 132 : 168 }}
-          />
-
-          <div className='pricing-toggle-group'>
-            <Button
-              className='pricing-toggle-button'
-              theme={viewMode === 'card' ? 'solid' : 'outline'}
-              type={viewMode === 'card' ? 'primary' : 'tertiary'}
-              icon={<Grid2X2 size={14} />}
-              onClick={handleCardView}
-            />
-            <Button
-              className='pricing-toggle-button'
-              theme={viewMode === 'table' ? 'solid' : 'outline'}
-              type={viewMode === 'table' ? 'primary' : 'tertiary'}
-              icon={<Table2 size={14} />}
-              onClick={handleTableView}
-            >
-              {!isMobile ? t('表格视图') : null}
-            </Button>
-            <Button
-              className='pricing-toggle-button pricing-unit-button'
-              theme={tokenUnit === 'K' ? 'solid' : 'outline'}
-              type={tokenUnit === 'K' ? 'primary' : 'tertiary'}
-              onClick={handleTokenUnitToggle}
-            >
-              {tokenUnit}
-            </Button>
+              </strong>
+              {t('个含折扣')}
+            </span>
           </div>
         </div>
-      </div>
+
+        {/* 第二层：搜索 + 筛选 + 视图切换 */}
+        <div className='pricing-toolbar'>
+          <div className='pricing-toolbar-search'>
+            <Input
+              prefix={<IconSearch />}
+              placeholder={t('按模型、供应商、端点或标签搜索')}
+              value={searchValue}
+              onCompositionStart={handleCompositionStart}
+              onCompositionEnd={handleCompositionEnd}
+              onChange={handleChange}
+              showClear
+            />
+          </div>
+
+          <div className='pricing-toolbar-controls'>
+            <Select
+              value={filterVendor}
+              onChange={setFilterVendor}
+              optionList={vendorOptions}
+              insetLabel={t('供应商')}
+              className='pricing-vendor-select'
+              style={{ width: isMobile ? 132 : 168 }}
+            />
+
+            <div className='pricing-toggle-group'>
+              <Button
+                className='pricing-toggle-button'
+                theme={viewMode === 'card' ? 'solid' : 'outline'}
+                type={viewMode === 'card' ? 'primary' : 'tertiary'}
+                icon={<Grid2X2 size={14} />}
+                onClick={handleCardView}
+              />
+              <Button
+                className='pricing-toggle-button'
+                theme={viewMode === 'table' ? 'solid' : 'outline'}
+                type={viewMode === 'table' ? 'primary' : 'tertiary'}
+                icon={<Table2 size={14} />}
+                onClick={handleTableView}
+              >
+                {!isMobile ? t('表格视图') : null}
+              </Button>
+              <Button
+                className='pricing-toggle-button pricing-unit-button'
+                theme={tokenUnit === 'K' ? 'solid' : 'outline'}
+                type={tokenUnit === 'K' ? 'primary' : 'tertiary'}
+                onClick={handleTokenUnitToggle}
+              >
+                {tokenUnit}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </>
     );
   },
 );

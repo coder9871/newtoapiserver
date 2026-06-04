@@ -76,23 +76,44 @@ const CardPro = ({
     if (!hasContent) return null;
 
     return (
-      <div className='flex flex-col w-full'>
+      <div className='card-pro-header flex flex-col w-full'>
+        {/* 描述信息区域 - type2 也支持，用于日志页等补充统一后台页头 */}
+        {type === 'type2' && descriptionArea && (
+          <div className='card-pro-section card-pro-section--description'>
+            {descriptionArea}
+          </div>
+        )}
+
+        {type === 'type2' && descriptionArea && statsArea ? (
+          <Divider margin='8px' />
+        ) : null}
+
         {/* 统计信息区域 - 用于type2 */}
-        {type === 'type2' && statsArea && <>{statsArea}</>}
+        {type === 'type2' && statsArea && (
+          <div className='card-pro-section card-pro-section--stats'>
+            {statsArea}
+          </div>
+        )}
 
         {/* 描述信息区域 - 用于type1和type3 */}
         {(type === 'type1' || type === 'type3') && descriptionArea && (
-          <>{descriptionArea}</>
+          <div className='card-pro-section card-pro-section--description'>
+            {descriptionArea}
+          </div>
         )}
 
         {/* 第一个分隔线 - 在描述信息或统计信息后面 */}
         {((type === 'type1' || type === 'type3') && descriptionArea) ||
         (type === 'type2' && statsArea) ? (
-          <Divider margin='12px' />
+          <Divider margin='8px' />
         ) : null}
 
         {/* 类型切换/标签区域 - 主要用于type3 */}
-        {type === 'type3' && tabsArea && <>{tabsArea}</>}
+        {type === 'type3' && tabsArea && (
+          <div className='card-pro-section card-pro-section--tabs'>
+            {tabsArea}
+          </div>
+        )}
 
         {/* 移动端操作切换按钮 */}
         {isMobile && hasMobileHideableContent && (
@@ -105,6 +126,7 @@ const CardPro = ({
                 size='small'
                 theme='outline'
                 block
+                className='card-pro-mobile-toggle-button'
               >
                 {showMobileActions ? t('隐藏操作项') : t('显示操作项')}
               </Button>
@@ -114,7 +136,7 @@ const CardPro = ({
 
         {/* 操作按钮和搜索表单的容器 */}
         <div
-          className={`flex flex-col gap-2 ${isMobile && !showMobileActions ? 'hidden' : ''}`}
+          className={`card-pro-toolbar-stack flex flex-col gap-2 ${isMobile && !showMobileActions ? 'hidden' : ''}`}
         >
           {/* 操作按钮区域 - 用于type1和type3 */}
           {(type === 'type1' || type === 'type3') &&
@@ -123,18 +145,26 @@ const CardPro = ({
               actionsArea.map((area, idx) => (
                 <React.Fragment key={idx}>
                   {idx !== 0 && <Divider />}
-                  <div className='w-full'>{area}</div>
+                  <div className='card-pro-section card-pro-section--actions w-full'>
+                    {area}
+                  </div>
                 </React.Fragment>
               ))
             ) : (
-              <div className='w-full'>{actionsArea}</div>
+              <div className='card-pro-section card-pro-section--actions w-full'>
+                {actionsArea}
+              </div>
             ))}
 
           {/* 当同时存在操作区和搜索区时，插入分隔线 */}
           {actionsArea && searchArea && <Divider />}
 
           {/* 搜索表单区域 - 所有类型都可能有 */}
-          {searchArea && <div className='w-full'>{searchArea}</div>}
+          {searchArea && (
+            <div className='card-pro-section card-pro-section--search w-full'>
+              {searchArea}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -148,7 +178,7 @@ const CardPro = ({
 
     return (
       <div
-        className={`flex w-full pt-4 border-t ${isMobile ? 'justify-center' : 'justify-between items-center'}`}
+        className={`card-pro-footer flex w-full pt-4 border-t ${isMobile ? 'justify-center' : 'justify-between items-center'}`}
         style={{ borderColor: 'var(--semi-color-border)' }}
       >
         {paginationArea}

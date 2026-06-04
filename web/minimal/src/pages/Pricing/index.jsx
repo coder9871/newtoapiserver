@@ -20,10 +20,12 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import ModelPricingPage from '../../components/table/model-pricing/layout/PricingPage';
 
+// 顶部标题与实时统计已下沉到 ModelPricingPage 的命令面板（粘性目录头），
+// 这里只保留页面外壳与上边距，避免与命令面板的标题/搜索重复。
 const Pricing = () => (
-  <>
+  <div className='pricing-page-shell'>
     <ModelPricingPage />
-  </>
+  </div>
 );
 
 export default Pricing;

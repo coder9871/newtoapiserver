@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React, { useState } from 'react';
 import { Button, Space } from '@douyinfe/semi-ui';
+import { IconPlus } from '@douyinfe/semi-icons';
 import { showError } from '../../../helpers';
 import CopyTokensModal from './modals/CopyTokensModal';
 import DeleteTokensModal from './modals/DeleteTokensModal';
@@ -64,7 +65,8 @@ const TokensActions = ({
       <div className='flex flex-wrap gap-2 w-full md:w-auto order-2 md:order-1'>
         <Button
           type='primary'
-          className='flex-1 md:flex-initial'
+          className='flex-1 md:flex-initial token-create-button'
+          icon={<IconPlus />}
           onClick={() => {
             setEditingToken({
               id: undefined,

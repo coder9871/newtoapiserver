@@ -238,7 +238,7 @@ const RiskAcknowledgementModal = React.memo(function RiskAcknowledgementModal({
             }}
           >
             {inputPrompt ? <Text strong>{inputPrompt}</Text> : null}
-            <div className='font-mono text-xs break-all rounded-md p-2 bg-gray-50 border border-gray-200'>
+            <div className='font-mono text-xs break-all rounded-md p-2 bg-[var(--semi-color-fill-0)] border border-[var(--semi-color-border)]'>
               {requiredTextToDisplay}
             </div>
             {hasSegmentedRequiredText ? (
@@ -247,7 +247,7 @@ const RiskAcknowledgementModal = React.memo(function RiskAcknowledgementModal({
                   part.type === 'static' ? (
                     <span
                       key={`static-${index}`}
-                      className='select-none rounded-md border border-gray-200 bg-white px-2 py-1 font-mono text-sm text-gray-500'
+                      className='select-none rounded-md border border-[var(--semi-color-border)] bg-[var(--semi-color-bg-1)] px-2 py-1 font-mono text-sm text-[var(--semi-color-text-2)]'
                     >
                       {part.text}
                     </span>

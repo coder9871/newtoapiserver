@@ -18,16 +18,16 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { CalendarClock } from 'lucide-react';
-import CompactModeToggle from '../../common/ui/CompactModeToggle';
+import { Boxes } from 'lucide-react';
 import AdminPageHeader from '../../common/ui/AdminPageHeader';
+import CompactModeToggle from '../../common/ui/CompactModeToggle';
 
-const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
+const DeploymentsDescription = ({ compactMode, setCompactMode, t }) => {
   return (
     <AdminPageHeader
       eyebrow={t('控制台')}
-      icon={<CalendarClock size={16} />}
-      title={t('订阅管理')}
+      icon={<Boxes size={16} />}
+      title={t('模型部署管理')}
       trailing={
         <CompactModeToggle
           compactMode={compactMode}
@@ -39,4 +39,4 @@ const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
   );
 };
 
-export default SubscriptionsDescription;
+export default DeploymentsDescription;

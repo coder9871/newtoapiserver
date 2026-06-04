@@ -48,23 +48,23 @@ const ChatWelcome = ({ models = [], model, onModelChange, onSend }) => {
   );
 
   return (
-    <div className='flex h-full flex-col items-center justify-center px-4'>
+    <div className='playground-welcome flex h-full flex-col items-center justify-center px-4'>
       <div className='flex w-full max-w-2xl flex-col items-center'>
         {/* 模型选择 */}
-        <div className='mb-4'>
+        <div className='mb-5'>
           <Select
             placeholder={t('请选择模型')}
             value={model}
             onChange={onModelChange}
             optionList={models}
             filter
-            className='!rounded-full'
-            style={{ minWidth: 200 }}
+            className='playground-model-select !rounded-full'
+            style={{ minWidth: 220 }}
           />
         </div>
 
         {/* 输入框 + 发送（同一行） */}
-        <div className='home-search-box flex w-full items-end gap-2 rounded-full border border-semi-color-border bg-semi-color-bg-1 py-2 pl-5 pr-2 shadow-sm transition-all duration-200 focus-within:border-semi-color-text-2 focus-within:shadow-md'>
+        <div className='playground-welcome__prompt flex w-full items-end gap-2 rounded-full py-2 pl-5 pr-2 transition-all duration-200'>
           <TextArea
             value={prompt}
             onChange={setPrompt}

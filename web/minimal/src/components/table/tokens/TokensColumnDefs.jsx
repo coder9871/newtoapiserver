@@ -382,87 +382,95 @@ const renderOperations = (
   }
 
   return (
-    <Space wrap>
-      <SplitButtonGroup
-        className='overflow-hidden'
-        aria-label={t('项目操作按钮组')}
-      >
+    <div className='token-ops-surface'>
+      <Space wrap className='token-ops-actions'>
+        <SplitButtonGroup
+          className='token-ops-split-button overflow-hidden'
+          aria-label={t('项目操作按钮组')}
+        >
+          <Button
+            className='token-ops-button'
+            size='small'
+            type='tertiary'
+            onClick={() => {
+              if (chatsArray.length === 0) {
+                showError(t('请联系管理员配置聊天链接'));
+              } else {
+                const first = chatsArray[0];
+                onOpenLink(first.name, first.value, record);
+              }
+            }}
+          >
+            {t('聊天')}
+          </Button>
+          <Dropdown trigger='click' position='bottomRight' menu={chatsArray}>
+            <Button
+              className='token-ops-button'
+              type='tertiary'
+              icon={<IconTreeTriangleDown />}
+              size='small'
+            ></Button>
+          </Dropdown>
+        </SplitButtonGroup>
+
+        {record.status === 1 ? (
+          <Button
+            className='token-ops-button token-ops-button-danger'
+            type='danger'
+            size='small'
+            onClick={async () => {
+              await manageToken(record.id, 'disable', record);
+              await refresh();
+            }}
+          >
+            {t('禁用')}
+          </Button>
+        ) : (
+          <Button
+            className='token-ops-button'
+            size='small'
+            onClick={async () => {
+              await manageToken(record.id, 'enable', record);
+              await refresh();
+            }}
+          >
+            {t('启用')}
+          </Button>
+        )}
+
         <Button
-          size='small'
+          className='token-ops-button'
           type='tertiary'
+          size='small'
           onClick={() => {
-            if (chatsArray.length === 0) {
-              showError(t('请联系管理员配置聊天链接'));
-            } else {
-              const first = chatsArray[0];
-              onOpenLink(first.name, first.value, record);
-            }
+            setEditingToken(record);
+            setShowEdit(true);
           }}
         >
-          {t('聊天')}
+          {t('编辑')}
         </Button>
-        <Dropdown trigger='click' position='bottomRight' menu={chatsArray}>
-          <Button
-            type='tertiary'
-            icon={<IconTreeTriangleDown />}
-            size='small'
-          ></Button>
-        </Dropdown>
-      </SplitButtonGroup>
 
-      {record.status === 1 ? (
         <Button
+          className='token-ops-button token-ops-button-danger'
           type='danger'
           size='small'
-          onClick={async () => {
-            await manageToken(record.id, 'disable', record);
-            await refresh();
+          onClick={() => {
+            Modal.confirm({
+              title: t('确定是否要删除此令牌？'),
+              content: t('此修改将不可逆'),
+              onOk: () => {
+                (async () => {
+                  await manageToken(record.id, 'delete', record);
+                  await refresh();
+                })();
+              },
+            });
           }}
         >
-          {t('禁用')}
+          {t('删除')}
         </Button>
-      ) : (
-        <Button
-          size='small'
-          onClick={async () => {
-            await manageToken(record.id, 'enable', record);
-            await refresh();
-          }}
-        >
-          {t('启用')}
-        </Button>
-      )}
-
-      <Button
-        type='tertiary'
-        size='small'
-        onClick={() => {
-          setEditingToken(record);
-          setShowEdit(true);
-        }}
-      >
-        {t('编辑')}
-      </Button>
-
-      <Button
-        type='danger'
-        size='small'
-        onClick={() => {
-          Modal.confirm({
-            title: t('确定是否要删除此令牌？'),
-            content: t('此修改将不可逆'),
-            onOk: () => {
-              (async () => {
-                await manageToken(record.id, 'delete', record);
-                await refresh();
-              })();
-            },
-          });
-        }}
-      >
-        {t('删除')}
-      </Button>
-    </Space>
+      </Space>
+    </div>
   );
 };
 
@@ -557,6 +565,7 @@ export const getTokensColumns = ({
     {
       title: '',
       dataIndex: 'operate',
+      className: 'table-ops-column',
       fixed: 'right',
       render: (text, record, index) =>
         renderOperations(

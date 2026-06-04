@@ -20,15 +20,12 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import { Tag, Space, Skeleton } from '@douyinfe/semi-ui';
 import { renderQuota } from '../../../helpers';
-import CompactModeToggle from '../../common/ui/CompactModeToggle';
 import { useMinimumLoadingTime } from '../../../hooks/common/useMinimumLoadingTime';
 
 const LogsActions = ({
   stat,
   loadingStat,
   showStat,
-  compactMode,
-  setCompactMode,
   t,
 }) => {
   const showSkeleton = useMinimumLoadingTime(loadingStat);
@@ -43,38 +40,34 @@ const LogsActions = ({
   );
 
   return (
-    <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full'>
+    <div className='flex w-full items-start'>
       <Skeleton loading={needSkeleton} active placeholder={placeholder}>
-        <Space>
+        <Space wrap size={10}>
           <Tag
-            color='blue'
+            color='grey'
             style={{
-              fontWeight: 500,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-              padding: 13,
+              fontWeight: 600,
+              padding: 12,
             }}
             className='!rounded-lg'
           >
             {t('消耗额度')}: {renderQuota(stat.quota)}
           </Tag>
           <Tag
-            color='pink'
+            color='grey'
             style={{
-              fontWeight: 500,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-              padding: 13,
+              fontWeight: 600,
+              padding: 12,
             }}
             className='!rounded-lg'
           >
             RPM: {stat.rpm}
           </Tag>
           <Tag
-            color='white'
+            color='grey'
             style={{
-              border: 'none',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-              fontWeight: 500,
-              padding: 13,
+              fontWeight: 600,
+              padding: 12,
             }}
             className='!rounded-lg'
           >
@@ -82,12 +75,6 @@ const LogsActions = ({
           </Tag>
         </Space>
       </Skeleton>
-
-      <CompactModeToggle
-        compactMode={compactMode}
-        setCompactMode={setCompactMode}
-        t={t}
-      />
     </div>
   );
 };

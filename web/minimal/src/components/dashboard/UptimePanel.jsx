@@ -131,7 +131,7 @@ const UptimePanel = ({
 
       {/* 图例 */}
       {uptimeData.length > 0 && (
-        <div className='p-3 bg-gray-50 rounded-b-2xl'>
+        <div className='p-3 bg-[var(--semi-color-fill-0)] rounded-b-2xl'>
           <div className='flex flex-wrap gap-3 text-xs justify-center'>
             {uptimeLegendData.map((legend, index) => (
               <div key={index} className='flex items-center gap-1'>
@@ -139,7 +139,7 @@ const UptimePanel = ({
                   className='w-2 h-2 rounded-full'
                   style={{ backgroundColor: legend.color }}
                 />
-                <span className='text-gray-600'>{legend.label}</span>
+                <span className='text-semi-color-text-2'>{legend.label}</span>
               </div>
             ))}
           </div>

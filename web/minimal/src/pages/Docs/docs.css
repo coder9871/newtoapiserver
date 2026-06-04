@@ -1,6 +1,8 @@
 .docs-page {
-  background: #ffffff;
-  color: #0f172a;
+  background:
+    radial-gradient(circle at 78% 12%, var(--semi-color-fill-0), transparent 30%),
+    var(--app-bg);
+  color: var(--semi-color-text-0);
   font-family:
     Inter,
     -apple-system,
@@ -20,83 +22,361 @@
     Menlo, monospace;
 }
 
+.docs-page aside {
+  background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent) !important;
+  border-right: 1px solid var(--app-shell-border) !important;
+  box-shadow: 18px 0 48px rgba(24, 24, 27, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+body[theme-mode='dark'] .docs-page aside {
+  box-shadow: 18px 0 48px rgba(0, 0, 0, 0.28);
+}
+
+.docs-page > div:first-child {
+  background: color-mix(in srgb, var(--semi-color-bg-1) 92%, transparent) !important;
+  border-bottom: 1px solid var(--app-shell-border) !important;
+  color: var(--semi-color-text-0) !important;
+  backdrop-filter: blur(18px);
+}
+
+.docs-page aside h3 {
+  margin-top: 24px !important;
+  color: var(--semi-color-text-0) !important;
+  font-size: 11px !important;
+  font-weight: 760 !important;
+  letter-spacing: 0.16em !important;
+}
+
+.docs-page aside li > div {
+  border: 1px solid transparent;
+  border-radius: 14px !important;
+  color: var(--semi-color-text-1) !important;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.docs-page aside .docs-nav-item {
+  min-height: 38px;
+}
+
+.docs-page aside .docs-nav-item--nested {
+  margin-left: 0;
+  padding-left: 8px !important;
+}
+
+.docs-page aside .docs-nav-icon,
+.docs-page aside .docs-nav-arrow {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+}
+
+.docs-page aside .docs-nav-icon svg,
+.docs-page aside .docs-nav-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.docs-page aside .docs-nav-title {
+  min-width: 0;
+  line-height: 20px;
+}
+
+.docs-page aside .docs-nav-children {
+  margin-left: 8px;
+  padding-left: 4px;
+}
+
+.docs-page aside li > div:hover {
+  background: var(--semi-color-fill-0) !important;
+  border-color: var(--semi-color-border);
+  color: var(--semi-color-text-0) !important;
+}
+
+.docs-page aside li > div.bg-blue-50,
+.docs-page aside li > div[class*='bg-blue-'] {
+  background: var(--semi-color-fill-1) !important;
+  border-color: var(--semi-color-border);
+  color: var(--semi-color-text-0) !important;
+  box-shadow: inset 3px 0 0 var(--semi-color-primary);
+}
+
+.docs-page aside svg,
+.docs-page aside span {
+  color: inherit !important;
+}
+
+.docs-page main {
+  scrollbar-width: thin;
+  scrollbar-color: var(--semi-color-text-3) transparent;
+}
+
+.docs-page aside {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--semi-color-text-3) 55%, transparent) transparent;
+}
+
+.docs-page main::-webkit-scrollbar,
+.docs-scrollable::-webkit-scrollbar,
+.docs-content::-webkit-scrollbar,
+.docs-page aside::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.docs-page main::-webkit-scrollbar-thumb,
+.docs-scrollable::-webkit-scrollbar-thumb,
+.docs-content::-webkit-scrollbar-thumb,
+.docs-page aside::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--semi-color-text-3) 55%, transparent);
+  border-radius: 999px;
+}
+
+.docs-page aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.docs-content {
+  color: var(--semi-color-text-1);
+}
+
+@media (min-width: 768px) {
+  .docs-page aside {
+    padding-top: 24px !important;
+  }
+
+  .docs-page main {
+    padding-top: 24px !important;
+  }
+
+  .docs-content {
+    margin-top: 20px;
+    margin-bottom: 28px;
+    border: 1px solid var(--app-shell-border);
+    border-radius: 30px;
+    background: color-mix(in srgb, var(--semi-color-bg-1) 88%, transparent);
+    box-shadow: 0 26px 70px rgba(24, 24, 27, 0.06);
+    backdrop-filter: blur(14px);
+  }
+
+  body[theme-mode='dark'] .docs-content {
+    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.docs-content h1,
+.docs-content h2,
+.docs-content h3,
+.docs-content h4,
+.docs-content h5,
+.docs-content h6,
+.docs-page [class*='text-gray-900'],
+.docs-page [class*='text-gray-800'],
+.docs-page [class*='text-blue-9'],
+.docs-page [class*='text-purple-9'],
+.docs-page [class*='text-green-9'] {
+  color: var(--semi-color-text-0) !important;
+}
+
+.docs-content h1 {
+  font-size: clamp(34px, 4.8vw, 58px) !important;
+  font-weight: 760 !important;
+  letter-spacing: -0.055em !important;
+  line-height: 1.02 !important;
+}
+
+.docs-content h2 {
+  margin-top: 42px !important;
+  font-size: clamp(24px, 3vw, 34px) !important;
+  font-weight: 720 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.docs-content h3 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+}
+
+.docs-page [class*='text-gray-700'],
+.docs-page [class*='text-gray-600'],
+.docs-page [class*='text-gray-500'],
+.docs-page [class*='text-blue-7'],
+.docs-page [class*='text-purple-7'],
+.docs-page [class*='text-green-7'] {
+  color: var(--semi-color-text-2) !important;
+}
+
+.docs-page [class*='text-blue-6'],
+.docs-page [class*='text-purple-6'],
+.docs-page [class*='text-pink-'],
+.docs-page [class*='text-orange-'],
+.docs-page [class*='text-indigo-'],
+.docs-page [class*='text-emerald-'] {
+  color: var(--semi-color-text-0) !important;
+}
+
+.docs-page a,
+.docs-page .text-primary {
+  color: var(--semi-color-link) !important;
+  text-decoration-color: var(--semi-color-border);
+  text-underline-offset: 3px;
+}
+
+.docs-page [class*='bg-blue-'],
+.docs-page [class*='bg-purple-'],
+.docs-page [class*='bg-pink-'],
+.docs-page [class*='bg-orange-'],
+.docs-page [class*='bg-green-'],
+.docs-page [class*='bg-indigo-'],
+.docs-page [class*='bg-emerald-'],
+.docs-page [class*='bg-gray-50'],
+.docs-page [class*='from-blue-'],
+.docs-page [class*='from-purple-'],
+.docs-page [class*='from-pink-'],
+.docs-page [class*='from-orange-'],
+.docs-page [class*='from-green-'],
+.docs-page [class*='from-indigo-'],
+.docs-page [class*='to-blue-'],
+.docs-page [class*='to-purple-'],
+.docs-page [class*='to-transparent'] {
+  background: var(--semi-color-fill-0) !important;
+}
+
+.docs-page [class*='border-blue-'],
+.docs-page [class*='border-purple-'],
+.docs-page [class*='border-pink-'],
+.docs-page [class*='border-orange-'],
+.docs-page [class*='border-green-'],
+.docs-page [class*='border-indigo-'],
+.docs-page [class*='border-gray-'] {
+  border-color: var(--semi-color-border) !important;
+}
+
+.docs-page [class*='shadow-sm'],
+.docs-page [class*='shadow'] {
+  box-shadow: none !important;
+}
+
+.docs-page .rounded-xl,
+.docs-page .rounded-lg {
+  border-radius: 18px !important;
+}
+
+.docs-page button {
+  border-radius: 999px !important;
+}
+
+.docs-page button[class*='bg-gray-8'],
+.docs-page button[class*='bg-gray-9'],
+.docs-page button[class*='bg-green-6'],
+.docs-page button[class*='bg-blue-'] {
+  background: var(--semi-color-primary) !important;
+  color: var(--semi-color-bg-1) !important;
+}
+
+body[theme-mode='dark'] .docs-page button[class*='bg-gray-8'],
+body[theme-mode='dark'] .docs-page button[class*='bg-gray-9'],
+body[theme-mode='dark'] .docs-page button[class*='bg-green-6'],
+body[theme-mode='dark'] .docs-page button[class*='bg-blue-'] {
+  color: var(--app-bg) !important;
+}
+
 .docs-page :not(pre) > code {
-  color: #0f172a;
+  padding: 2px 6px;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 8px;
+  background: var(--semi-color-fill-0) !important;
+  color: var(--semi-color-text-0);
 }
 
 .docs-code-block {
   margin: 0;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 20px;
   overflow-x: auto;
   white-space: pre;
+  background: #151515 !important;
+  color: #f5f4ef !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .docs-code-block code {
   display: block;
   min-width: max-content;
+  padding: 18px;
   background: transparent;
   color: inherit;
 }
 
 .docs-content table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 18px;
   font-size: 0.875rem;
 }
 
 .docs-content th,
 .docs-content td {
-  border: 1px solid #e5e7eb;
-  padding: 0.75rem;
+  border-right: 1px solid var(--semi-color-border);
+  border-bottom: 1px solid var(--semi-color-border);
+  padding: 0.85rem;
   text-align: left;
   vertical-align: top;
 }
 
+.docs-content th:last-child,
+.docs-content td:last-child {
+  border-right: 0;
+}
+
+.docs-content tr:last-child td {
+  border-bottom: 0;
+}
+
 .docs-content th {
-  background: #f8fafc;
+  background: var(--semi-color-fill-0);
+  color: var(--semi-color-text-0);
   font-weight: 700;
 }
 
-.docs-scrollable,
-.docs-content,
-.docs-page main {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-}
-
-.docs-scrollable::-webkit-scrollbar,
-.docs-content::-webkit-scrollbar,
-.docs-page main::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.docs-scrollable::-webkit-scrollbar-thumb,
-.docs-content::-webkit-scrollbar-thumb,
-.docs-page main::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 999px;
+.docs-page .fixed.inset-0 {
+  background: rgba(24, 24, 27, 0.42) !important;
+  backdrop-filter: blur(4px);
 }
 
 body[theme-mode='dark'] .docs-page,
 html.dark .docs-page {
-  color: #0f172a;
+  background:
+    radial-gradient(circle at 78% 12%, var(--semi-color-fill-0), transparent 30%),
+    var(--app-bg);
+  color: var(--semi-color-text-0);
 }
 
-body[theme-mode='dark'] .docs-page .bg-white,
-html.dark .docs-page .bg-white {
-  background-color: #ffffff !important;
-}
+@media (max-width: 767px) {
+  .docs-page {
+    min-height: calc(100vh - var(--app-header-height));
+    min-height: calc(100dvh - var(--app-header-height));
+  }
 
-body[theme-mode='dark'] .docs-page .text-gray-900,
-body[theme-mode='dark'] .docs-page .text-gray-800,
-body[theme-mode='dark'] .docs-page .text-gray-700,
-body[theme-mode='dark'] .docs-page .text-gray-600,
-body[theme-mode='dark'] .docs-page .text-gray-500,
-html.dark .docs-page .text-gray-900,
-html.dark .docs-page .text-gray-800,
-html.dark .docs-page .text-gray-700,
-html.dark .docs-page .text-gray-600,
-html.dark .docs-page .text-gray-500 {
-  color: #0f172a !important;
+  .docs-page aside {
+    width: min(82vw, 300px) !important;
+  }
+
+  .docs-content {
+    padding-top: 28px !important;
+  }
+
+  .docs-content h1 {
+    font-size: 34px !important;
+  }
 }

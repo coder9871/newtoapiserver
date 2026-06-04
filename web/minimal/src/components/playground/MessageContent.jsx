@@ -77,7 +77,10 @@ const MessageContent = ({
           >
             <div className='flex items-center gap-2'>
               <AlertTriangle size={16} className='text-orange-500 shrink-0' />
-              <Typography.Text strong className='!text-[var(--semi-color-text-0)]'>
+              <Typography.Text
+                strong
+                className='!text-[var(--semi-color-text-0)]'
+              >
                 {t('模型价格未配置')}
               </Typography.Text>
             </div>
@@ -93,7 +96,9 @@ const MessageContent = ({
                 theme='light'
                 type='warning'
                 icon={<Settings size={14} />}
-                onClick={() => window.open('/console/setting?tab=ratio', '_blank')}
+                onClick={() =>
+                  window.open('/console/setting?tab=ratio', '_blank')
+                }
               >
                 {t('前往设置')}
               </Button>
@@ -213,11 +218,11 @@ const MessageContent = ({
   ) {
     return (
       <div
-        className={`${className} flex items-center gap-2 sm:gap-4 bg-gradient-to-r from-purple-50 to-indigo-50`}
+        className={`${className} flex items-center gap-2 sm:gap-4 bg-[var(--app-accent-soft)] rounded-lg`}
       >
-        <div className='w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg'>
+        <div className='w-5 h-5 rounded-full bg-[var(--semi-color-primary)] flex items-center justify-center shadow-lg'>
           <Loader2
-            className='animate-spin text-white'
+            className='animate-spin !text-[var(--semi-color-bg-1)]'
             size={styleState.isMobile ? 16 : 20}
           />
         </div>
@@ -230,15 +235,15 @@ const MessageContent = ({
       {message.role === 'system' && (
         <div className='mb-2 sm:mb-4'>
           <div
-            className='flex items-center gap-2 p-2 sm:p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg'
+            className='flex items-center gap-2 p-2 sm:p-3 bg-[var(--semi-color-fill-0)] rounded-lg'
             style={{ border: '1px solid var(--semi-color-border)' }}
           >
-            <div className='w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-sm'>
-              <Typography.Text className='text-white text-xs font-bold'>
+            <div className='w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[var(--semi-color-primary)] flex items-center justify-center shadow-sm'>
+              <Typography.Text className='!text-[var(--semi-color-bg-1)] text-xs font-bold'>
                 S
               </Typography.Text>
             </div>
-            <Typography.Text className='text-amber-700 text-xs sm:text-sm font-medium'>
+            <Typography.Text className='!text-[var(--semi-color-text-1)] text-xs sm:text-sm font-medium'>
               {t('系统消息')}
             </Typography.Text>
           </div>
@@ -267,7 +272,7 @@ const MessageContent = ({
               fontSize: styleState.isMobile ? '14px' : '15px',
               lineHeight: '1.6',
             }}
-            className='!border-blue-200 focus:!border-blue-400 !bg-blue-50/50'
+            className='!border-[var(--semi-color-border)] focus:!border-[var(--semi-color-primary)] !bg-[var(--semi-color-fill-0)]'
           />
           <div className='flex items-center gap-2 w-full'>
             <Button

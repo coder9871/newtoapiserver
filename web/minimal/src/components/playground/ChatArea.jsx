@@ -46,7 +46,7 @@ const ChatArea = ({
 
   return (
     <Card
-      className='h-full'
+      className='playground-chat-card h-full'
       bordered={false}
       bodyStyle={{
         padding: 0,
@@ -57,14 +57,14 @@ const ChatArea = ({
       }}
     >
       {/* 顶部：模型选择 */}
-      <div className='flex items-center px-4 py-3 border-b border-semi-color-border shrink-0'>
+      <div className='playground-chat-toolbar flex items-center px-4 py-3 shrink-0'>
         <Select
           placeholder={t('请选择模型')}
           value={inputs.model}
           onChange={onModelChange}
           optionList={models}
           filter
-          className='!rounded-full'
+          className='playground-model-select !rounded-full'
           style={{ minWidth: 220 }}
         />
       </div>
@@ -90,7 +90,6 @@ const ChatArea = ({
           onMessageCopy={onMessageCopy}
           onMessageReset={onMessageReset}
           onMessageDelete={onMessageDelete}
-          showClearContext
           showStopGenerate
           onStopGenerator={onStopGenerator}
           onClear={onClearMessages}

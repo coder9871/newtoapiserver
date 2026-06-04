@@ -70,8 +70,8 @@ const SettingsPanel = ({
       {/* 标题区域 - 与调试面板保持一致 */}
       <div className='flex items-center justify-between mb-6 flex-shrink-0'>
         <div className='flex items-center'>
-          <div className='w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mr-3'>
-            <Settings size={20} className='text-white' />
+          <div className='w-10 h-10 rounded-full bg-[var(--semi-color-primary)] flex items-center justify-center mr-3'>
+            <Settings size={20} className='!text-[var(--semi-color-bg-1)]' />
           </div>
           <Typography.Title heading={5} className='mb-0'>
             {t('模型配置')}

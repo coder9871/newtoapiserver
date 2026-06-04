@@ -18,16 +18,17 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { CalendarClock } from 'lucide-react';
+import { ClipboardList } from 'lucide-react';
 import CompactModeToggle from '../../common/ui/CompactModeToggle';
 import AdminPageHeader from '../../common/ui/AdminPageHeader';
 
-const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
+const TaskLogsDescription = ({ compactMode, setCompactMode, t }) => {
   return (
     <AdminPageHeader
       eyebrow={t('控制台')}
-      icon={<CalendarClock size={16} />}
-      title={t('订阅管理')}
+      icon={<ClipboardList size={16} />}
+      title={t('任务日志')}
+      subtitle={t('集中查看异步任务处理状态、结果预览与排查线索。')}
       trailing={
         <CompactModeToggle
           compactMode={compactMode}
@@ -39,4 +40,4 @@ const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
   );
 };
 
-export default SubscriptionsDescription;
+export default TaskLogsDescription;

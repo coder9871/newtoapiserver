@@ -484,8 +484,8 @@ const Playground = () => {
 
   return (
     <PlaygroundProvider value={playgroundContextValue}>
-      <div className='h-full'>
-        <div className='mt-[60px] h-[calc(100vh-66px)]'>
+      <div className='playground-shell h-full'>
+        <div className='playground-shell__frame h-[calc(100vh-66px)]'>
           {message.length === 0 ? (
             <ChatWelcome
               models={models}

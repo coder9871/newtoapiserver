@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SkeletonWrapper from '../components/SkeletonWrapper';
 
 const Navigation = ({
@@ -28,12 +28,19 @@ const Navigation = ({
   userState,
   pricingRequireAuth,
 }) => {
+  const location = useLocation();
+
+  const isLinkActive = (to) => {
+    if (!to) return false;
+    if (to === '/') return location.pathname === '/';
+    return location.pathname === to || location.pathname.startsWith(`${to}/`);
+  };
+
   const renderNavLinks = () => {
     const baseClasses =
-      'flex-shrink-0 flex items-center gap-1 font-medium text-semi-color-text-0 rounded-md transition-colors duration-200 ease-in-out';
-    const hoverClasses =
-      'hover:text-semi-color-primary hover:underline underline-offset-4 decoration-2 decoration-semi-color-primary';
-    const spacingClasses = isMobile ? 'px-2 py-1' : 'px-3 py-2';
+      'app-topbar-nav-link flex-shrink-0 flex items-center gap-1 font-medium rounded-full transition-all duration-200 ease-in-out';
+    const hoverClasses = 'hover:-translate-y-0.5';
+    const spacingClasses = isMobile ? 'px-3 py-1.5' : 'px-4 py-2';
 
     const commonLinkClasses = `${baseClasses} ${spacingClasses} ${hoverClasses}`;
 
@@ -62,8 +69,14 @@ const Navigation = ({
         targetPath = '/login';
       }
 
+      const activeClass = isLinkActive(link.to) ? ' active' : '';
+
       return (
-        <Link key={link.itemKey} to={targetPath} className={commonLinkClasses}>
+        <Link
+          key={link.itemKey}
+          to={targetPath}
+          className={`${commonLinkClasses}${activeClass}`}
+        >
           {linkContent}
         </Link>
       );
@@ -71,7 +84,7 @@ const Navigation = ({
   };
 
   return (
-    <nav className='flex flex-1 items-center gap-1 lg:gap-2 mx-2 md:mx-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+    <nav className='app-topbar-nav flex flex-1 items-center gap-1.5 lg:gap-2 mx-2 md:mx-5 overflow-x-auto whitespace-nowrap scrollbar-hide'>
       <SkeletonWrapper
         loading={isLoading}
         type='navigation'

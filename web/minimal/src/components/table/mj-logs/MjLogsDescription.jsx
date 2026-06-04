@@ -18,16 +18,17 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import { CalendarClock } from 'lucide-react';
+import { WandSparkles } from 'lucide-react';
 import CompactModeToggle from '../../common/ui/CompactModeToggle';
 import AdminPageHeader from '../../common/ui/AdminPageHeader';
 
-const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
+const MjLogsDescription = ({ compactMode, setCompactMode, t }) => {
   return (
     <AdminPageHeader
       eyebrow={t('控制台')}
-      icon={<CalendarClock size={16} />}
-      title={t('订阅管理')}
+      icon={<WandSparkles size={16} />}
+      title={t('Midjourney 日志')}
+      subtitle={t('聚合绘图任务记录、回调状态与素材产出结果。')}
       trailing={
         <CompactModeToggle
           compactMode={compactMode}
@@ -39,4 +40,4 @@ const SubscriptionsDescription = ({ compactMode, setCompactMode, t }) => {
   );
 };
 
-export default SubscriptionsDescription;
+export default MjLogsDescription;

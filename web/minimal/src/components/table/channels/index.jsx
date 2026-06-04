@@ -23,6 +23,7 @@ import { IconAlertTriangle } from '@douyinfe/semi-icons';
 import CardPro from '../../common/ui/CardPro';
 import ChannelsTable from './ChannelsTable';
 import ChannelsActions from './ChannelsActions';
+import ChannelsDescription from './ChannelsDescription';
 import ChannelsFilters from './ChannelsFilters';
 import ChannelsTabs from './ChannelsTabs';
 import { useChannelsData } from '../../../hooks/channels/useChannelsData';
@@ -76,23 +77,27 @@ const ChannelsPage = () => {
 
       {/* Main Content */}
       {channelsData.globalPassThroughEnabled ? (
-        <Banner
-          type='warning'
-          closeIcon={null}
-          icon={
-            <IconAlertTriangle
-              size='large'
-              style={{ color: 'var(--semi-color-warning)' }}
-            />
-          }
-          description={channelsData.t(
-            '已开启全局请求透传：参数覆写、模型重定向、渠道适配等 NewAPI 内置功能将失效，非最佳实践；如因此产生问题，请勿提交 issue 反馈。',
-          )}
-          style={{ marginBottom: 12 }}
-        />
+        <div className='admin-page-notice-shell'>
+          <Banner
+            className='admin-page-notice'
+            type='warning'
+            closeIcon={null}
+            icon={
+              <IconAlertTriangle
+                size='large'
+                style={{ color: 'var(--semi-color-warning)' }}
+              />
+            }
+            description={channelsData.t(
+              '已开启全局请求透传：参数覆写、模型重定向、渠道适配等 NewAPI 内置功能将失效，非最佳实践；如因此产生问题，请勿提交 issue 反馈。',
+            )}
+            style={{ marginBottom: 0 }}
+          />
+        </div>
       ) : null}
       <CardPro
         type='type3'
+        descriptionArea={<ChannelsDescription t={channelsData.t} />}
         tabsArea={<ChannelsTabs {...channelsData} />}
         actionsArea={<ChannelsActions {...channelsData} />}
         searchArea={<ChannelsFilters {...channelsData} />}

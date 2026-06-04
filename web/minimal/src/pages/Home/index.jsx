@@ -69,33 +69,9 @@ const Home = () => {
     <main className='minimal-home'>
       <section
         className='minimal-home__stage'
-        aria-label={t('聚合全球大模型，导航海量智能体')}
+        aria-label={t('请输入您的问题...')}
       >
         <div className='minimal-home__content'>
-          <h1
-            className='minimal-home__slogan'
-            aria-label={t('聚合全球大模型，导航海量智能体')}
-          >
-            <span className='minimal-home__slogan-seg' style={{ '--seg': 0 }}>
-              {t('聚合全球')}
-            </span>
-            <span
-              className='minimal-home__slogan-seg minimal-home__slogan-key minimal-home__slogan-key--a'
-              style={{ '--seg': 1 }}
-            >
-              {t('大模型')}
-            </span>
-            <span className='minimal-home__slogan-seg' style={{ '--seg': 2 }}>
-              {t('，导航海量')}
-            </span>
-            <span
-              className='minimal-home__slogan-seg minimal-home__slogan-key minimal-home__slogan-key--b'
-              style={{ '--seg': 3 }}
-            >
-              {t('智能体')}
-            </span>
-          </h1>
-
           <div className='home-search-box minimal-home__prompt'>
             <TextArea
               className='minimal-home__textarea'

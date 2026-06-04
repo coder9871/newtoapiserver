@@ -546,6 +546,43 @@ const $ = () =>
         ],
       },
       {
+        id: 'agent-integration',
+        title: a(s, 'Agent 集成', 'Agent Integration'),
+        type: 'doc',
+        children: [
+          {
+            id: 'opencode',
+            title: a(s, 'OpenCode', 'OpenCode'),
+            type: 'doc',
+            icon: e.jsx(j, {}),
+          },
+          {
+            id: 'claude-code',
+            title: a(s, 'Claude Code', 'Claude Code'),
+            type: 'doc',
+            icon: e.jsx(j, {}),
+          },
+          {
+            id: 'openclaw',
+            title: a(s, 'OpenClaw / Clawdbot', 'OpenClaw / Clawdbot'),
+            type: 'doc',
+            icon: e.jsx(j, {}),
+          },
+          {
+            id: 'codex',
+            title: a(s, 'Codex', 'Codex'),
+            type: 'doc',
+            icon: e.jsx(j, {}),
+          },
+          {
+            id: 'librechat',
+            title: a(s, 'LibreChat', 'LibreChat'),
+            type: 'doc',
+            icon: e.jsx(j, {}),
+          },
+        ],
+      },
+      {
         id: 'advanced',
         title: a(s, '高级用法', 'Advanced Usage'),
         type: 'doc',
@@ -585,43 +622,6 @@ const $ = () =>
             title: a(s, '多模态输入', 'Multimodal Input'),
             type: 'doc',
             icon: e.jsx(ne, {}),
-          },
-        ],
-      },
-      {
-        id: 'agent-integration',
-        title: a(s, 'Agent 集成', 'Agent Integration'),
-        type: 'doc',
-        children: [
-          {
-            id: 'opencode',
-            title: a(s, 'OpenCode', 'OpenCode'),
-            type: 'doc',
-            icon: e.jsx(j, {}),
-          },
-          {
-            id: 'claude-code',
-            title: a(s, 'Claude Code', 'Claude Code'),
-            type: 'doc',
-            icon: e.jsx(j, {}),
-          },
-          {
-            id: 'openclaw',
-            title: a(s, 'OpenClaw / Clawdbot', 'OpenClaw / Clawdbot'),
-            type: 'doc',
-            icon: e.jsx(j, {}),
-          },
-          {
-            id: 'codex',
-            title: a(s, 'Codex', 'Codex'),
-            type: 'doc',
-            icon: e.jsx(j, {}),
-          },
-          {
-            id: 'librechat',
-            title: a(s, 'LibreChat', 'LibreChat'),
-            type: 'doc',
-            icon: e.jsx(j, {}),
           },
         ],
       },
@@ -14196,38 +14196,39 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
       children: [
         e.jsxs('div', {
           className: `
-          flex items-center justify-between px-3 py-2 rounded-md cursor-pointer text-sm font-medium transition-colors
+          docs-nav-item grid grid-cols-[20px_minmax(0,1fr)_20px] items-center gap-2 px-3 py-2 rounded-md cursor-pointer text-sm font-medium transition-colors
           ${x ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}
-          ${n > 0 ? 'ml-4' : ''}
+          ${n > 0 ? 'docs-nav-item--nested' : ''}
         `,
           onClick: (f) => {
             d ? l(s.id) : o(s.id);
           },
           children: [
             e.jsxs('div', {
-              className: 'flex items-center gap-2',
+              className: 'contents',
               children: [
-                s.icon &&
-                  e.jsx('span', {
-                    className: x
-                      ? 'text-blue-600'
-                      : 'text-gray-400 group-hover:text-gray-600',
-                    children: s.icon,
-                  }),
-                e.jsx('span', { children: s.title }),
+                e.jsx('span', {
+                  className: x
+                    ? 'docs-nav-icon text-blue-600'
+                    : 'docs-nav-icon text-gray-400 group-hover:text-gray-600',
+                  children: s.icon || null,
+                }),
+                e.jsx('span', {
+                  className: 'docs-nav-title truncate',
+                  children: s.title,
+                }),
               ],
             }),
-            d &&
-              e.jsx('span', {
-                className: 'text-gray-400',
-                children: m ? e.jsx($, {}) : e.jsx(Q, {}),
-              }),
+            e.jsx('span', {
+              className: 'docs-nav-arrow text-gray-400',
+              children: d ? (m ? e.jsx($, {}) : e.jsx(Q, {})) : null,
+            }),
           ],
         }),
         d &&
           m &&
           e.jsx('ul', {
-            className: 'mt-1 space-y-0.5 border-l border-gray-100 ml-3.5',
+            className: 'docs-nav-children mt-1 space-y-0.5 border-l border-gray-100',
             children: s.children.map((f) =>
               e.jsx(
                 Y,
@@ -14254,18 +14255,7 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
       i = 'quickstart',
       [l, d] = y.useState(i),
       [m, x] = y.useState(!1),
-      [f, p] = y.useState(
-        new Set([
-          'overview',
-          'api-reference',
-          'chat-interface',
-          'image-interface',
-          'audio-interface',
-          'music-interface',
-          'advanced',
-          'legal',
-        ]),
-      ),
+      [f, p] = y.useState(new Set()),
       g = y.useMemo(() => ie(n), [n]),
       k = y.useMemo(() => le(g.main), [g]),
       N = (h) => {

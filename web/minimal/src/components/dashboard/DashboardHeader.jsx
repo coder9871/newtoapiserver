@@ -33,14 +33,18 @@ const DashboardHeader = ({
     '!rounded-full !w-9 !h-9 text-semi-color-text-1 hover:!bg-semi-color-fill-0';
 
   return (
-    <div className='flex items-center justify-between mb-7'>
-      <h2
-        className='text-[28px] leading-tight font-semibold tracking-tight text-semi-color-text-0 transition-opacity duration-1000 ease-in-out'
-        style={{ opacity: greetingVisible ? 1 : 0 }}
-      >
-        {getGreeting}
-      </h2>
-      <div className='flex gap-1.5'>
+    <div className='dashboard-hero mb-7'>
+      <div className='dashboard-hero-copy'>
+        <div className='dashboard-hero-kicker'>{t('数据看板')}</div>
+        <h2
+          className='dashboard-hero-title text-[28px] leading-tight font-semibold tracking-tight text-semi-color-text-0 transition-opacity duration-1000 ease-in-out'
+          style={{ opacity: greetingVisible ? 1 : 0 }}
+        >
+          {getGreeting}
+        </h2>
+        <p className='dashboard-hero-subtitle'>{t('快速开始')} · {t('使用日志')} · {t('模型与价格')}</p>
+      </div>
+      <div className='dashboard-hero-actions flex gap-1.5'>
         <Button
           type='tertiary'
           theme='borderless'

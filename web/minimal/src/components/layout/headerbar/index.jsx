@@ -65,7 +65,7 @@ const HeaderBar = ({ onMobileMenuToggle, drawerOpen }) => {
   const { mainNavLinks } = useNavigation(t, docsLink, headerNavModules);
 
   return (
-    <header className='text-semi-color-text-0 sticky top-0 z-50 transition-colors duration-300 bg-white dark:bg-zinc-900'>
+    <header className='app-topbar text-semi-color-text-0 sticky top-0 z-50 transition-colors duration-300'>
       <NoticeModal
         visible={noticeVisible}
         onClose={handleNoticeClose}
@@ -74,9 +74,9 @@ const HeaderBar = ({ onMobileMenuToggle, drawerOpen }) => {
         unreadKeys={getUnreadKeys()}
       />
 
-      <div className='w-full px-2'>
-        <div className='flex items-center justify-between h-16'>
-          <div className='flex items-center'>
+      <div className='app-topbar-shell w-full px-3 md:px-5'>
+        <div className='app-topbar-panel flex items-center justify-between min-h-[68px] px-3 md:px-5'>
+          <div className='flex items-center min-w-0 gap-2 md:gap-3'>
             <MobileMenuButton
               isConsoleRoute={isConsoleRoute}
               isMobile={isMobile}
@@ -107,22 +107,24 @@ const HeaderBar = ({ onMobileMenuToggle, drawerOpen }) => {
             pricingRequireAuth={pricingRequireAuth}
           />
 
-          <ActionButtons
-            isNewYear={isNewYear}
-            unreadCount={unreadCount}
-            onNoticeOpen={handleNoticeOpen}
-            theme={theme}
-            onThemeToggle={handleThemeToggle}
-            currentLang={currentLang}
-            onLanguageChange={handleLanguageChange}
-            userState={userState}
-            isLoading={isLoading}
-            isMobile={isMobile}
-            isSelfUseMode={isSelfUseMode}
-            logout={logout}
-            navigate={navigate}
-            t={t}
-          />
+          <div className='app-topbar-actions'>
+            <ActionButtons
+              isNewYear={isNewYear}
+              unreadCount={unreadCount}
+              onNoticeOpen={handleNoticeOpen}
+              theme={theme}
+              onThemeToggle={handleThemeToggle}
+              currentLang={currentLang}
+              onLanguageChange={handleLanguageChange}
+              userState={userState}
+              isLoading={isLoading}
+              isMobile={isMobile}
+              isSelfUseMode={isSelfUseMode}
+              logout={logout}
+              navigate={navigate}
+              t={t}
+            />
+          </div>
         </div>
       </div>
     </header>

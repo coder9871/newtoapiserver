@@ -59,7 +59,7 @@ const ApiInfoPanel = ({
                 </div>
                 <div className='flex-1'>
                   <div className='flex flex-wrap items-center justify-between mb-1 w-full gap-2'>
-                    <span className='text-sm font-medium text-gray-900 !font-bold break-all'>
+                    <span className='text-sm font-medium text-semi-color-text-0 !font-bold break-all'>
                       {api.route}
                     </span>
                     <div className='flex items-center gap-1 mt-1 lg:mt-0'>
@@ -96,11 +96,13 @@ const ApiInfoPanel = ({
                     </span>
                     <Copy
                       size={14}
-                      className='flex-shrink-0 text-gray-400 hover:text-semi-color-primary cursor-pointer transition-colors'
+                      className='flex-shrink-0 text-semi-color-text-2 hover:text-semi-color-primary cursor-pointer transition-colors'
                       onClick={() => handleCopyUrl(api.url)}
                     />
                   </div>
-                  <div className='text-gray-500'>{api.description}</div>
+                  <div className='text-semi-color-text-2'>
+                    {api.description}
+                  </div>
                 </div>
               </div>
               <Divider />
