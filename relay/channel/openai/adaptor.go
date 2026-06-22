@@ -310,6 +310,12 @@ func (a *Adaptor) ConvertOpenAIRequest(c *gin.Context, info *relaycommon.RelayIn
 		}
 
 	}
+	if model_setting.ShouldOmitClaudeSamplingParameters(info.UpstreamModelName) ||
+		model_setting.ShouldOmitClaudeSamplingParameters(request.Model) {
+		request.Temperature = nil
+		request.TopP = nil
+		request.TopK = nil
+	}
 	if strings.HasPrefix(info.UpstreamModelName, "o") || strings.HasPrefix(info.UpstreamModelName, "gpt-5") {
 		if lo.FromPtrOr(request.MaxCompletionTokens, uint(0)) == 0 && lo.FromPtrOr(request.MaxTokens, uint(0)) != 0 {
 			request.MaxCompletionTokens = request.MaxTokens

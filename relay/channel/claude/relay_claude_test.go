@@ -275,6 +275,86 @@ func TestBuildOpenAIStyleUsageFromClaudeUsageDefaultsAggregateCacheCreationTo5m(
 	require.Equal(t, 0, openAIUsage.ClaudeCacheCreation1hTokens)
 }
 
+func TestRequestOpenAI2ClaudeMessageOmitsDeprecatedSamplingParameters(t *testing.T) {
+	temperature := 0.7
+	topP := 0.95
+	topK := 40
+	request := dto.GeneralOpenAIRequest{
+		Model:       "claude-opus-4-8",
+		Temperature: &temperature,
+		TopP:        &topP,
+		TopK:        &topK,
+		Messages: []dto.Message{
+			{
+				Role:    "user",
+				Content: "hi",
+			},
+		},
+	}
+
+	claudeRequest, err := RequestOpenAI2ClaudeMessage(nil, request)
+
+	require.NoError(t, err)
+	require.Nil(t, claudeRequest.Temperature)
+	require.Nil(t, claudeRequest.TopP)
+	require.Nil(t, claudeRequest.TopK)
+}
+
+func TestRequestOpenAI2ClaudeMessageKeepsSamplingParametersForOpus46(t *testing.T) {
+	temperature := 0.7
+	topP := 0.95
+	topK := 40
+	request := dto.GeneralOpenAIRequest{
+		Model:       "claude-opus-4-6",
+		Temperature: &temperature,
+		TopP:        &topP,
+		TopK:        &topK,
+		Messages: []dto.Message{
+			{
+				Role:    "user",
+				Content: "hi",
+			},
+		},
+	}
+
+	claudeRequest, err := RequestOpenAI2ClaudeMessage(nil, request)
+
+	require.NoError(t, err)
+	require.Equal(t, &temperature, claudeRequest.Temperature)
+	require.Equal(t, &topP, claudeRequest.TopP)
+	require.Equal(t, &topK, claudeRequest.TopK)
+}
+
+func TestRequestOpenAI2ClaudeMessageMapsOpus48EffortSuffixAndOmitsSamplingParameters(t *testing.T) {
+	temperature := 0.7
+	topP := 0.95
+	topK := 40
+	request := dto.GeneralOpenAIRequest{
+		Model:       "claude-opus-4-8-high",
+		Temperature: &temperature,
+		TopP:        &topP,
+		TopK:        &topK,
+		Messages: []dto.Message{
+			{
+				Role:    "user",
+				Content: "hi",
+			},
+		},
+	}
+
+	claudeRequest, err := RequestOpenAI2ClaudeMessage(nil, request)
+
+	require.NoError(t, err)
+	require.Equal(t, "claude-opus-4-8", claudeRequest.Model)
+	require.NotNil(t, claudeRequest.Thinking)
+	require.Equal(t, "adaptive", claudeRequest.Thinking.Type)
+	require.Equal(t, "summarized", claudeRequest.Thinking.Display)
+	require.JSONEq(t, `{"effort":"high"}`, string(claudeRequest.OutputConfig))
+	require.Nil(t, claudeRequest.Temperature)
+	require.Nil(t, claudeRequest.TopP)
+	require.Nil(t, claudeRequest.TopK)
+}
+
 func TestRequestOpenAI2ClaudeMessage_IgnoresUnsupportedFileContent(t *testing.T) {
 	request := dto.GeneralOpenAIRequest{
 		Model: "claude-3-5-sonnet",

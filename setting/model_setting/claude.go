@@ -2,6 +2,7 @@ package model_setting
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/QuantumNous/new-api/setting/config"
@@ -86,4 +87,21 @@ func (c *ClaudeSettings) GetDefaultMaxTokens(model string) int {
 		return maxTokens
 	}
 	return c.DefaultMaxTokens["default"]
+}
+
+func ShouldOmitClaudeSamplingParameters(modelName string) bool {
+	modelName = strings.TrimPrefix(modelName, "anthropic/")
+	const prefix = "claude-opus-4-"
+	if !strings.HasPrefix(modelName, prefix) {
+		return false
+	}
+
+	versionPart := strings.TrimPrefix(modelName, prefix)
+	minorVersion, _, _ := strings.Cut(versionPart, "-")
+	if len(minorVersion) > 2 {
+		return false
+	}
+
+	minor, err := strconv.Atoi(minorVersion)
+	return err == nil && minor >= 7
 }
