@@ -18,14 +18,10 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React, { useEffect } from 'react';
+import AINavigation from '../Home/AINavigation';
+import '../Home/home.css';
 
-import AINavigation from './AINavigation';
-import './home.css';
-
-const Home = () => {
-  // 首页：让头部与内容区视觉融为一体（去掉头部与背景之间的横向接缝）
-  // 逻辑上头部与首页仍是分开的组件，这里仅通过路由标记类让头部背景透明、
-  // 首页背景上移铺到头部之后，形成贯穿顶部的一整片渐变。
+const AINavigationPage = () => {
   useEffect(() => {
     document.body.classList.add('minimal-home-route');
     return () => {
@@ -34,10 +30,10 @@ const Home = () => {
   }, []);
 
   return (
-    <main className='minimal-home minimal-home--navigation-home'>
-      <AINavigation showBackLink={false} />
+    <main className='minimal-home minimal-home--navigation-page'>
+      <AINavigation />
     </main>
   );
 };
 
-export default Home;
+export default AINavigationPage;

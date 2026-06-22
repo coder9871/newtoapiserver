@@ -56,6 +56,7 @@ const About = lazy(() => import('./pages/About'));
 const UserAgreement = lazy(() => import('./pages/UserAgreement'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Docs = lazy(() => import('./pages/Docs'));
+const AINavigationPage = lazy(() => import('./pages/AINavigation'));
 
 function DynamicOAuth2Callback() {
   const { provider } = useParams();
@@ -104,6 +105,14 @@ function App() {
           element={
             <Suspense fallback={<Loading></Loading>} key={location.pathname}>
               <Setup />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/ai-navigation'
+          element={
+            <Suspense fallback={<Loading></Loading>} key={location.pathname}>
+              <AINavigationPage />
             </Suspense>
           }
         />
