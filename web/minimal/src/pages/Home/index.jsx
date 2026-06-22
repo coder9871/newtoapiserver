@@ -34,7 +34,7 @@ const Home = () => {
   }, []);
 
   return (
-    <main className='minimal-home minimal-home--navigation-home'>
+    <main className='minimal-home minimal-home--navigation-page'>
       <AINavigation showBackLink={false} />
     </main>
   );

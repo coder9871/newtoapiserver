@@ -62,22 +62,25 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
     [activeCollection],
   );
 
-  const flattenedItems = useMemo(() => {
-    const sourceCategories =
+  const visibleCategories = useMemo(
+    () =>
       activeCategoryId === 'all'
         ? activeCollection.categories
         : activeCollection.categories.filter(
             (category) => category.id === activeCategoryId,
-          );
+          ),
+    [activeCategoryId, activeCollection],
+  );
 
-    return sourceCategories.flatMap((category) =>
+  const flattenedItems = useMemo(() => {
+    return visibleCategories.flatMap((category) =>
       category.items.map((item) => ({
         ...item,
         categoryId: category.id,
         categoryName: category.name,
       })),
     );
-  }, [activeCategoryId, activeCollection]);
+  }, [visibleCategories]);
 
   const visibleItems = useMemo(() => {
     const keyword = normalizeText(query.trim());
@@ -99,6 +102,14 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
     setQuery('');
   };
 
+  const currentListTitle = query.trim()
+    ? t('搜索结果')
+    : t(
+        activeCategoryId === 'all'
+          ? activeCollection.title
+          : visibleCategories[0]?.name || activeCollection.title,
+      );
+
   return (
     <section
       className={`ai-navigation ${preview ? 'ai-navigation--preview' : 'ai-navigation--full'}`}
@@ -110,14 +121,7 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
             <Sparkles size={15} />
             <span>{t('AI导航')}</span>
           </div>
-          <h2>{preview ? t('精选推荐') : t('智能体与工具导航')}</h2>
-          {!preview && (
-            <p>
-              {t(
-                '按 AI 工具集和 AI 应用集整理的入口，优先展示智能体、创作、办公、编程和移动应用场景。',
-              )}
-            </p>
-          )}
+          {preview && <h2>{t('精选推荐')}</h2>}
         </div>
 
         {(preview || showBackLink) && (
@@ -213,38 +217,93 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
         ))}
       </div>
 
-      {visibleItems.length > 0 ? (
-        <div className='ai-navigation__grid'>
-          {visibleItems.map((item) => (
-            <a
-              key={`${activeCollection.id}-${item.categoryId}-${item.name}`}
-              className='ai-navigation__card'
-              href={item.url}
-              target='_blank'
-              rel='noreferrer'
-            >
-              <span className='ai-navigation__avatar' aria-hidden='true'>
-                {item.name.slice(0, 1).toUpperCase()}
-              </span>
-              <span className='ai-navigation__card-body'>
-                <span className='ai-navigation__card-title'>
-                  <strong>{item.name}</strong>
-                  <ExternalLink size={14} />
+      {preview ? (
+        visibleItems.length > 0 ? (
+          <div className='ai-navigation__grid'>
+            {visibleItems.map((item) => (
+              <a
+                key={`${activeCollection.id}-${item.categoryId}-${item.name}`}
+                className='ai-navigation__card'
+                href={item.url}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='ai-navigation__avatar' aria-hidden='true'>
+                  {item.icon ? (
+                    <img src={item.icon} alt='' loading='lazy' />
+                  ) : (
+                    item.name.slice(0, 1).toUpperCase()
+                  )}
                 </span>
-                <span className='ai-navigation__card-desc'>
-                  {item.description}
+                <span className='ai-navigation__card-body'>
+                  <span className='ai-navigation__card-title'>
+                    <strong>{item.name}</strong>
+                    <ExternalLink size={14} />
+                  </span>
+                  <span className='ai-navigation__card-desc'>
+                    {item.description}
+                  </span>
+                  <span className='ai-navigation__tag'>
+                    {t(item.categoryName)}
+                  </span>
                 </span>
-                <span className='ai-navigation__tag'>
-                  {t(item.categoryName)}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className='ai-navigation__empty'>
+            <p>{t('没有找到匹配的导航项')}</p>
+          </div>
+        )
+      ) : visibleItems.length > 0 ? (
+        <div className='ai-navigation__results'>
+          <div className='ai-navigation__section-heading'>
+            <strong>{currentListTitle}</strong>
+            <span>{t('{{count}} 个工具', { count: visibleItems.length })}</span>
+          </div>
+          <div className='ai-navigation__grid ai-navigation__grid--apps'>
+            {visibleItems.map((item) => (
+              <a
+                key={`${activeCollection.id}-${item.categoryId}-${item.name}`}
+                className='ai-navigation__card ai-navigation__card--app'
+                href={item.url}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='ai-navigation__avatar' aria-hidden='true'>
+                  {item.icon ? (
+                    <img src={item.icon} alt='' loading='lazy' />
+                  ) : (
+                    item.name.slice(0, 1).toUpperCase()
+                  )}
                 </span>
-              </span>
-            </a>
-          ))}
+                <span className='ai-navigation__card-body'>
+                  <span className='ai-navigation__card-title'>
+                    <strong>{item.name}</strong>
+                    <ExternalLink size={14} />
+                  </span>
+                  <span className='ai-navigation__card-desc'>
+                    {item.description}
+                  </span>
+                  <span className='ai-navigation__tag'>
+                    {t(item.categoryName)}
+                  </span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : query.trim() ? (
+        <div className='ai-navigation__empty'>
+          <p>{t('没有找到匹配的导航项')}</p>
+          <button type='button' onClick={() => setQuery('')}>
+            {t('清空筛选')}
+          </button>
         </div>
       ) : (
         <div className='ai-navigation__empty'>
           <p>{t('没有找到匹配的导航项')}</p>
-          <button type='button' onClick={() => setQuery('')}>
+          <button type='button' onClick={() => setActiveCategoryId('all')}>
             {t('清空筛选')}
           </button>
         </div>

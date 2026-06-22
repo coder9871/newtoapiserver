@@ -31,16 +31,19 @@ export const aiNavigationCollections = [
         items: [
           {
             name: '蛙蛙写作',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2025/07/wawa-logo.png',
             url: 'https://wawawriter.com/app/?utm_source=aigongjuji',
             description: 'AI小说和内容创作工具',
           },
           {
             name: '讯飞绘文',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/08/turbodesk-logo.png',
             url: 'https://turbodesk.xfyun.cn/?channelid=aitool1',
             description: 'AI批量原创，多平台矩阵号管理',
           },
           {
             name: '笔灵AI写作',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2023/07/ibiling-icon.png',
             url: 'https://ibiling.cn/?from=ai-bot',
             description: '600+写作模板、AI一键生成论文/小说，论文降重降AI',
           },
@@ -53,11 +56,13 @@ export const aiNavigationCollections = [
         items: [
           {
             name: '绘蛙',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/03/ihuiwa-icon.png',
             url: 'https://ai-bot.cn/sites/9195.html',
             description: 'AI 电商营销工具，免费生成商品图',
           },
           {
             name: '即梦',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/10/jimeng-logo-1.png',
             url: 'https://jimeng.jianying.com/ai-tool/home/?utm_medium=aitools&utm_source=aibot&utm_campaign=null&utm_content=hw_jm_aibot',
             description: '抖音旗下免费AI图片创作工具',
           },
@@ -75,16 +80,19 @@ export const aiNavigationCollections = [
         items: [
           {
             name: 'LibTV',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2026/04/libtv-icon.png',
             url: 'https://libtv.cgref.cn/aibot',
             description: '专业AI视频创作平台，支持Seedance 2.0（真人参考）',
           },
           {
             name: '即梦AI',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/10/jimeng-logo-1.png',
             url: 'https://jimeng.jianying.com/ai-tool/home/?utm_medium=aitools&utm_source=aibot&utm_campaign=null&utm_content=hw_jm_aibot',
             description: '一站式AI视频、图片、数字人创作工具',
           },
           {
             name: 'Seko',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2025/07/Seko-logo-1.png',
             url: 'https://ai-bot.cn/sites/58360.html',
             description: '首个创编一体的AI视频创作Agent',
           },
@@ -97,6 +105,7 @@ export const aiNavigationCollections = [
         items: [
           {
             name: 'AiPPT',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2026/06/AiPPT-logo.png',
             url: 'https://www.aippt.cn/?utm_type=Navweb&utm_source=ai-bot&utm_page=aippt&utm_plan=ppt&utm_unit=AIPPT&utm_keyword=50608',
             description: 'AI快速生成高质量PPT',
           },
@@ -249,6 +258,7 @@ export const aiNavigationCollections = [
           },
           {
             name: '秘塔AI搜索',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/06/metaso-ai-search-icon.png',
             url: 'https://metaso.cn/?s=aibot1&referrer_s=aibot1',
             description: '最好用的AI搜索工具，没有广告，直达结果',
           },
@@ -385,16 +395,19 @@ export const aiNavigationCollections = [
         items: [
           {
             name: 'ChatGPT APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/98/bc/e0/98bce0c1-cd6a-3f82-1ad2-5d656152f151/AppIcon-1x_U007emarketing-0-7-0-85-220-0.png/246x0w.webp',
             url: 'https://ai-bot.cn/app/10389.html?menu-id=66&mininav-id=10334',
             description: 'OpenAI推出的AI聊天机器人和智能对话工具',
           },
           {
             name: 'DeepSeek APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/8e/a0/5f/8ea05f59-71d1-e2fd-a81c-f6848f539a7d/AppIcon-0-0-1x_U007ephone-0-11-0-85-220.png/492x0w.webp',
             url: 'https://ai-bot.cn/app/38498.html?menu-id=66&mininav-id=10334',
             description: '深度求索公司推出的AI智能助手',
           },
           {
             name: '豆包APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5e/dd/71/5edd71e7-a752-b57d-7a35-47cac58aaeeb/AppIcon-0-1x_U007epad-0-7-0-85-220-0.png/217x0w.webp',
             url: 'https://ai-bot.cn/app/10285.html?menu-id=66&mininav-id=10334',
             description: '字节跳动推出的AI聊天机器人',
           },
@@ -407,6 +420,7 @@ export const aiNavigationCollections = [
         items: [
           {
             name: '即梦AI APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/64/87/ec/6487ec43-425c-687a-9bea-c1a7e716b771/AppIcon-0-0-1x_U007ephone-0-85-220.png/492x0w.webp',
             url: 'https://ai-bot.cn/app/15155.html?menu-id=66&mininav-id=10334',
             description: '字节跳动抖音旗下的剪映推出的AI图片和视频创作应用',
           },
@@ -429,6 +443,7 @@ export const aiNavigationCollections = [
         items: [
           {
             name: 'Sora APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/5e/59/d4/5e59d48f-f362-3230-3044-6e4926ed4071/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/434x0w.webp',
             url: 'https://ai-bot.cn/app/64060.html?menu-id=66&mininav-id=10334',
             description: 'OpenAI推出的AI创意视频生成应用',
           },
@@ -451,6 +466,7 @@ export const aiNavigationCollections = [
         items: [
           {
             name: '夸克APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d1/7f/87/d17f873d-35e5-c7b2-a317-5534dbbfed54/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/492x0w.webp',
             url: 'https://ai-bot.cn/app/10365.html?menu-id=66&mininav-id=10334',
             description: '阿里巴巴旗下的智能搜索应用和浏览器APP',
           },
@@ -461,6 +477,7 @@ export const aiNavigationCollections = [
           },
           {
             name: 'Perplexity APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/80/b5/0a/80b50a9f-1e65-d9e9-160e-8d92735ed8ae/AppIcon-0-0-1x_U007ephone-0-0-85-220.png/246x0w.webp',
             url: 'https://ai-bot.cn/app/10362.html?menu-id=66&mininav-id=10334',
             description: '专业无广告的人工智能搜索引擎',
           },
@@ -605,16 +622,19 @@ export const aiNavigationCollections = [
         items: [
           {
             name: 'Trae',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2025/07/trae.ai-logo.png',
             url: 'https://ai-bot.cn/app/46112.html?menu-id=66&mininav-id=10334',
             description: '字节跳动推出的免费 AI IDE',
           },
           {
             name: 'Cursor',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2025/10/Cursor-logo.png',
             url: 'https://ai-bot.cn/app/46665.html?menu-id=66&mininav-id=10334',
             description: 'Anysphere公司推出的AI代码编辑器',
           },
           {
             name: 'Windsurf',
+            icon: 'https://ai-bot.cn/wp-content/uploads/2024/11/Windsurf-logo.png',
             url: 'https://ai-bot.cn/app/46670.html?menu-id=66&mininav-id=10334',
             description: 'Codeium公司推出的AI编程工具',
           },
@@ -632,6 +652,7 @@ export const aiNavigationCollections = [
           },
           {
             name: '扣子APP',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/68/30/6c/68306cb3-73b8-5b48-5288-85d3bc4017de/AppIcon-0-0-1x_U007epad-0-1-85-220.png/400x400ia-75.webp',
             url: 'https://ai-bot.cn/app/56721.html?menu-id=66&mininav-id=10334',
             description: '字节跳动推出的职场AI工具',
           },
