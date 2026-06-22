@@ -90,6 +90,7 @@ const ChatArea = ({
           onMessageCopy={onMessageCopy}
           onMessageReset={onMessageReset}
           onMessageDelete={onMessageDelete}
+          showClearContext
           showStopGenerate
           onStopGenerator={onStopGenerator}
           onClear={onClearMessages}

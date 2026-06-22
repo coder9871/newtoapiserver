@@ -21,6 +21,7 @@ import * as e from 'react/jsx-runtime';
 import * as y from 'react';
 import { useNavigate as B, useParams as F } from 'react-router-dom';
 import { useTranslation as I } from 'react-i18next';
+import { StatusContext } from '../../context/Status';
 import './docs.css';
 
 const D = (languageDefinition) => languageDefinition;
@@ -345,6 +346,43 @@ const $ = () =>
       ],
     }),
   a = (s, n, t) => (s ? n : t),
+  DOCS_BASE_URL_PLACEHOLDER = '__DOCS_BASE_URL__',
+  DOCS_PROJECT_NAME_PLACEHOLDER = '__DOCS_PROJECT_NAME__',
+  DOCS_PROJECT_KEY_PLACEHOLDER = '__DOCS_PROJECT_KEY__',
+  getDocsBaseUrl = () =>
+    typeof window > 'u' || !window.location || !window.location.origin
+      ? ''
+      : window.location.origin,
+  getStoredDocsProjectName = () => {
+    if (typeof window > 'u' || !window.localStorage) return 'New API';
+    const s = window.localStorage.getItem('system_name');
+    return typeof s == 'string' && s.trim() ? s.trim() : 'New API';
+  },
+  getDocsProjectName = (s) => {
+    const n = s == null ? void 0 : s.system_name;
+    return typeof n == 'string' && n.trim()
+      ? n.trim()
+      : getStoredDocsProjectName();
+  },
+  getDocsProjectKey = (s) => {
+    const n = String(s || getStoredDocsProjectName())
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    return n || 'new_api';
+  },
+  resolveDocsBaseUrl = (s) =>
+    typeof s == 'string'
+      ? s.split(DOCS_BASE_URL_PLACEHOLDER).join(getDocsBaseUrl())
+      : s,
+  resolveDocsProjectName = (s, n = getStoredDocsProjectName()) =>
+    typeof s == 'string' ? s.split(DOCS_PROJECT_NAME_PLACEHOLDER).join(n) : s,
+  resolveDocsProjectKey = (s, n = getStoredDocsProjectName()) =>
+    typeof s == 'string'
+      ? s.split(DOCS_PROJECT_KEY_PLACEHOLDER).join(getDocsProjectKey(n))
+      : s,
+  resolveDocsRuntimeValues = (s, n = getStoredDocsProjectName()) =>
+    resolveDocsProjectKey(resolveDocsProjectName(resolveDocsBaseUrl(s), n), n),
   L = () => {
     const [s, n] = y.useState(!1);
     return (
@@ -669,7 +707,7 @@ const $ = () =>
           : o && (N = 'x-goog-api-key: YOUR_API_KEY');
         const P = p.map(([h, v]) => `  -F '${h}=${String(v)}'`).join(` \\
 `);
-        return `curl -X ${s.method} "https://open6666.com${s.endpoint}" \\
+        return `curl -X ${s.method} "__DOCS_BASE_URL__${s.endpoint}" \\
   -H "${N}" \\
 ${P}`;
       }
@@ -685,7 +723,7 @@ ${P}`;
 `);
       return `import requests
 
-url = "https://open6666.com${s.endpoint}"
+url = "__DOCS_BASE_URL__${s.endpoint}"
 
 ${g}
 
@@ -703,7 +741,7 @@ print(response.json())`;
         ? (p = 'x-api-key: YOUR_API_KEY')
         : o && (p = 'x-goog-api-key: YOUR_API_KEY');
       const g = i ? ' --output speech.mp3' : '';
-      return `curl -X ${s.method} "https://open6666.com${s.endpoint}" \\
+      return `curl -X ${s.method} "__DOCS_BASE_URL__${s.endpoint}" \\
   -H "Content-Type: application/json" \\
   -H "${p}" \\
   -d '${l.replace(/'/g, "'\\''")}'${g}`;
@@ -735,7 +773,7 @@ print(response.json())`;
     return i
       ? `import requests
 
-url = "https://open6666.com${s.endpoint}"
+url = "__DOCS_BASE_URL__${s.endpoint}"
 
 ${d}
 
@@ -749,7 +787,7 @@ with open('speech.mp3', 'wb') as f:
 print("Audio saved to speech.mp3")`
       : `import requests
 
-url = "https://open6666.com${s.endpoint}"
+url = "__DOCS_BASE_URL__${s.endpoint}"
 
 ${d}
 
@@ -773,8 +811,15 @@ print(response.json())`;
   r = ({ code: s, language: n = 'json' }) => {
     const { i18n: t } = I(),
       o = t.language && t.language.startsWith('zh'),
+      [projectStatusState] = y.useContext(StatusContext),
+      projectName = getDocsProjectName(
+        projectStatusState == null ? void 0 : projectStatusState.status,
+      ),
       i = L(),
-      l = typeof s == 'object' ? JSON.stringify(s, null, 2) : s,
+      l = resolveDocsRuntimeValues(
+        typeof s == 'object' ? JSON.stringify(s, null, 2) : s,
+        projectName,
+      ),
       [d, m] = y.useState(!1),
       x = () => {
         navigator.clipboard.writeText(l), m(!0), setTimeout(() => m(!1), 2e3);
@@ -840,11 +885,15 @@ print(response.json())`;
   ce = ({ data: s }) => {
     const { i18n: n } = I(),
       t = n.language && n.language.startsWith('zh'),
+      [projectStatusState] = y.useContext(StatusContext),
+      projectName = getDocsProjectName(
+        projectStatusState == null ? void 0 : projectStatusState.status,
+      ),
       o = L(),
       [i, l] = y.useState('curl'),
       [d, m] = y.useState(!1),
-      x = S(s, 'curl'),
-      f = S(s, 'python'),
+      x = resolveDocsRuntimeValues(S(s, 'curl'), projectName),
+      f = resolveDocsRuntimeValues(S(s, 'python'), projectName),
       p = i === 'curl' ? x : f,
       g = i === 'curl' ? 'bash' : 'python',
       k = () => {
@@ -1054,8 +1103,10 @@ print(response.json())`;
         }),
       ],
     }),
-  me = (s, n) => {
-    const t = (o, i) => a(s, o, i);
+  me = (s, n, projectName) => {
+    const projectLabel = (o) => resolveDocsRuntimeValues(o, projectName),
+      t = (o, i) => projectLabel(a(s, o, i)),
+      baseUrl = getDocsBaseUrl();
     switch (n) {
       case 'quickstart':
         return e.jsx(u, {
@@ -1145,14 +1196,14 @@ print(response.json())`;
                             code: `import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: 'https://open6666.com/v1',
+  baseURL: '__DOCS_BASE_URL__/v1',
   apiKey: 'YOUR_API_KEY',
 });
 
 async function main() {
   const completion = await client.chat.completions.create({
     messages: [{ role: 'user', content: 'Say this is a test' }],
-    model: 'gpt-4o',
+    model: 'gpt-5.5',
   });
 
   console.log(completion.choices);
@@ -5696,7 +5747,7 @@ We're building tomorrow, or so it seems`,
                       }),
                       e.jsx(r, {
                         language: 'javascript',
-                        code: `const response = await fetch('https://open6666.com/v1/chat/completions', {
+                        code: `const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -5738,7 +5789,7 @@ if (data.choices[0].message.tool_calls) {
   const functionResult = await executeFunction(functionName, functionArgs);
 
   // Send the result back to the model
-  const followupResponse = await fetch('https://open6666.com/v1/chat/completions', {
+  const followupResponse = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer YOUR_API_KEY',
@@ -7439,7 +7490,7 @@ if __name__ == "__main__":
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/chat/completions', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -7465,7 +7516,7 @@ console.log(data.choices[0].message.content);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/chat/completions'
+url = '__DOCS_BASE_URL__/v1/chat/completions'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -7547,7 +7598,7 @@ print(data['choices'][0]['message']['content'])`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -7575,7 +7626,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1beta/models/gemini-2.5-flash:generateContent'
+url = '__DOCS_BASE_URL__/v1beta/models/gemini-2.5-flash:generateContent'
 params = {'key': 'YOUR_API_KEY'}
 headers = {
     'Content-Type': 'application/json',
@@ -7662,7 +7713,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/messages', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -7694,7 +7745,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/messages'
+url = '__DOCS_BASE_URL__/v1/messages'
 headers = {
     'x-api-key': 'YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -7854,7 +7905,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/responses', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/responses', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -7880,7 +7931,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/responses'
+url = '__DOCS_BASE_URL__/v1/responses'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -8426,7 +8477,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/chat/completions', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -8470,7 +8521,7 @@ console.log(data.choices[0].message.content);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/chat/completions'
+url = '__DOCS_BASE_URL__/v1/chat/completions'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -8609,7 +8660,7 @@ print(data['choices'][0]['message']['content'])`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1beta/models/gemini-2.0-flash:generateContent?key=YOUR_API_KEY', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-2.0-flash:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -8654,7 +8705,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1beta/models/gemini-2.0-flash:generateContent'
+url = '__DOCS_BASE_URL__/v1beta/models/gemini-2.0-flash:generateContent'
 params = {'key': 'YOUR_API_KEY'}
 headers = {
     'Content-Type': 'application/json',
@@ -8775,7 +8826,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/messages', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -8829,7 +8880,7 @@ console.log(result);`,
                             code: `import json
 import requests
 
-url = 'https://open6666.com/v1/messages'
+url = '__DOCS_BASE_URL__/v1/messages'
 headers = {
     'x-api-key': 'YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -8996,7 +9047,7 @@ print(result)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/responses', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/responses', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -9033,7 +9084,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/responses'
+url = '__DOCS_BASE_URL__/v1/responses'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -9769,7 +9820,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/chat/completions', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -9795,7 +9846,7 @@ console.log(data.choices[0].message.content);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/chat/completions'
+url = '__DOCS_BASE_URL__/v1/chat/completions'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -9980,7 +10031,7 @@ print(data['choices'][0]['message']['content'])`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/messages', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -10010,7 +10061,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/messages'
+url = '__DOCS_BASE_URL__/v1/messages'
 headers = {
     'x-api-key': 'YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -10153,7 +10204,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -10183,7 +10234,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1beta/models/gemini-3-pro:generateContent'
+url = '__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent'
 params = {'key': 'YOUR_API_KEY'}
 headers = {
     'Content-Type': 'application/json',
@@ -10369,7 +10420,7 @@ print(data)`,
                           {
                             label: 'JavaScript',
                             language: 'javascript',
-                            code: `const response = await fetch('https://open6666.com/v1/responses', {
+                            code: `const response = await fetch('__DOCS_BASE_URL__/v1/responses', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -10390,7 +10441,7 @@ console.log(data);`,
                             language: 'python',
                             code: `import requests
 
-url = 'https://open6666.com/v1/responses'
+url = '__DOCS_BASE_URL__/v1/responses'
 headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
@@ -11173,7 +11224,7 @@ print(data)`,
                       }),
                       e.jsx(r, {
                         language: 'javascript',
-                        code: `const response = await fetch('https://open6666.com/v1/chat/completions', {
+                        code: `const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -11274,7 +11325,7 @@ console.log(data.choices[0].message.content);`,
                       }),
                       e.jsx(r, {
                         language: 'javascript',
-                        code: `const response = await fetch('https://open6666.com/v1/messages', {
+                        code: `const response = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -11318,7 +11369,7 @@ console.log(data.content[0].text);`,
                       }),
                       e.jsx(r, {
                         language: 'javascript',
-                        code: `const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
+                        code: `const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -11375,7 +11426,7 @@ console.log(data.candidates[0].content.parts[0].text);`,
                       e.jsx(r, {
                         language: 'javascript',
                         code: `// Step 1: Upload video file (for files >20MB or >1 min)
-const uploadResponse = await fetch('https://open6666.com/upload/v1beta/files', {
+const uploadResponse = await fetch('__DOCS_BASE_URL__/upload/v1beta/files', {
   method: 'POST',
   headers: {
     'X-Goog-Upload-Protocol': 'resumable',
@@ -11387,7 +11438,7 @@ const uploadResponse = await fetch('https://open6666.com/upload/v1beta/files', {
 // ... complete upload process ...
 
 // Step 2: Use uploaded video
-const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
+const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -11413,7 +11464,7 @@ const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:ge
 });
 
 // Alternative: YouTube URL support
-const youtubeResponse = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
+const youtubeResponse = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   body: JSON.stringify({
     contents: [{
@@ -11458,7 +11509,7 @@ const youtubeResponse = await fetch('https://open6666.com/v1beta/models/gemini-3
                         code: `// Extract frames from video (using ffmpeg or similar)
 // Then send frames as multiple images
 
-const response = await fetch('https://open6666.com/v1/chat/completions', {
+const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -11525,7 +11576,7 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                         code: `// Method 1: Base64 encoding (for PDFs <32MB, <100 pages)
 const pdfBase64 = fs.readFileSync('document.pdf').toString('base64');
 
-const response = await fetch('https://open6666.com/v1/messages', {
+const response = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -11557,7 +11608,7 @@ const response = await fetch('https://open6666.com/v1/messages', {
 });
 
 // Method 2: Files API (recommended for larger PDFs)
-const fileUpload = await fetch('https://open6666.com/v1/files', {
+const fileUpload = await fetch('__DOCS_BASE_URL__/v1/files', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY'
@@ -11568,7 +11619,7 @@ const fileUpload = await fetch('https://open6666.com/v1/files', {
 const fileId = fileUpload.json().id;
 
 // Then reference in messages
-const analysisResponse = await fetch('https://open6666.com/v1/messages', {
+const analysisResponse = await fetch('__DOCS_BASE_URL__/v1/messages', {
   method: 'POST',
   headers: {
     'x-api-key': 'YOUR_API_KEY',
@@ -11642,7 +11693,7 @@ const analysisResponse = await fetch('https://open6666.com/v1/messages', {
                       e.jsx(r, {
                         language: 'javascript',
                         code: `// Upload PDF document
-const uploadResponse = await fetch('https://open6666.com/upload/v1beta/files', {
+const uploadResponse = await fetch('__DOCS_BASE_URL__/upload/v1beta/files', {
   method: 'POST',
   headers: {
     'X-Goog-Upload-Protocol': 'resumable',
@@ -11652,7 +11703,7 @@ const uploadResponse = await fetch('https://open6666.com/upload/v1beta/files', {
 });
 
 // Process document
-const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
+const response = await fetch('__DOCS_BASE_URL__/v1beta/models/gemini-3-pro:generateContent?key=YOUR_API_KEY', {
   method: 'POST',
   body: JSON.stringify({
     contents: [
@@ -11710,7 +11761,7 @@ const response = await fetch('https://open6666.com/v1beta/models/gemini-3-pro:ge
                         code: `// Convert PDF pages to images, then send to API
 // Use pdf-to-image library or similar
 
-const response = await fetch('https://open6666.com/v1/chat/completions', {
+const response = await fetch('__DOCS_BASE_URL__/v1/chat/completions', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -12167,8 +12218,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
               e.jsx('p', {
                 className: 'lead text-xl text-gray-600 mb-8',
                 children: t(
-                  'OpenCode 是面向终端的强大 AI 编码智能体。接入 Open6666 后，只需一个 API Key 即可访问多家模型，无需分别管理各提供方凭据。',
-                  'OpenCode is a powerful AI coding agent built for the terminal. Connect it to Open6666 to access all your favorite models with a single API key—no need to manage multiple provider credentials.',
+                  'OpenCode 是面向终端的强大 AI 编码智能体。接入 __DOCS_PROJECT_NAME__ 后，只需一个 API Key 即可访问多家模型，无需分别管理各提供方凭据。',
+                  'OpenCode is a powerful AI coding agent built for the terminal. Connect it to __DOCS_PROJECT_NAME__ to access all your favorite models with a single API key—no need to manage multiple provider credentials.',
                 ),
               }),
               e.jsxs('div', {
@@ -12195,14 +12246,14 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                           children: [
                             e.jsx('strong', {
                               children: t(
-                                '为什么用 Open6666 + OpenCode？',
-                                'Why Open6666 + OpenCode?',
+                                '为什么用 __DOCS_PROJECT_NAME__ + OpenCode？',
+                                'Why __DOCS_PROJECT_NAME__ + OpenCode?',
                               ),
                             }),
                             ' ',
                             t(
-                              '无需分别管理 OpenAI、Anthropic、Google 的 Key；只用一个 Open6666 Key 即可统一访问与计费。',
-                              'Instead of managing separate API keys for OpenAI, Anthropic, and Google, use a single Open6666 key to access all providers through OpenCode. Unified billing, unified access.',
+                              '无需分别管理 OpenAI、Anthropic、Google 的 Key；只用一个 __DOCS_PROJECT_NAME__ Key 即可统一访问与计费。',
+                              'Instead of managing separate API keys for OpenAI, Anthropic, and Google, use a single __DOCS_PROJECT_NAME__ key to access all providers through OpenCode. Unified billing, unified access.',
                             ),
                           ],
                         }),
@@ -12378,11 +12429,11 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
   "$schema": "https://opencode.ai/config.json",
 
   "provider": {
-    "runapi_openai": {
+    "__DOCS_PROJECT_KEY___openai": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Open6666 (OpenAI)",
+      "name": "__DOCS_PROJECT_NAME__ (OpenAI)",
       "options": {
-        "baseURL": "https://open6666.com/v1"
+        "baseURL": "__DOCS_BASE_URL__/v1"
       },
       "models": {
         "gpt-4o": { "name": "GPT-4o" },
@@ -12392,11 +12443,11 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
       }
     },
 
-    "runapi_anthropic": {
+    "__DOCS_PROJECT_KEY___anthropic": {
       "npm": "@ai-sdk/anthropic",
-      "name": "Open6666 (Anthropic)",
+      "name": "__DOCS_PROJECT_NAME__ (Anthropic)",
       "options": {
-        "baseURL": "https://open6666.com/v1"
+        "baseURL": "__DOCS_BASE_URL__/v1"
       },
       "models": {
         "claude-sonnet-4-20250514": { "name": "Claude Sonnet 4" },
@@ -12405,11 +12456,11 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
       }
     },
 
-    "runapi_google": {
+    "__DOCS_PROJECT_KEY___google": {
       "npm": "@ai-sdk/google",
-      "name": "Open6666 (Google)",
+      "name": "__DOCS_PROJECT_NAME__ (Google)",
       "options": {
-        "baseURL": "https://open6666.com/v1"
+        "baseURL": "__DOCS_BASE_URL__/v1"
       },
       "models": {
         "gemini-2.5-pro-preview-05-06": { "name": "Gemini 2.5 Pro" },
@@ -12418,7 +12469,7 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
     }
   },
 
-  "model": "runapi_openai/gpt-4o-mini"
+  "model": "__DOCS_PROJECT_KEY___openai/gpt-4o-mini"
 }`,
                       }),
                       e.jsx('div', {
@@ -12435,8 +12486,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                             }),
                             ' ',
                             t(
-                              '该配置通过 Open6666 启用 OpenAI、Anthropic、Google 三大提供方，可按需调整模型列表。',
-                              'This configuration enables all three major AI providers through RunAPI—OpenAI, Anthropic, and Google. You can customize the models list based on your needs.',
+                              '该配置通过 __DOCS_PROJECT_NAME__ 启用 OpenAI、Anthropic、Google 三大提供方，可按需调整模型列表。',
+                              'This configuration enables all three major AI providers through __DOCS_PROJECT_NAME__—OpenAI, Anthropic, and Google. You can customize the models list based on your needs.',
                             ),
                           ],
                         }),
@@ -12503,8 +12554,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                       e.jsx('h2', {
                         className: 'text-2xl font-bold text-gray-900 mb-4',
                         children: t(
-                          '步骤 4：连接 Open6666',
-                          'Step 4: Connect to Open6666',
+                          '步骤 4：连接 __DOCS_PROJECT_NAME__',
+                          'Step 4: Connect to __DOCS_PROJECT_NAME__',
                         ),
                       }),
                       e.jsxs('p', {
@@ -12556,7 +12607,9 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                                 }),
                                 e.jsx('span', {
                                   className: 'text-gray-800',
-                                  children: 'Open6666 (OpenAI)',
+                                  children: projectLabel(
+                                    '__DOCS_PROJECT_NAME__ (OpenAI)',
+                                  ),
                                 }),
                                 e.jsx('span', {
                                   className: 'text-xs text-gray-500',
@@ -12574,7 +12627,9 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                                 }),
                                 e.jsx('span', {
                                   className: 'text-gray-800',
-                                  children: 'Open6666 (Anthropic)',
+                                  children: projectLabel(
+                                    '__DOCS_PROJECT_NAME__ (Anthropic)',
+                                  ),
                                 }),
                                 e.jsx('span', {
                                   className: 'text-xs text-gray-500',
@@ -12592,7 +12647,9 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                                 }),
                                 e.jsx('span', {
                                   className: 'text-gray-800',
-                                  children: 'Open6666 (Google)',
+                                  children: projectLabel(
+                                    '__DOCS_PROJECT_NAME__ (Google)',
+                                  ),
                                 }),
                                 e.jsx('span', {
                                   className: 'text-xs text-gray-500',
@@ -12607,8 +12664,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                       e.jsx('p', {
                         className: 'text-gray-700 mt-4',
                         children: t(
-                          '选择任一 Open6666 提供方继续。',
-                          'Select any of the Open6666 providers to continue.',
+                          '选择任一 __DOCS_PROJECT_NAME__ 提供方继续。',
+                          'Select any of the __DOCS_PROJECT_NAME__ providers to continue.',
                         ),
                       }),
                     ],
@@ -12625,8 +12682,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                       e.jsx('p', {
                         className: 'text-gray-700 mb-4',
                         children: t(
-                          '选择提供方后会提示输入 Open6666 Key：',
-                          "After selecting a provider, you'll be prompted to enter your Open6666 key:",
+                          '选择提供方后会提示输入 __DOCS_PROJECT_NAME__ Key：',
+                          "After selecting a provider, you'll be prompted to enter your __DOCS_PROJECT_NAME__ key:",
                         ),
                       }),
                       e.jsxs('div', {
@@ -12635,8 +12692,9 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                         children: [
                           e.jsx('div', {
                             className: 'text-gray-500 mb-2',
-                            children:
-                              '# Paste your Open6666 key when prompted:',
+                            children: projectLabel(
+                              '# Paste your __DOCS_PROJECT_NAME__ key when prompted:',
+                            ),
                           }),
                           e.jsx('div', {
                             children: 'Enter API Key: sk-xxxxxxxxxxxxxxxxxxxx',
@@ -12657,8 +12715,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                             }),
                             ' ',
                             t(
-                              '在 Open6666 控制台的 Token 管理页面创建或复制 API Key，该 Key 可用于三大提供方。',
-                              'Go to the Token Management page in your Open6666 console to create or copy your API key. The same key works for all three providers!',
+                              '在 __DOCS_PROJECT_NAME__ 控制台的 Token 管理页面创建或复制 API Key，该 Key 可用于三大提供方。',
+                              'Go to the Token Management page in your __DOCS_PROJECT_NAME__ console to create or copy your API key. The same key works for all three providers!',
                             ),
                           ],
                         }),
@@ -12780,14 +12838,20 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                               }),
                               e.jsxs('li', {
                                 children: [
-                                  t('创建包含 Open6666 提供方的', 'Create'),
+                                  t(
+                                    '创建包含 __DOCS_PROJECT_NAME__ 提供方的',
+                                    'Create',
+                                  ),
                                   ' ',
                                   e.jsx('code', {
                                     className: 'bg-white px-1 rounded',
                                     children: 'opencode.json',
                                   }),
                                   ' ',
-                                  t('配置', 'with Open6666 providers'),
+                                  t(
+                                    '配置',
+                                    'with __DOCS_PROJECT_NAME__ providers',
+                                  ),
                                 ],
                               }),
                               e.jsxs('li', {
@@ -12814,8 +12878,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                               }),
                               e.jsx('li', {
                                 children: t(
-                                  '输入 Open6666 Key 即可完成',
-                                  'Enter your Open6666 key — done!',
+                                  '输入 __DOCS_PROJECT_NAME__ Key 即可完成',
+                                  'Enter your __DOCS_PROJECT_NAME__ key — done!',
                                 ),
                               }),
                             ],
@@ -12837,8 +12901,8 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
               e.jsx('p', {
                 className: 'lead text-xl text-gray-600 mb-8',
                 children: t(
-                  'Claude Code 是 Anthropic 官方 CLI AI 编码助手。接入 Open6666 可无缝使用。',
-                  "Claude Code is Anthropic's official CLI AI coding assistant. Connect it to Open6666 for seamless access.",
+                  'Claude Code 是 Anthropic 官方 CLI AI 编码助手。接入 __DOCS_PROJECT_NAME__ 可无缝使用。',
+                  "Claude Code is Anthropic's official CLI AI coding assistant. Connect it to __DOCS_PROJECT_NAME__ for seamless access.",
                 ),
               }),
               e.jsxs('div', {
@@ -12868,14 +12932,14 @@ const response = await fetch('https://open6666.com/v1/chat/completions', {
                           children: [
                             e.jsx('strong', {
                               children: t(
-                                '为什么用 Open6666 + Claude Code？',
-                                'Why Open6666 + Claude Code?',
+                                '为什么用 __DOCS_PROJECT_NAME__ + Claude Code？',
+                                'Why __DOCS_PROJECT_NAME__ + Claude Code?',
                               ),
                             }),
                             ' ',
                             t(
-                              '使用 Open6666 Key 即可通过 Claude Code 访问 Claude 模型，无需单独的 Anthropic 凭据，统一接入与计费。',
-                              'Use your Open6666 key to access Claude models through Claude Code. No need for separate Anthropic API credentials—unified access and billing.',
+                              '使用 __DOCS_PROJECT_NAME__ Key 即可通过 Claude Code 访问 Claude 模型，无需单独的 Anthropic 凭据，统一接入与计费。',
+                              'Use your __DOCS_PROJECT_NAME__ key to access Claude models through Claude Code. No need for separate Anthropic API credentials—unified access and billing.',
                             ),
                           ],
                         }),
@@ -13095,12 +13159,13 @@ claude --version`,
                                         'API service endpoint',
                                       ),
                                     }),
-                                    e.jsx('td', {
+                                    e.jsxs('td', {
                                       className: 'py-3 px-4 text-gray-600',
-                                      children: t(
-                                        '使用 https://open6666.com',
-                                        'Use https://open6666.com',
-                                      ),
+                                      children: [
+                                        t('使用', 'Use'),
+                                        ' ',
+                                        baseUrl,
+                                      ],
                                     }),
                                   ],
                                 }),
@@ -13158,7 +13223,7 @@ cd your-project-folder
 
 # Set environment variables
 export ANTHROPIC_AUTH_TOKEN=sk-...  # Replace with your token
-export ANTHROPIC_BASE_URL=https://open6666.com
+export ANTHROPIC_BASE_URL=__DOCS_BASE_URL__
 export API_TIMEOUT_MS=300000  # 300 second timeout
 
 # Launch Claude Code
@@ -13180,7 +13245,7 @@ claude`,
 cd your-project-folder
 
 # Set environment variables
-$env:ANTHROPIC_BASE_URL = "https://open6666.com"
+$env:ANTHROPIC_BASE_URL = "__DOCS_BASE_URL__"
 $env:ANTHROPIC_AUTH_TOKEN = "sk-..."
 $env:API_TIMEOUT_MS = "300000"
 
@@ -13203,7 +13268,7 @@ claude`,
 cd your-project-folder
 
 # Set environment variables
-set ANTHROPIC_BASE_URL=https://open6666.com
+set ANTHROPIC_BASE_URL=__DOCS_BASE_URL__
 set ANTHROPIC_AUTH_TOKEN=sk-...
 set API_TIMEOUT_MS=300000
 
@@ -13360,13 +13425,13 @@ claude`,
                               e.jsx('p', {
                                 className: 'text-gray-600 text-sm mb-2',
                                 children: t(
-                                  '确认可以访问 RunAPI：',
-                                  'Verify you can reach Open6666:',
+                                  '确认可以访问 __DOCS_PROJECT_NAME__：',
+                                  'Verify you can reach __DOCS_PROJECT_NAME__:',
                                 ),
                               }),
                               e.jsx(r, {
                                 language: 'bash',
-                                code: 'curl https://open6666.com/v1/models',
+                                code: 'curl __DOCS_BASE_URL__/v1/models',
                               }),
                             ],
                           }),
@@ -13454,8 +13519,8 @@ claude`,
               e.jsx('p', {
                 className: 'lead text-xl text-gray-600 mb-8',
                 children: t(
-                  '本教程介绍如何在 OpenClaw 最新版本中配置自定义中转站（以 Open6666 为例）。',
-                  'This guide shows how to configure a custom relay in OpenClaw latest version (using Open6666 as the example).',
+                  '本教程介绍如何在 OpenClaw 最新版本中配置自定义中转站（以 __DOCS_PROJECT_NAME__ 为例）。',
+                  'This guide shows how to configure a custom relay in OpenClaw latest version (using __DOCS_PROJECT_NAME__ as the example).',
                 ),
               }),
               e.jsxs('div', {
@@ -13575,7 +13640,7 @@ claude`,
     "mode": "merge",
     "providers": {
       "api-proxy-gpt": {
-        "baseUrl": "https://open6666.com/v1",
+        "baseUrl": "__DOCS_BASE_URL__/v1",
         "api": "openai-completions",
         "models": [
           {
@@ -13590,7 +13655,7 @@ claude`,
         ]
       },
       "api-proxy-claude": {
-        "baseUrl": "https://open6666.com",
+        "baseUrl": "__DOCS_BASE_URL__",
         "api": "anthropic-messages",
         "models": [
           {
@@ -13605,7 +13670,7 @@ claude`,
         ]
       },
       "api-proxy-google": {
-        "baseUrl": "https://open6666.com/v1",
+        "baseUrl": "__DOCS_BASE_URL__/v1",
         "api": "google-generative-ai",
         "models": [
           {
@@ -13620,7 +13685,7 @@ claude`,
         ]
       },
       "api-proxy-deepseek": {
-        "baseUrl": "https://open6666.com/v1",
+        "baseUrl": "__DOCS_BASE_URL__/v1",
         "api": "openai-completions",
         "models": [
           {
@@ -13741,16 +13806,16 @@ claude`,
       case 'codex':
         return e.jsx(u, {
           title: t(
-            'Codex 配置教程 - Open6666 接口对接',
-            'Codex Configuration Guide - Open6666 Integration',
+            'Codex 配置教程 - __DOCS_PROJECT_NAME__ 接口对接',
+            'Codex Configuration Guide - __DOCS_PROJECT_NAME__ Integration',
           ),
           content: e.jsxs(e.Fragment, {
             children: [
               e.jsx('p', {
                 className: 'lead text-xl text-gray-600 mb-8',
                 children: t(
-                  '本教程介绍如何配置 Codex 以接入 Open6666 第三方 API。',
-                  'This guide shows how to configure Codex to connect with Open6666 third-party API.',
+                  '本教程介绍如何配置 Codex 以接入 __DOCS_PROJECT_NAME__ 第三方 API。',
+                  'This guide shows how to configure Codex to connect with __DOCS_PROJECT_NAME__ third-party API.',
                 ),
               }),
               e.jsxs('div', {
@@ -13844,15 +13909,15 @@ claude`,
                       }),
                       e.jsx(r, {
                         language: 'toml',
-                        code: `model_provider = "open6666"
+                        code: `model_provider = "__DOCS_PROJECT_KEY__"
 model = "gpt-5.3-codex"
 model_reasoning_effort = "high"
 disable_response_storage = true
 preferred_auth_method = "apikey"
 
-[model_providers.open6666]
-name = "open6666"
-base_url = "https://open6666.com/v1"
+[model_providers.__DOCS_PROJECT_KEY__]
+name = "__DOCS_PROJECT_KEY__"
+base_url = "__DOCS_BASE_URL__/v1"
 wire_api = "responses"`,
                       }),
                     ],
@@ -13899,8 +13964,8 @@ wire_api = "responses"`,
               e.jsx('p', {
                 className: 'lead text-xl text-gray-600 mb-8',
                 children: t(
-                  'LibreChat 是开源的多模型对话平台，支持 OpenAI 兼容 API。通过简单配置即可接入 RunAPI。',
-                  'LibreChat is an open-source multi-model chat platform that supports OpenAI-compatible APIs. Connect it to Open6666 with simple configuration.',
+                  'LibreChat 是开源的多模型对话平台，支持 OpenAI 兼容 API。通过简单配置即可接入 __DOCS_PROJECT_NAME__。',
+                  'LibreChat is an open-source multi-model chat platform that supports OpenAI-compatible APIs. Connect it to __DOCS_PROJECT_NAME__ with simple configuration.',
                 ),
               }),
               e.jsxs('div', {
@@ -13994,11 +14059,11 @@ cd LibreChat`,
                         language: 'bash',
                         code: `# 你的第三方 OpenAI 兼容 API Key
 # Your third-party OpenAI-compatible API Key
-OPENAI_API_KEY="sk-your_runapi_key"
+OPENAI_API_KEY="sk-your___DOCS_PROJECT_KEY___key"
 
 # 你的第三方 OpenAI 兼容 baseURL（必须写到 /v1）
 # Your third-party OpenAI-compatible baseURL (must include /v1)
-OPENAI_REVERSE_PROXY="https://open6666.com/v1"
+OPENAI_REVERSE_PROXY="__DOCS_BASE_URL__/v1"
 
 # 手动声明可用模型（逗号分隔，不要空格，第一个为默认模型）
 # Manually declare available models (comma-separated, no spaces, first one is default)
@@ -14024,8 +14089,8 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
                                   }),
                                   ' — ',
                                   t(
-                                    '填入你的 Open6666 Key（以 sk- 开头）',
-                                    'Your Open6666 Key (starts with sk-)',
+                                    '填入你的 __DOCS_PROJECT_NAME__ Key（以 sk- 开头）',
+                                    'Your __DOCS_PROJECT_NAME__ Key (starts with sk-)',
                                   ),
                                 ],
                               }),
@@ -14037,8 +14102,8 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
                                   }),
                                   ' — ',
                                   t(
-                                    'Open6666 的 OpenAI 兼容端点，必须以 /v1 结尾',
-                                    'Open6666 OpenAI-compatible endpoint, must end with /v1',
+                                    '__DOCS_PROJECT_NAME__ 的 OpenAI 兼容端点，必须以 /v1 结尾',
+                                    '__DOCS_PROJECT_NAME__ OpenAI-compatible endpoint, must end with /v1',
                                   ),
                                 ],
                               }),
@@ -14139,8 +14204,8 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
                                 }),
                                 ' ',
                                 t(
-                                  '设置 Open6666 Key 和模型',
-                                  'to set Open6666 Key and models',
+                                  '设置 __DOCS_PROJECT_NAME__ Key 和模型',
+                                  'to set __DOCS_PROJECT_NAME__ Key and models',
                                 ),
                               ],
                             }),
@@ -14228,7 +14293,8 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
         d &&
           m &&
           e.jsx('ul', {
-            className: 'docs-nav-children mt-1 space-y-0.5 border-l border-gray-100',
+            className:
+              'docs-nav-children mt-1 space-y-0.5 border-l border-gray-100',
             children: s.children.map((f) =>
               e.jsx(
                 Y,
@@ -14252,6 +14318,10 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
       n = s.language && s.language.startsWith('zh'),
       t = B(),
       { docId: o } = F(),
+      [statusState] = y.useContext(StatusContext),
+      projectName = getDocsProjectName(
+        statusState == null ? void 0 : statusState.status,
+      ),
       i = 'quickstart',
       [l, d] = y.useState(i),
       [m, x] = y.useState(!1),
@@ -14361,7 +14431,7 @@ OPENAI_MODELS="gpt-4o-mini,gpt-4.1-mini,gpt-4o,claude-sonnet-4-20250514"`,
             children: e.jsx('div', {
               className:
                 'docs-content max-w-[1400px] mx-auto w-full p-6 md:p-10',
-              children: me(n, l),
+              children: me(n, l, projectName),
             }),
           }),
         }),
