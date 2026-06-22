@@ -2408,6 +2408,8 @@
     "用户信息端点": "User Info Endpoint",
     "用户信息缺失": "User information missing",
     "用户最大令牌数量": "Maximum Tokens per User",
+    "Playground 支持模型": "Playground supported models",
+    "仅限制 /console/playground 页面模型下拉和请求。留空表示显示用户可用的全部模型；填写后只显示与用户权限的交集。": "Only limits the model dropdown and requests on /console/playground. Leave empty to show every model available to the user; when set, only the intersection with the user's permissions is shown.",
     "用户分组": "User Group",
     "用户分组和额度管理": "User Group and Quota Management",
     "用户分组的联动作用": "How user group affects other features",

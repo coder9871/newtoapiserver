@@ -57,6 +57,7 @@ export default function GeneralSettings(props) {
     DefaultCollapseSidebar: false,
     DemoSiteEnabled: false,
     SelfUseModeEnabled: false,
+    'playground_setting.supported_models': '',
     'token_setting.max_user_tokens': 1000,
   });
   const refForm = useRef();
@@ -401,6 +402,23 @@ export default function GeneralSettings(props) {
                   extraText={t('每个用户最多可创建的令牌数量，默认 1000，设置过大可能会影响性能')}
                   placeholder={'1000'}
                   onChange={handleFieldChange('token_setting.max_user_tokens')}
+                />
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.TextArea
+                  field={'playground_setting.supported_models'}
+                  label={t('Playground 支持模型')}
+                  placeholder={'gpt-4o\nclaude-3-5-sonnet\ngemini-2.5-pro'}
+                  rows={5}
+                  extraText={t(
+                    '仅限制 /console/playground 页面模型下拉和请求。留空表示显示用户可用的全部模型；填写后只显示与用户权限的交集。',
+                  )}
+                  onChange={handleFieldChange(
+                    'playground_setting.supported_models',
+                  )}
+                  showClear
                 />
               </Col>
             </Row>

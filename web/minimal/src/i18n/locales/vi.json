@@ -2527,6 +2527,8 @@
     "用户信息更新成功！": "Cập nhật thông tin người dùng thành công!",
     "用户信息缺失": "Thiếu thông tin người dùng",
     "用户最大令牌数量": "Số token tối đa mỗi người dùng",
+    "Playground 支持模型": "Mô hình được hỗ trợ trong Playground",
+    "仅限制 /console/playground 页面模型下拉和请求。留空表示显示用户可用的全部模型；填写后只显示与用户权限的交集。": "Chỉ giới hạn danh sách mô hình và yêu cầu trên /console/playground. Để trống để hiển thị mọi mô hình người dùng có thể dùng; khi thiết lập, chỉ hiển thị phần giao với quyền của người dùng.",
     "用户分组": "Nhóm người dùng",
     "用户分组和额度管理": "Quản lý nhóm người dùng và hạn ngạch",
     "用户分组的联动作用": "How user group affects other features",

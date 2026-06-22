@@ -49,6 +49,7 @@ const OperationSetting = () => {
     DefaultCollapseSidebar: false,
     DemoSiteEnabled: false,
     SelfUseModeEnabled: false,
+    'playground_setting.supported_models': '',
 
     /* 顶栏模块管理 */
     HeaderNavModules: '',

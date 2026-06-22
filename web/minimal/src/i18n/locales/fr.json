@@ -2394,6 +2394,8 @@
     "用户信息更新成功！": "Informations utilisateur mises à jour avec succès !",
     "用户信息缺失": "Informations utilisateur manquantes",
     "用户最大令牌数量": "Nombre maximal de jetons par utilisateur",
+    "Playground 支持模型": "Modèles pris en charge dans Playground",
+    "仅限制 /console/playground 页面模型下拉和请求。留空表示显示用户可用的全部模型；填写后只显示与用户权限的交集。": "Limite uniquement la liste des modèles et les requêtes sur /console/playground. Laissez vide pour afficher tous les modèles disponibles pour l'utilisateur ; une fois défini, seule l'intersection avec ses autorisations est affichée.",
     "用户分组": "Votre groupe par défaut",
     "用户分组和额度管理": "Groupes et quotas",
     "用户分组的联动作用": "How user group affects other features",

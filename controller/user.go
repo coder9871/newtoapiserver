@@ -555,6 +555,9 @@ func GetUserModels(c *gin.Context) {
 			}
 		}
 	}
+	if c.Query("scope") == "playground" || c.Query("playground") == "true" {
+		models = operation_setting.FilterPlaygroundModels(models)
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "",

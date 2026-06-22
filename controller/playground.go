@@ -7,6 +7,7 @@ import (
 	"github.com/QuantumNous/new-api/middleware"
 	"github.com/QuantumNous/new-api/model"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
+	"github.com/QuantumNous/new-api/setting/operation_setting"
 	"github.com/QuantumNous/new-api/types"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,14 @@ func Playground(c *gin.Context) {
 	relayInfo, err := relaycommon.GenRelayInfo(c, types.RelayFormatOpenAI, nil, nil)
 	if err != nil {
 		newAPIError = types.NewError(err, types.ErrorCodeInvalidRequest, types.ErrOptionWithSkipRetry())
+		return
+	}
+	if !operation_setting.IsPlaygroundModelAllowed(relayInfo.OriginModelName) {
+		newAPIError = types.NewError(
+			fmt.Errorf("playground does not support model: %s", relayInfo.OriginModelName),
+			types.ErrorCodeInvalidRequest,
+			types.ErrOptionWithSkipRetry(),
+		)
 		return
 	}
 
