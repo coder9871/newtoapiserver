@@ -41,6 +41,25 @@ const normalizeText = (value) => (value || '').toLowerCase();
 
 const DEFAULT_COLLECTION_ID = 'apps';
 
+const NavigationIcon = ({ item }) => {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <span className='ai-navigation__avatar' aria-hidden='true'>
+      {item.icon && !failed ? (
+        <img
+          src={item.icon}
+          alt=''
+          loading='lazy'
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        item.name.slice(0, 1).toUpperCase()
+      )}
+    </span>
+  );
+};
+
 const AINavigation = ({ preview = false, showBackLink = true }) => {
   const { t } = useTranslation();
   const [activeCollectionId, setActiveCollectionId] = useState(
@@ -228,13 +247,7 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
                 target='_blank'
                 rel='noreferrer'
               >
-                <span className='ai-navigation__avatar' aria-hidden='true'>
-                  {item.icon ? (
-                    <img src={item.icon} alt='' loading='lazy' />
-                  ) : (
-                    item.name.slice(0, 1).toUpperCase()
-                  )}
-                </span>
+                <NavigationIcon item={item} />
                 <span className='ai-navigation__card-body'>
                   <span className='ai-navigation__card-title'>
                     <strong>{item.name}</strong>
@@ -270,13 +283,7 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
                 target='_blank'
                 rel='noreferrer'
               >
-                <span className='ai-navigation__avatar' aria-hidden='true'>
-                  {item.icon ? (
-                    <img src={item.icon} alt='' loading='lazy' />
-                  ) : (
-                    item.name.slice(0, 1).toUpperCase()
-                  )}
-                </span>
+                <NavigationIcon item={item} />
                 <span className='ai-navigation__card-body'>
                   <span className='ai-navigation__card-title'>
                     <strong>{item.name}</strong>
