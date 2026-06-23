@@ -21,7 +21,6 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowLeft,
   ArrowRight,
   ExternalLink,
   Grid2X2,
@@ -40,6 +39,9 @@ const PREVIEW_LIMIT = 8;
 const normalizeText = (value) => (value || '').toLowerCase();
 
 const DEFAULT_COLLECTION_ID = 'apps';
+
+// 顶部分类 tab 的展示顺序（与数据定义顺序解耦）
+const COLLECTION_DISPLAY_ORDER = ['apps', 'tools'];
 
 const NavigationIcon = ({ item }) => {
   const [failed, setFailed] = useState(false);
@@ -60,7 +62,7 @@ const NavigationIcon = ({ item }) => {
   );
 };
 
-const AINavigation = ({ preview = false, showBackLink = true }) => {
+const AINavigation = ({ preview = false }) => {
   const { t } = useTranslation();
   const [activeCollectionId, setActiveCollectionId] = useState(
     DEFAULT_COLLECTION_ID,
@@ -74,6 +76,17 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
         (collection) => collection.id === activeCollectionId,
       ) || aiNavigationCollections[0],
     [activeCollectionId],
+  );
+
+  // 按展示顺序排序的分类集合，仅用于顶部 tab 渲染
+  const orderedCollections = useMemo(
+    () =>
+      [...aiNavigationCollections].sort(
+        (a, b) =>
+          COLLECTION_DISPLAY_ORDER.indexOf(a.id) -
+          COLLECTION_DISPLAY_ORDER.indexOf(b.id),
+      ),
+    [],
   );
 
   const stats = useMemo(
@@ -134,35 +147,28 @@ const AINavigation = ({ preview = false, showBackLink = true }) => {
       className={`ai-navigation ${preview ? 'ai-navigation--preview' : 'ai-navigation--full'}`}
       aria-label={t('AI导航')}
     >
-      <div className='ai-navigation__header'>
-        <div className='ai-navigation__title-group'>
-          <div className='ai-navigation__eyebrow'>
-            <Sparkles size={15} />
-            <span>{t('AI导航')}</span>
+      {preview && (
+        <div className='ai-navigation__header'>
+          <div className='ai-navigation__title-group'>
+            <div className='ai-navigation__eyebrow'>
+              <Sparkles size={15} />
+              <span>{t('AI导航')}</span>
+            </div>
+            <h2>{t('精选推荐')}</h2>
           </div>
-          {preview && <h2>{t('精选推荐')}</h2>}
-        </div>
 
-        {(preview || showBackLink) && (
           <div className='ai-navigation__actions'>
-            {preview ? (
-              <Link className='ai-navigation__more' to='/ai-navigation'>
-                <span>{t('查看完整导航')}</span>
-                <ArrowRight size={16} />
-              </Link>
-            ) : (
-              <Link className='ai-navigation__more' to='/'>
-                <ArrowLeft size={16} />
-                <span>{t('返回首页')}</span>
-              </Link>
-            )}
+            <Link className='ai-navigation__more' to='/ai-navigation'>
+              <span>{t('查看完整导航')}</span>
+              <ArrowRight size={16} />
+            </Link>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className='ai-navigation__toolbar'>
         <div className='ai-navigation__segments' role='tablist'>
-          {aiNavigationCollections.map((collection) => {
+          {orderedCollections.map((collection) => {
             const collectionStats = getNavigationStats(collection);
             const active = collection.id === activeCollection.id;
             return (

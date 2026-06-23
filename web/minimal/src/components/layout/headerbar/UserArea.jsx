@@ -21,6 +21,9 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Button, Dropdown, Typography } from '@douyinfe/semi-ui';
 import {
+  BadgeDollarSign,
+  Bell,
+  BookOpen,
   ChevronDown,
   LayoutDashboard,
   ScrollText,
@@ -40,11 +43,34 @@ const UserArea = ({
   isLoading,
   isMobile,
   isSelfUseMode,
+  unreadCount = 0,
+  onNoticeOpen,
+  docsLink,
+  pricingRequireAuth = false,
   logout,
   navigate,
   t,
 }) => {
   const dropdownRef = useRef(null);
+  const handleDocsClick = () => {
+    if (docsLink && /^https?:\/\//i.test(docsLink)) {
+      window.open(docsLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    navigate('/docs');
+  };
+
+  const handlePricingClick = () => {
+    navigate(pricingRequireAuth && !userState.user ? '/login' : '/pricing');
+  };
+
+  const handleNoticeClick = () => {
+    if (typeof onNoticeOpen === 'function') {
+      onNoticeOpen();
+    }
+  };
+
   if (isLoading) {
     return (
       <SkeletonWrapper
@@ -90,6 +116,49 @@ const UserArea = ({
                     className='text-gray-500 dark:text-gray-400'
                   />
                   <span>{t('数据看板')}</span>
+                </div>
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={handlePricingClick}
+                className='!px-3 !py-1.5 !text-sm !text-semi-color-text-0 hover:!bg-semi-color-fill-1 dark:!text-gray-200 dark:hover:!bg-blue-500 dark:hover:!text-white'
+              >
+                <div className='flex items-center gap-2'>
+                  <BadgeDollarSign
+                    size={16}
+                    className='text-gray-500 dark:text-gray-400'
+                  />
+                  <span>{t('模型与价格')}</span>
+                </div>
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={handleDocsClick}
+                className='!px-3 !py-1.5 !text-sm !text-semi-color-text-0 hover:!bg-semi-color-fill-1 dark:!text-gray-200 dark:hover:!bg-blue-500 dark:hover:!text-white'
+              >
+                <div className='flex items-center gap-2'>
+                  <BookOpen
+                    size={16}
+                    className='text-gray-500 dark:text-gray-400'
+                  />
+                  <span>{t('文档')}</span>
+                </div>
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={handleNoticeClick}
+                className='!px-3 !py-1.5 !text-sm !text-semi-color-text-0 hover:!bg-semi-color-fill-1 dark:!text-gray-200 dark:hover:!bg-blue-500 dark:hover:!text-white'
+              >
+                <div className='flex w-full items-center justify-between gap-3'>
+                  <span className='flex items-center gap-2'>
+                    <Bell
+                      size={16}
+                      className='text-gray-500 dark:text-gray-400'
+                    />
+                    <span>{t('公告')}</span>
+                  </span>
+                  {unreadCount > 0 && (
+                    <span className='rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white'>
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </div>
               </Dropdown.Item>
               <Dropdown.Item

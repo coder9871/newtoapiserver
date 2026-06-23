@@ -13,17 +13,75 @@
 }
 
 /*
- * 首页只保留输入框。头部继续透明，让页面视觉中心只落在 prompt 上。
+ * 首页头部用毛玻璃遮挡：保留与背景融合的通透感，
+ * 同时在向上滚动时模糊遮住下方内容，避免文字穿透。
  */
 body.minimal-home-route header {
-  background: transparent !important;
+  background: color-mix(in srgb, var(--semi-color-bg-0) 86%, transparent) !important;
   box-shadow: none !important;
   border-bottom: 0 !important;
-  backdrop-filter: none !important;
+  backdrop-filter: saturate(180%) blur(14px) !important;
+}
+
+body.minimal-home-route .app-topbar-panel {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 body.minimal-home-route .app-shell-main {
   padding: 0;
+}
+
+@media (max-width: 640px) {
+  body.minimal-home-route .app-shell-body {
+    padding-top: 124px;
+  }
+
+  /* 移动端头部改用 flex 换行：第一行 logo + 账户，下面整行标语与输入框 */
+  body.minimal-home-route .app-topbar-panel {
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  /* logo 固定在第一行左侧 */
+  body.minimal-home-route .app-topbar-panel > :first-child {
+    order: 1;
+  }
+
+  /* 标语：与 logo、账户同处第一行，占据中间空间 */
+  body.minimal-home-route .app-topbar-tagline {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-left: 4px;
+    overflow: hidden;
+    color: var(--semi-color-text-1);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 账户 / 登录靠第一行最右 */
+  body.minimal-home-route .app-topbar-actions {
+    order: 3;
+    margin-left: auto;
+  }
+
+  /* 输入框：独占整行 */
+  body.minimal-home-route .app-topbar-ask {
+    order: 4;
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
 }
 
 .minimal-home__stage {
@@ -1022,13 +1080,15 @@ body[theme-mode='dark'] .minimal-home-discovery__card:hover {
 
 .ai-navigation__toolbar {
   align-items: stretch;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
 .ai-navigation__segments {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: min(480px, 100%);
+  width: min(420px, 100%);
+  flex: 0 0 min(420px, 100%);
   padding: 3px;
   border: 1px solid
     color-mix(in srgb, var(--semi-color-border) 70%, transparent);
@@ -1605,12 +1665,12 @@ body[theme-mode='dark'] .ai-navigation__card:hover {
 @media (max-width: 560px) {
   .minimal-home {
     align-items: flex-start;
-    padding: 14px 12px 32px;
+    padding: 10px 12px 24px;
   }
 
   .minimal-home--navigation-page,
   .minimal-home--navigation-home {
-    padding-top: 16px;
+    padding-top: 10px;
   }
 
   .minimal-home--discovery {

@@ -19,7 +19,6 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import NewYearButton from './NewYearButton';
-import NotificationButton from './NotificationButton';
 import ThemeToggle from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
 import UserArea from './UserArea';
@@ -28,6 +27,8 @@ const ActionButtons = ({
   isNewYear,
   unreadCount,
   onNoticeOpen,
+  docsLink,
+  pricingRequireAuth,
   theme,
   onThemeToggle,
   currentLang,
@@ -36,19 +37,34 @@ const ActionButtons = ({
   isLoading,
   isMobile,
   isSelfUseMode,
+  accountOnly = false,
   logout,
   navigate,
   t,
 }) => {
+  if (accountOnly) {
+    return (
+      <div className='flex items-center gap-2 md:gap-3'>
+        <UserArea
+          userState={userState}
+          isLoading={isLoading}
+          isMobile={isMobile}
+          isSelfUseMode={isSelfUseMode}
+          unreadCount={unreadCount}
+          onNoticeOpen={onNoticeOpen}
+          docsLink={docsLink}
+          pricingRequireAuth={pricingRequireAuth}
+          logout={logout}
+          navigate={navigate}
+          t={t}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className='flex items-center gap-2 md:gap-3'>
       <NewYearButton isNewYear={isNewYear} />
-
-      <NotificationButton
-        unreadCount={unreadCount}
-        onNoticeOpen={onNoticeOpen}
-        t={t}
-      />
 
       <ThemeToggle theme={theme} onThemeToggle={onThemeToggle} t={t} />
 
@@ -63,6 +79,10 @@ const ActionButtons = ({
         isLoading={isLoading}
         isMobile={isMobile}
         isSelfUseMode={isSelfUseMode}
+        unreadCount={unreadCount}
+        onNoticeOpen={onNoticeOpen}
+        docsLink={docsLink}
+        pricingRequireAuth={pricingRequireAuth}
         logout={logout}
         navigate={navigate}
         t={t}
