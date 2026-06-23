@@ -217,9 +217,6 @@ const AINavigation = ({ preview = false }) => {
           <Grid2X2 size={14} />
           {t('共 {{count}} 个分类', { count: stats.categoryCount })}
         </span>
-        <a href={activeCollection.sourceUrl} target='_blank' rel='noreferrer'>
-          {t('来源')}：{t(activeCollection.title)}
-        </a>
       </div>
 
       <div className='ai-navigation__categories' aria-label={t('分类')}>
